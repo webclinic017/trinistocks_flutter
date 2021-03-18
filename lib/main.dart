@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'config.dart';
+import 'config.dart' as config;
 import 'charts.dart';
 import 'package:intl/intl.dart';
 
@@ -111,10 +111,10 @@ class _HomePageState extends State<HomePage> {
 
   Future<Map> _fetchLatestTrades() async {
     String url = 'https://trinistocks.com/api/latestdailytrades';
+    const apiToken = config.APIKeys.app_api_token;
+    final response =
+        await http.get(url, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];
-    final response = await http.get(url, headers: {
-      "Authorization": "Token 05a2a4db5ccf2b72dac5394c9262696e1ee1fa2c"
-    });
     if (response.statusCode == 200) {
       apiResponse = json.decode(response.body);
     } else {

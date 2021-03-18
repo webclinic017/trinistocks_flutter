@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'config.dart';
+import 'charts.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(TriniStocks());
@@ -22,7 +25,7 @@ class TriniStocks extends StatelessWidget {
         primaryColor: Colors.red[900],
         accentColor: Colors.red[900],
       ),
-      home: HomePage(title: 'trinistocks: Home'),
+      home: HomePage(title: 'Home'),
     );
   }
 }
@@ -46,19 +49,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -69,9 +59,8 @@ class _HomePageState extends State<HomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        centerTitle: true,
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -91,23 +80,53 @@ class _HomePageState extends State<HomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            FutureBuilder<Map>(
+              future: _fetchLatestTrades(),
+              initialData: Map(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return new Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      "Stocks Traded on the TTSE on ${snapshot.data['date']}",
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.visible,
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                  );
+                }
+                //else
+                return CircularProgressIndicator();
+              },
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            BarChartSample2(),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Future<Map> _fetchLatestTrades() async {
+    String url = 'https://trinistocks.com/api/latestdailytrades';
+    List apiResponse = [];
+    final response = await http.get(url, headers: {
+      "Authorization": "Token 05a2a4db5ccf2b72dac5394c9262696e1ee1fa2c"
+    });
+    if (response.statusCode == 200) {
+      apiResponse = json.decode(response.body);
+    } else {
+      throw Exception("Could not fetch API data from $url");
+    }
+    // create a map to store the parsed api response
+    Map returnData = new Map();
+    // parse the date into the form we need
+    DateTime parsedDate = DateTime.parse(apiResponse[0]["date"]);
+    DateFormat dateFormat = DateFormat.yMMMMd('en_US');
+    returnData['date'] = dateFormat.format(parsedDate);
+    // return the data from the api request
+    return returnData;
   }
 }

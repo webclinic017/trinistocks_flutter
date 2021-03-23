@@ -28,6 +28,8 @@ Future<Map> fetchLatestTrades() async {
       "value_traded": apiResponse[i]["value_traded"],
     });
   }
+  // temp delay to display overlay
+  await Future.delayed(const Duration(seconds: 10));
   // return the data from the api request
   return returnData;
 }

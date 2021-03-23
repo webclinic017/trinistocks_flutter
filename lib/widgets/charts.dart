@@ -2,6 +2,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import '../apis/latestdailytrades.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class HorizontalBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -75,7 +76,11 @@ class HorizontalBarChart extends StatelessWidget {
           );
         }
         //else
-        return CircularProgressIndicator();
+        return Padding(
+            padding: EdgeInsets.only(top: 10.00),
+            child:
+                SizedBox(height: 400.00, child: EasyLoading.show(status: 'loading...');
+));
       },
     );
   }

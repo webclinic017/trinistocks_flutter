@@ -36,6 +36,8 @@ dependencies:
   intl: ^0.15.7
   # provider lib which helps with state management between screens/widgets
   provider: ^4.3.3
+  # loading overlay
+  flutter_easyloading: ^3.0.0
 
 dev_dependencies:
   flutter_test:

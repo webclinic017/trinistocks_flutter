@@ -30,10 +30,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   # use http requests
   http: ^0.12.0+4
-  # fl charts lib for bar,line and pie charts
-  fl_chart: ^0.20.1
+  # charts lib for bar,line and pie charts
+  charts_flutter: ^0.10.0
   # intl lib for converting dates to strings 
   intl: ^0.15.7
+  # provider lib which helps with state management between screens/widgets
+  provider: ^4.3.3
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import '../apis/latestdailytrades.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:material_segmented_control/material_segmented_control.dart';
 
 class HorizontalBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -54,7 +55,7 @@ class HorizontalBarChart extends StatelessWidget {
       future: fetchLatestTrades(),
       initialData: Map(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.hasData && snapshot.data.containsKey('date')) {
           return new Padding(
             padding: EdgeInsets.all(16.0),
             child: Column(children: <Widget>[
@@ -74,13 +75,31 @@ class HorizontalBarChart extends StatelessWidget {
               ),
             ]),
           );
-        }
-        //else
-        return Padding(
-            padding: EdgeInsets.only(top: 10.00),
-            child:
-                SizedBox(height: 400.00, child: EasyLoading.show(status: 'loading...');
-));
+        } else
+          return Padding(
+              padding: EdgeInsets.only(top: 10.00),
+              child: SizedBox(
+                  height: 400.00,
+                  child: MaterialSegmentedControl<EasyLoadingStyle>(
+                      unselectedColor: Colors.white,
+                      selectedColor: Colors.blue,
+                      children: {
+                        EasyLoadingStyle.dark: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text('dark'),
+                        ),
+                        EasyLoadingStyle.light: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text('light'),
+                        ),
+                        EasyLoadingStyle.custom: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text('custom'),
+                        ),
+                      },
+                      onSegmentChosen: (value) {
+                        EasyLoading.instance.loadingStyle = value;
+                      })));
       },
     );
   }

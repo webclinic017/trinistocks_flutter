@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../utilities/config.dart' as config;
 import 'package:intl/intl.dart';
+import 'dart:io';
 
 Future<Map> fetchLatestTrades() async {
   String url = 'https://trinistocks.com/api/latestdailytrades';
@@ -29,7 +30,7 @@ Future<Map> fetchLatestTrades() async {
     });
   }
   // temp delay to display overlay
-  await Future.delayed(const Duration(seconds: 10));
+  await Future.delayed(Duration(seconds: 10));
   // return the data from the api request
   return returnData;
 }

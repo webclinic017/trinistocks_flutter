@@ -38,6 +38,8 @@ dependencies:
   provider: ^4.3.3
   # loading overlay
   flutter_easyloading: ^3.0.0
+  material_segmented_control: ^2.1.0
+
 
 dev_dependencies:
   flutter_test:

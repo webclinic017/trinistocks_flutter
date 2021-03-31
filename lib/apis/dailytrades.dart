@@ -25,14 +25,25 @@ class FetchDailyTrades {
     DateTime parsedDate = DateTime.parse(apiResponse[0]["date"]);
     DateFormat dateFormat = DateFormat.yMMMMd('en_US');
     returnData['date'] = dateFormat.format(parsedDate);
-    // parse the value traded data for the chart
-    returnData['valuesTraded'] = <Map>[];
+    // parse the data required for the barchart
+    returnData['chartData'] = <Map>[];
+    // and for the table
+    returnData['tableData'] = <Map>[];
     for (var i = 0; i < apiResponse.length; i++) {
       if (apiResponse[i]['symbol'] != null &&
           apiResponse[i]['value_traded'] != null) {
-        returnData['valuesTraded'].add({
+        returnData['chartData'].add({
           "symbol": apiResponse[i]["symbol"],
           "value_traded": double.tryParse(apiResponse[i]["value_traded"]),
+        });
+        returnData['tableData'].add({
+          "symbol": apiResponse[i]["symbol"],
+          "volume_traded": apiResponse[i]["volume_traded"],
+          "close_price": apiResponse[i]["close_price"],
+          "value_traded": apiResponse[i]["value_traded"],
+          "low": apiResponse[i]["low"],
+          "high": apiResponse[i]["high"],
+          "change_dollars": apiResponse[i]["change_dollars"],
         });
       }
     }

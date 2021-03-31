@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../apis/dailytrades.dart';
-import '../widgets/charts.dart';
+import '../widgets/daily_trades_horizontal_barchart.dart';
+import '../widgets/daily_trades_datatable.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, this.title}) : super(key: key);
@@ -35,11 +36,49 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title!),
         centerTitle: true,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(5),
-        children: <Widget>[
-          HorizontalBarChart.withLatestDailyTradesData(),
-        ],
+      //setup a futurebuilder to wait on the API data
+      body: FutureBuilder<Map>(
+        //make the API call
+        future: FetchDailyTrades.fetchLatestTrades(),
+        initialData: Map(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data!.containsKey('date')) {
+            return new ListView(
+                padding: const EdgeInsets.all(10.0),
+                children: <Widget>[
+                  Text(
+                    "Stocks Traded on the TTSE on ${snapshot.data!['date']}",
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.visible,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  SizedBox(
+                    height: 400.0,
+                    child: DailyTradesHorizontalBarChart.withData(
+                        snapshot.data!['chartData']),
+                  ),
+                  DailyTradesDataTable(),
+                ]);
+          } else
+            return Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Please wait while we load the latest data from our backend.',
+                    style: Theme.of(context).textTheme.headline6,
+                    textAlign: TextAlign.center,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              ),
+            );
+        },
       ),
     );
   }

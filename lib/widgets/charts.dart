@@ -1,13 +1,11 @@
 /// Horizontal bar chart example
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
-import '../apis/latestdailytrades.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:material_segmented_control/material_segmented_control.dart';
+import '../apis/dailytrades.dart';
 
 class HorizontalBarChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
-  final bool animate;
+  final List<Series<dynamic, String>>? seriesList;
+  final bool? animate;
 
   HorizontalBarChart(this.seriesList, {this.animate});
 
@@ -23,15 +21,25 @@ class HorizontalBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // For horizontal bar charts, set the [vertical] flag to false.
-    return new charts.BarChart(
+    return new BarChart(
       seriesList,
       animate: animate,
       vertical: false,
+      behaviors: [
+        new ChartTitle('Price Volume (TTD\$)',
+            titleStyleSpec: TextStyleSpec(
+                color: MaterialPalette.black,
+                fontFamily: 'Roboto',
+                fontSize: 12),
+            behaviorPosition: BehaviorPosition.bottom,
+            titleOutsideJustification: OutsideJustification.middleDrawArea,
+            innerPadding: 15),
+      ],
     );
   }
 
   /// Create one series with sample hard coded data.
-  static List<charts.Series<OrdinalSales, String>> _createSampleData() {
+  static List<Series<OrdinalSales, String>> _createSampleData() {
     final data = [
       new OrdinalSales('2014', 5),
       new OrdinalSales('2015', 25),
@@ -40,7 +48,7 @@ class HorizontalBarChart extends StatelessWidget {
     ];
 
     return [
-      new charts.Series<OrdinalSales, String>(
+      new Series<OrdinalSales, String>(
         id: 'Sales',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
@@ -49,18 +57,37 @@ class HorizontalBarChart extends StatelessWidget {
     ];
   }
 
+  static List<Series<DailyTrades, String>>? _createDailyTradesData(
+      List valuesTraded) {
+    List<DailyTrades> parsedData = [];
+    for (int i = 0; i < valuesTraded.length; i++) {
+      final valueTraded = new DailyTrades(
+          valuesTraded[i]['symbol'], valuesTraded[i]['value_traded']);
+      parsedData.add(valueTraded);
+    }
+    List<Series<DailyTrades, String>> returnSeries = [
+      new Series<DailyTrades, String>(
+        id: 'Daily Trades',
+        domainFn: (DailyTrades trade, _) => trade.symbol,
+        measureFn: (DailyTrades trade, _) => trade.valueTraded,
+        data: parsedData,
+      )
+    ];
+    return returnSeries;
+  }
+
   /// Setup the data for the latest daily trades bar chart
   static Widget withLatestDailyTradesData() {
     return new FutureBuilder<Map>(
-      future: fetchLatestTrades(),
+      future: FetchDailyTrades.fetchLatestTrades(),
       initialData: Map(),
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data.containsKey('date')) {
+        if (snapshot.hasData && snapshot.data!.containsKey('date')) {
           return new Padding(
             padding: EdgeInsets.all(16.0),
             child: Column(children: <Widget>[
               Text(
-                "Stocks Traded on the TTSE on ${snapshot.data['date']}",
+                "Stocks Traded on the TTSE on ${snapshot.data!['date']}",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.visible,
                 style: Theme.of(context).textTheme.headline5,
@@ -68,38 +95,32 @@ class HorizontalBarChart extends StatelessWidget {
               SizedBox(
                 height: 400.0,
                 child: HorizontalBarChart(
-                  _createSampleData(),
+                  _createDailyTradesData(snapshot.data!['valuesTraded']),
                   // Disable animations for image tests.
-                  animate: false,
+                  animate: true,
                 ),
               ),
             ]),
           );
         } else
           return Padding(
-              padding: EdgeInsets.only(top: 10.00),
-              child: SizedBox(
-                  height: 400.00,
-                  child: MaterialSegmentedControl<EasyLoadingStyle>(
-                      unselectedColor: Colors.white,
-                      selectedColor: Colors.blue,
-                      children: {
-                        EasyLoadingStyle.dark: Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text('dark'),
-                        ),
-                        EasyLoadingStyle.light: Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text('light'),
-                        ),
-                        EasyLoadingStyle.custom: Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text('custom'),
-                        ),
-                      },
-                      onSegmentChosen: (value) {
-                        EasyLoading.instance.loadingStyle = value;
-                      })));
+            padding: EdgeInsets.only(top: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Please wait while we load the latest data from our backend.',
+                  style: Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            ),
+          );
       },
     );
   }
@@ -116,7 +137,7 @@ class OrdinalSales {
 //class for daily trade data returned by the api
 class DailyTrades {
   final String symbol;
-  final double volumeTraded;
+  final double valueTraded;
 
-  DailyTrades(this.symbol, this.volumeTraded);
+  DailyTrades(this.symbol, this.valueTraded);
 }

@@ -1,7 +1,7 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'screens/home.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
   runApp(TriniStocks());
@@ -24,7 +24,6 @@ class TriniStocks extends StatelessWidget {
         accentColor: Colors.red[900],
       ),
       home: HomePage(title: 'Home'),
-      builder: EasyLoading.init(),
     );
   }
 }

@@ -35,7 +35,8 @@ dependencies:
   # intl lib for converting dates to strings 
   intl: ^0.15.7
   # provider lib which helps with state management between screens/widgets
-  provider: ^4.3.3
+  provider: ^5.0.0
+  horizontal_data_table: ^3.0.0
 
 
 dev_dependencies:

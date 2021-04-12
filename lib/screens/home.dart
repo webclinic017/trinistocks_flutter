@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                     child: DailyTradesHorizontalBarChart.withData(
                         snapshot.data!['chartData']),
                   ),
-                  DailyTradesDataTable(),
+                  DailyTradesDataTable(tableData: snapshot.data!['tableData']),
                 ]);
           } else
             return Padding(

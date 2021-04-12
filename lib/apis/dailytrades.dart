@@ -39,6 +39,7 @@ class FetchDailyTrades {
         returnData['tableData'].add({
           "symbol": apiResponse[i]["symbol"],
           "volume_traded": apiResponse[i]["volume_traded"],
+          "open_price": apiResponse[i]["open_price"],
           "close_price": apiResponse[i]["close_price"],
           "value_traded": apiResponse[i]["value_traded"],
           "low": apiResponse[i]["low"],

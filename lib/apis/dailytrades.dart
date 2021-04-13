@@ -8,7 +8,6 @@ class FetchDailyTrades {
   FetchDailyTrades() {}
 
   static Future<Map> fetchLatestTrades() async {
-    print("Now requesting data");
     String url = 'https://trinistocks.com/api/latestdailytrades';
     const apiToken = config.APIKeys.app_api_token;
     final response =
@@ -50,8 +49,6 @@ class FetchDailyTrades {
     }
     // temp delay to display overlay
     await Future.delayed(Duration(seconds: 2));
-    // return the data from the api request
-    print("Now received data");
     return returnData;
   }
 }

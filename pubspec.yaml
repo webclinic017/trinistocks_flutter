@@ -36,7 +36,10 @@ dependencies:
   intl: ^0.15.7
   # provider lib which helps with state management between screens/widgets
   provider: ^5.0.0
+  # table
   horizontal_data_table: ^3.0.0
+  # url launcher
+  url_launcher: ^6.0.0
 
 
 dev_dependencies:

@@ -1,12 +1,12 @@
 /// Example of a simple line chart.
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 
 class MarketIndexesLineChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
-  final bool animate;
+  final bool? animate;
+  final List<Series<dynamic, String>>? seriesList;
 
-  MarketIndexesLineChart(this.seriesList, {required this.animate});
+  MarketIndexesLineChart(this.seriesList, {this.animate});
 
   /// Creates a [LineChart] with sample data and no transition.
   factory MarketIndexesLineChart.withSampleData() {

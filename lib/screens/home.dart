@@ -5,6 +5,7 @@ import '../apis/dailytrades.dart';
 import '../apis/stocknews.dart';
 import '../apis/marketindexes.dart';
 import '../widgets/daily_trades_horizontal_barchart.dart';
+import '../widgets/market_indexes_linechart.dart';
 import '../widgets/daily_trades_datatable.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,10 +50,14 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.hasData && snapshot.data!.length > 0) {
               return new Column(children: <Widget>[
                 Text(
-                  "test",
+                  "TTSE Trailing 30-Day Market Indexes",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.visible,
                   style: Theme.of(context).textTheme.headline5,
+                ),
+                SizedBox(
+                  height: 400.0,
+                  child: MarketIndexesLineChart.withSampleData(),
                 ),
               ]);
             } //while the data is loading, return a progress indicator

@@ -4,30 +4,58 @@ import 'package:flutter/material.dart';
 
 class MarketIndexesLineChart extends StatelessWidget {
   final bool? animate;
-  final List<Series<dynamic, String>>? seriesList;
+  final List<Series<MarketIndexData, DateTime>>? seriesList;
 
   MarketIndexesLineChart(this.seriesList, {this.animate});
 
   @override
   Widget build(BuildContext context) {
-    return new LineChart(seriesList, animate: animate);
+    return new TimeSeriesChart(
+      seriesList,
+      animate: animate,
+      primaryMeasureAxis: NumericAxisSpec(
+        tickProviderSpec: BasicNumericTickProviderSpec(
+            desiredTickCount: 10, zeroBound: false),
+      ),
+      behaviors: [
+        new ChartTitle('Date',
+            behaviorPosition: BehaviorPosition.bottom,
+            titleOutsideJustification: OutsideJustification.middleDrawArea),
+        new ChartTitle('Index Value',
+            behaviorPosition: BehaviorPosition.start,
+            titleOutsideJustification: OutsideJustification.middleDrawArea),
+      ],
+    );
   }
 
-  static List<Series<MarketIndexData, String>>? _createSeriesFromData(
+  static List<Series<MarketIndexData, DateTime>>? _createSeriesFromData(
       List indexDataPoints) {
-    List<MarketIndexData> parsedData = [];
+    List<MarketIndexData> compositeIndexData = [];
     for (int i = 0; i < indexDataPoints.length; i++) {
-      final dataPoint = new MarketIndexData(
-          indexDataPoints[i]['indexName'], indexDataPoints[i]['indexValue']);
-      parsedData.add(dataPoint);
+      if (indexDataPoints[i]['index_name'] == "Composite Totals") {
+        final dataPoint = new MarketIndexData(
+            DateTime.parse(indexDataPoints[i]['date']),
+            double.parse(indexDataPoints[i]['index_value']));
+        compositeIndexData.add(dataPoint);
+      }
     }
-    List<Series<MarketIndexData, String>> returnSeries = [
-      new Series<MarketIndexData, String>(
-        id: 'Daily Trades',
-        domainFn: (MarketIndexData trade, _) => trade.indexName,
-        measureFn: (MarketIndexData trade, _) => trade.indexValue,
-        data: parsedData,
-      )
+    List<MarketIndexData> tntIndexData = [];
+    for (int i = 0; i < indexDataPoints.length; i++) {
+      if (indexDataPoints[i]['index_name'] == "All T&T Totals") {
+        final dataPoint = new MarketIndexData(
+            DateTime.parse(indexDataPoints[i]['date']),
+            double.parse(indexDataPoints[i]['index_value']));
+        tntIndexData.add(dataPoint);
+      }
+    }
+    List<Series<MarketIndexData, DateTime>> returnSeries = [
+      new Series<MarketIndexData, DateTime>(
+        id: 'Composite Index',
+        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+        domainFn: (MarketIndexData data, _) => data.dateTime,
+        measureFn: (MarketIndexData data, _) => data.indexValue,
+        data: compositeIndexData,
+      ),
     ];
     return returnSeries;
   }
@@ -44,8 +72,8 @@ class MarketIndexesLineChart extends StatelessWidget {
 
 //class for market index data returned by the api
 class MarketIndexData {
-  final String indexName;
+  final DateTime dateTime;
   final double indexValue;
 
-  MarketIndexData(this.indexName, this.indexValue);
+  MarketIndexData(this.dateTime, this.indexValue);
 }

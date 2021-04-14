@@ -50,13 +50,13 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.hasData && snapshot.data!.length > 0) {
               return new Column(children: <Widget>[
                 Text(
-                  "TTSE Trailing 30-Day Market Indexes",
+                  "TTSE Trailing 30-Day Composite Index",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.visible,
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 SizedBox(
-                  height: 400.0,
+                  height: 200.0,
                   child: MarketIndexesLineChart.withData(snapshot.data!),
                 ),
               ]);

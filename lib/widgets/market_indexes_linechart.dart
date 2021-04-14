@@ -8,45 +8,44 @@ class MarketIndexesLineChart extends StatelessWidget {
 
   MarketIndexesLineChart(this.seriesList, {this.animate});
 
-  /// Creates a [LineChart] with sample data and no transition.
-  factory MarketIndexesLineChart.withSampleData() {
-    return new MarketIndexesLineChart(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return new charts.LineChart(seriesList, animate: animate);
+    return new LineChart(seriesList, animate: animate);
   }
 
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<LinearSales, int>> _createSampleData() {
-    final data = [
-      new LinearSales(0, 5),
-      new LinearSales(1, 25),
-      new LinearSales(2, 100),
-      new LinearSales(3, 75),
-    ];
-
-    return [
-      new charts.Series<LinearSales, int>(
-        id: 'Sales',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        data: data,
+  static List<Series<MarketIndexData, String>>? _createSeriesFromData(
+      List indexDataPoints) {
+    List<MarketIndexData> parsedData = [];
+    for (int i = 0; i < indexDataPoints.length; i++) {
+      final dataPoint = new MarketIndexData(
+          indexDataPoints[i]['indexName'], indexDataPoints[i]['indexValue']);
+      parsedData.add(dataPoint);
+    }
+    List<Series<MarketIndexData, String>> returnSeries = [
+      new Series<MarketIndexData, String>(
+        id: 'Daily Trades',
+        domainFn: (MarketIndexData trade, _) => trade.indexName,
+        measureFn: (MarketIndexData trade, _) => trade.indexValue,
+        data: parsedData,
       )
     ];
+    return returnSeries;
+  }
+
+  /// Setup the data for the latest daily trades bar chart
+  static Widget withData(List indexData) {
+    return new MarketIndexesLineChart(
+      _createSeriesFromData(indexData),
+      // Disable animations for image tests.
+      animate: true,
+    );
   }
 }
 
-/// Sample linear data type.
-class LinearSales {
-  final int year;
-  final int sales;
+//class for market index data returned by the api
+class MarketIndexData {
+  final String indexName;
+  final double indexValue;
 
-  LinearSales(this.year, this.sales);
+  MarketIndexData(this.indexName, this.indexValue);
 }

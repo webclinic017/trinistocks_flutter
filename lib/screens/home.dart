@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(
                   height: 400.0,
-                  child: MarketIndexesLineChart.withSampleData(),
+                  child: MarketIndexesLineChart.withData(snapshot.data!),
                 ),
               ]);
             } //while the data is loading, return a progress indicator

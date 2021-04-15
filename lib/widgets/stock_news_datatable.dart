@@ -46,7 +46,7 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
         rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
         enablePullToRefresh: false,
       ),
-      height: MediaQuery.of(context).size.height,
+      height: 52.0 * (widget.tableData.length + 1),
     );
   }
 

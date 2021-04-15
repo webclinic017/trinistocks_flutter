@@ -17,13 +17,18 @@ class TriniStocks extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: Colors.red[900],
         accentColor: Colors.red[900],
+        cardColor: Colors.grey[400],
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.red[900],
         accentColor: Colors.red[900],
       ),
-      home: HomePage(title: 'Home'),
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => HomePage(title: 'Home'),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+      },
     );
   }
 }

@@ -7,6 +7,7 @@ import '../apis/marketindexes.dart';
 import '../widgets/daily_trades_horizontal_barchart.dart';
 import '../widgets/market_indexes_linechart.dart';
 import '../widgets/daily_trades_datatable.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, this.title}) : super(key: key);
@@ -39,6 +40,46 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title!),
         centerTitle: true,
+      ),
+      //add a drawer for navigation
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              height: 120,
+              child: DrawerHeader(
+                child: Text(
+                  'Menu',
+                  style: TextStyle(color: Colors.white),
+                ),
+                decoration:
+                    BoxDecoration(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            Card(
+              color: Theme.of(context).cardColor,
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color: Theme.of(context).accentColor,
+                  size: 30.0,
+                  semanticLabel: 'Text to announce in accessibility modes',
+                ),
+                title: Text('Home'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/');
+                },
+              ),
+            ),
+            Container(
+              color: Colors.grey[300],
+              child: ExpansionTile(
+                title: Text("Hello"),
+              ), /*or any other widget you want to apply the theme to.*/
+            ),
+          ],
+        ),
       ),
       //setup futurebuilders to wait on the API data
       body: ListView(padding: const EdgeInsets.all(10.0), children: [
@@ -94,20 +135,22 @@ class _HomePageState extends State<HomePage> {
           initialData: Map(),
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data!.containsKey('date')) {
-              return new Column(children: <Widget>[
-                Text(
-                  "Stocks Traded on the TTSE on ${snapshot.data!['date']}",
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.visible,
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                SizedBox(
-                  height: 400.0,
-                  child: DailyTradesHorizontalBarChart.withData(
-                      snapshot.data!['chartData']),
-                ),
-                DailyTradesDataTable(tableData: snapshot.data!['tableData']),
-              ]);
+              return new Column(
+                children: <Widget>[
+                  Text(
+                    "Stocks Traded on the TTSE on ${snapshot.data!['date']}",
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.visible,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  SizedBox(
+                    height: 400.0,
+                    child: DailyTradesHorizontalBarChart.withData(
+                        snapshot.data!['chartData']),
+                  ),
+                  DailyTradesDataTable(tableData: snapshot.data!['tableData']),
+                ],
+              );
             } //while the data is loading, return a progress indicator
             else
               return Padding(

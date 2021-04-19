@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:trinistocks_flutter/widgets/mainDrawer.dart';
 import 'package:trinistocks_flutter/widgets/stock_news_datatable.dart';
 import '../apis/dailytrades.dart';
 import '../apis/stocknews.dart';
@@ -10,18 +11,7 @@ import '../widgets/daily_trades_datatable.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String? title;
+  HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -38,49 +28,11 @@ class _HomePageState extends State<HomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title!),
+        title: Text('Home'),
         centerTitle: true,
       ),
       //add a drawer for navigation
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            Container(
-              height: 120,
-              child: DrawerHeader(
-                child: Text(
-                  'Menu',
-                  style: TextStyle(color: Colors.white),
-                ),
-                decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColor),
-              ),
-            ),
-            Card(
-              color: Theme.of(context).cardColor,
-              child: ListTile(
-                leading: Icon(
-                  Icons.house,
-                  color: Theme.of(context).accentColor,
-                  size: 30.0,
-                  semanticLabel: 'Text to announce in accessibility modes',
-                ),
-                title: Text('Home'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/');
-                },
-              ),
-            ),
-            Container(
-              color: Colors.grey[300],
-              child: ExpansionTile(
-                title: Text("Hello"),
-              ), /*or any other widget you want to apply the theme to.*/
-            ),
-          ],
-        ),
-      ),
+      endDrawer: MainDrawer(),
       //setup futurebuilders to wait on the API data
       body: ListView(padding: const EdgeInsets.all(10.0), children: [
         FutureBuilder<List>(

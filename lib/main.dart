@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
+import 'package:trinistocks_flutter/screens/listed_stocks.dart';
 import 'screens/home.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +27,8 @@ class TriniStocks extends StatelessWidget {
       ),
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => HomePage(title: 'Home'),
+        '/': (context) => HomePage(),
+        '/listed_stocks': (context) => ListedStocksPage(),
         // When navigating to the "/second" route, build the SecondScreen widget.
       },
     );

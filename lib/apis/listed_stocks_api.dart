@@ -4,8 +4,8 @@ import '../utilities/config.dart' as config;
 import 'package:intl/intl.dart';
 import 'dart:io';
 
-class ListedStocks {
-  ListedStocks() {}
+class ListedStocksAPI {
+  ListedStocksAPI() {}
 
   static Future<List<Map>> fetchAllListedStockData() async {
     String url = 'https://trinistocks.com/api/listedstocks';

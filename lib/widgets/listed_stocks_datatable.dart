@@ -139,17 +139,17 @@ class _ListedStocksDataTableState extends State<ListedStocksDataTable> {
     switch (issuedShareCapitalSort) {
       case -1:
         {
-          sectorSort = 1;
+          issuedShareCapitalSort = 1;
           break;
         }
       case 0:
         {
-          sectorSort = 1;
+          issuedShareCapitalSort = 1;
           break;
         }
       case 1:
         {
-          sectorSort = -1;
+          issuedShareCapitalSort = -1;
           break;
         }
     }
@@ -178,17 +178,17 @@ class _ListedStocksDataTableState extends State<ListedStocksDataTable> {
     switch (marketCapitalizationSort) {
       case -1:
         {
-          sectorSort = 1;
+          marketCapitalizationSort = 1;
           break;
         }
       case 0:
         {
-          sectorSort = 1;
+          marketCapitalizationSort = 1;
           break;
         }
       case 1:
         {
-          sectorSort = -1;
+          marketCapitalizationSort = -1;
           break;
         }
     }

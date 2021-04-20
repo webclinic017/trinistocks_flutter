@@ -4,8 +4,8 @@ import '../utilities/config.dart' as config;
 import 'package:intl/intl.dart';
 import 'dart:io';
 
-class MarketIndexes {
-  MarketIndexes() {}
+class MarketIndexesAPI {
+  MarketIndexesAPI() {}
 
   static Future<List> fetchLast30Days() async {
     //first get todays date

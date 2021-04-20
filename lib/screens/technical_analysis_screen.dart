@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:trinistocks_flutter/apis/listedstocks.dart';
+import 'package:trinistocks_flutter/apis/listed_stocks_api.dart';
+import 'package:trinistocks_flutter/apis/technical_analysis_api.dart';
 import 'package:trinistocks_flutter/widgets/listed_stocks_datatable.dart';
-import 'package:trinistocks_flutter/widgets/mainDrawer.dart';
+import 'package:trinistocks_flutter/widgets/main_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:trinistocks_flutter/widgets/technical_analysis_datatable.dart';
 
-class ListedStocksPage extends StatefulWidget {
-  ListedStocksPage({Key? key}) : super(key: key);
+class TechnicalAnalysisPage extends StatefulWidget {
+  TechnicalAnalysisPage({Key? key}) : super(key: key);
 
   @override
-  _ListedStocksPageState createState() => _ListedStocksPageState();
+  _TechnicalAnalysisPageState createState() => _TechnicalAnalysisPageState();
 }
 
-class _ListedStocksPageState extends State<ListedStocksPage> {
+class _TechnicalAnalysisPageState extends State<TechnicalAnalysisPage> {
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -23,7 +25,7 @@ class _ListedStocksPageState extends State<ListedStocksPage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        title: Text('Listed Stocks'),
+        title: Text('Technical Analysis'),
         centerTitle: true,
       ),
       //add a drawer for navigation
@@ -32,20 +34,21 @@ class _ListedStocksPageState extends State<ListedStocksPage> {
       body: ListView(padding: const EdgeInsets.all(10.0), children: [
         FutureBuilder<List<Map>>(
           //make the API call
-          future: ListedStocks.fetchAllListedStockData(),
+          future: TechnicalAnalysisAPI.fetchLatestTechnicalAnalysisData(),
           initialData: [],
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data!.length > 0) {
               return new Column(children: <Widget>[
                 Text(
-                  "Stocks Currently Listed on the TTSE",
+                  "Technical Analysis Summary",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.visible,
                   style: Theme.of(context).textTheme.headline5,
                 ),
+                Padding(padding: EdgeInsets.only(top: 10)),
                 SizedBox(
                   height: 1000.0,
-                  child: ListedStocksDataTable(
+                  child: TechnicalAnalysisDataTable(
                     tableData: snapshot.data!,
                   ),
                 ),

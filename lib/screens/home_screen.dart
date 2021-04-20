@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:trinistocks_flutter/widgets/mainDrawer.dart';
+import 'package:trinistocks_flutter/widgets/main_drawer.dart';
 import 'package:trinistocks_flutter/widgets/stock_news_datatable.dart';
-import '../apis/dailytrades.dart';
-import '../apis/stocknews.dart';
-import '../apis/marketindexes.dart';
+import '../apis/daily_trades_api.dart';
+import '../apis/stock_news_api.dart';
+import '../apis/market_indexes_api.dart';
 import '../widgets/daily_trades_horizontal_barchart.dart';
 import '../widgets/market_indexes_linechart.dart';
 import '../widgets/daily_trades_datatable.dart';
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       body: ListView(padding: const EdgeInsets.all(10.0), children: [
         FutureBuilder<List>(
           //make the API call
-          future: MarketIndexes.fetchLast30Days(),
+          future: MarketIndexesAPI.fetchLast30Days(),
           initialData: [],
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data!.length > 0) {
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
         ),
         FutureBuilder<Map>(
           //make the API call
-          future: FetchDailyTrades.fetchLatestTrades(),
+          future: FetchDailyTradesAPI.fetchLatestTrades(),
           initialData: Map(),
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data!.containsKey('date')) {
@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
         ),
         FutureBuilder<List<Map>>(
           //make the API call
-          future: StockNews.fetch10LatestNews(),
+          future: StockNewsAPI.fetch10LatestNews(),
           initialData: [],
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data!.length > 0) {

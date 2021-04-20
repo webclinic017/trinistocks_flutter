@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainDrawer extends StatefulWidget {
   _MainDrawerState createState() => _MainDrawerState();
@@ -45,6 +46,17 @@ class _MainDrawerState extends State<MainDrawer> {
                 title: Text('Listed Stocks'),
                 onTap: () {
                   Navigator.pushNamed(context, '/listed_stocks');
+                },
+              ),
+              ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.chartLine,
+                  color: Theme.of(context).accentColor,
+                  size: 30.0,
+                ),
+                title: Text('Technical Analysis'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/technical_analysis');
                 },
               ),
             ],

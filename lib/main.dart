@@ -1,7 +1,8 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
-import 'package:trinistocks_flutter/screens/listed_stocks.dart';
-import 'screens/home.dart';
+import 'package:trinistocks_flutter/screens/listed_stocks_screen.dart';
+import 'package:trinistocks_flutter/screens/technical_analysis_screen.dart';
+import 'screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -26,10 +27,9 @@ class TriniStocks extends StatelessWidget {
         accentColor: Colors.red[900],
       ),
       routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
         '/': (context) => HomePage(),
         '/listed_stocks': (context) => ListedStocksPage(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/technical_analysis': (context) => TechnicalAnalysisPage(),
       },
     );
   }

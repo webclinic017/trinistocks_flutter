@@ -4,8 +4,8 @@ import '../utilities/config.dart' as config;
 import 'package:intl/intl.dart';
 import 'dart:io';
 
-class StockNews {
-  StockNews() {}
+class StockNewsAPI {
+  StockNewsAPI() {}
 
   static Future<List<Map>> fetch10LatestNews() async {
     //first get todays date

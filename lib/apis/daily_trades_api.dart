@@ -4,8 +4,8 @@ import '../utilities/config.dart' as config;
 import 'package:intl/intl.dart';
 import 'dart:io';
 
-class FetchDailyTrades {
-  FetchDailyTrades() {}
+class FetchDailyTradesAPI {
+  FetchDailyTradesAPI() {}
 
   static Future<Map> fetchLatestTrades() async {
     String url = 'https://trinistocks.com/api/latestdailytrades';

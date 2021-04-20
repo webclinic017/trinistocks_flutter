@@ -51,7 +51,7 @@ class MarketIndexesLineChart extends StatelessWidget {
     List<Series<MarketIndexData, DateTime>> returnSeries = [
       new Series<MarketIndexData, DateTime>(
         id: 'Composite Index',
-        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+        colorFn: (_, __) => MaterialPalette.red.shadeDefault,
         domainFn: (MarketIndexData data, _) => data.dateTime,
         measureFn: (MarketIndexData data, _) => data.indexValue,
         data: compositeIndexData,

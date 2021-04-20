@@ -112,8 +112,13 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
         Container(
           child: Row(
             children: <Widget>[
-              Text(compactFormat
-                  .format(dailyTrades.dailyTradeData[index].changeDollars))
+              Text(
+                compactFormat
+                    .format(dailyTrades.dailyTradeData[index].changeDollars),
+                style: dailyTrades.dailyTradeData[index].changeDollars >= 0
+                    ? TextStyle(color: Colors.green)
+                    : TextStyle(color: Colors.red),
+              )
             ],
           ),
           width: 80,

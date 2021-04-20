@@ -214,9 +214,15 @@ class _ListedStocksDataTableState extends State<ListedStocksDataTable> {
   }
 
   List<Widget> _getTitleWidget() {
+    ButtonStyle titleButtonStyle = TextButton.styleFrom(
+      backgroundColor: Colors.transparent,
+      side: BorderSide(width: 0, style: BorderStyle.none),
+      padding: EdgeInsets.zero,
+      primary: Colors.black,
+    );
     return [
-      FlatButton(
-        padding: EdgeInsets.all(0),
+      TextButton(
+        style: titleButtonStyle,
         child: _getTitleItemWidget("Symbol" + checkSymbolSort(), 100),
         onPressed: () {
           changeSymbolSort();
@@ -229,8 +235,8 @@ class _ListedStocksDataTableState extends State<ListedStocksDataTable> {
       ),
       _getTitleItemWidget("Security Name", 250),
       _getTitleItemWidget("Status", 100),
-      FlatButton(
-        padding: EdgeInsets.all(0),
+      TextButton(
+        style: titleButtonStyle,
         child: _getTitleItemWidget("Sector" + checkSectorSort(), 120),
         onPressed: () {
           changeSectorSort();
@@ -241,8 +247,8 @@ class _ListedStocksDataTableState extends State<ListedStocksDataTable> {
           setState(() {});
         },
       ),
-      FlatButton(
-        padding: EdgeInsets.all(0),
+      TextButton(
+        style: titleButtonStyle,
         child: _getTitleItemWidget(
             "Issued Share Capital" + checkIssuedShareCapitalSort(), 120),
         onPressed: () {
@@ -254,8 +260,8 @@ class _ListedStocksDataTableState extends State<ListedStocksDataTable> {
           setState(() {});
         },
       ),
-      FlatButton(
-        padding: EdgeInsets.all(0),
+      TextButton(
+        style: titleButtonStyle,
         child: _getTitleItemWidget(
             "Market Capitalization" + checkMarketCapitalSort(), 100),
         onPressed: () {

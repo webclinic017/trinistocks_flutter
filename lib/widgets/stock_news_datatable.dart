@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
 
@@ -15,15 +16,32 @@ class StockNewsDataTable extends StatefulWidget {
 }
 
 class _StockNewsDataTableState extends State<StockNewsDataTable> {
-  static const int sortName = 0;
-  static const int sortStatus = 1;
-  bool isAscending = true;
-  int sortType = sortName;
+  int symbolSort = 0;
+  int dateSort = -1;
 
   @override
   void initState() {
-    user.initData(100);
+    stockNews.initData(widget.tableData);
     super.initState();
+  }
+
+  String checkDateSort() {
+    switch (dateSort) {
+      case 0:
+        {
+          return '';
+        }
+      case -1:
+        {
+          return '↓';
+        }
+      case 1:
+        {
+          return '↑';
+        }
+      default:
+        return '';
+    }
   }
 
   @override
@@ -53,7 +71,7 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
   List<Widget> _getTitleWidget() {
     return [
       _getTitleItemWidget("Symbol", 80),
-      _getTitleItemWidget("Date", 100),
+      _getTitleItemWidget("Date" + checkDateSort(), 100),
       _getTitleItemWidget("Category", 100),
       _getTitleItemWidget("Title", 300),
     ];
@@ -76,7 +94,7 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
 
   Widget _generateFirstColumnRow(BuildContext context, int index) {
     return Container(
-      child: Text(widget.tableData[index]["symbol"]),
+      child: Text(stockNews.stockNewsData[index].symbol),
       width: 100,
       height: 52,
       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -86,11 +104,14 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
   }
 
   Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
+    var formatter = new DateFormat.yMMMMd('en_US');
     return Row(
       children: <Widget>[
         Container(
           child: Row(
-            children: <Widget>[Text(widget.tableData[index]["date"])],
+            children: <Widget>[
+              Text(formatter.format(stockNews.stockNewsData[index].date))
+            ],
           ),
           width: 100,
           height: 52,
@@ -98,7 +119,7 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
           alignment: Alignment.centerLeft,
         ),
         Container(
-          child: Text(widget.tableData[index]["category"]),
+          child: Text(stockNews.stockNewsData[index].category),
           width: 100,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -106,7 +127,7 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
         ),
         Container(
           child: new InkWell(
-            child: new Text(widget.tableData[index]["title"]),
+            child: new Text(stockNews.stockNewsData[index].title),
             onTap: () => launch(widget.tableData[index]["link"]),
           ),
           width: 300,
@@ -119,52 +140,43 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
   }
 }
 
-User user = User();
+StockNews stockNews = StockNews();
 
-class User {
-  List<UserInfo> userInfo = [];
+class StockNews {
+  List<StockNewsData> stockNewsData = [];
 
-  void initData(int size) {
-    for (int i = 0; i < size; i++) {
-      userInfo.add(UserInfo(
-          "User_$i", i % 3 == 0, '+001 9999 9999', '2019-01-01', 'N/A'));
+  void initData(List<Map> tableData) {
+    for (int i = 0; i < tableData.length; i++) {
+      stockNewsData.add(StockNewsData(
+          tableData[i]['symbol'],
+          tableData[i]['date'],
+          tableData[i]['category'],
+          tableData[i]['title']));
     }
   }
 
-  ///
-  /// Single sort, sort Name's id
-  void sortName(bool isAscending) {
-    userInfo.sort((a, b) {
-      int aId = int.tryParse(a.name.replaceFirst('User_', ''))!;
-      int bId = int.tryParse(b.name.replaceFirst('User_', ''))!;
-      return (aId - bId) * (isAscending ? 1 : -1);
-    });
+  void sortSymbol(int symbolSort) {
+    if (symbolSort == -1) {
+      stockNewsData.sort((a, b) => (a.symbol.compareTo(b.symbol)));
+    } else {
+      stockNewsData.sort((a, b) => (b.symbol.compareTo(a.symbol)));
+    }
   }
 
-  ///
-  /// sort with Status and Name as the 2nd Sort
-  void sortStatus(bool isAscending) {
-    userInfo.sort((a, b) {
-      if (a.status == b.status) {
-        int aId = int.tryParse(a.name.replaceFirst('User_', ''))!;
-        int bId = int.tryParse(b.name.replaceFirst('User_', ''))!;
-        return (aId - bId);
-      } else if (a.status) {
-        return isAscending ? 1 : -1;
-      } else {
-        return isAscending ? -1 : 1;
-      }
-    });
+  void sortDate(int dateSort) {
+    if (dateSort == -1) {
+      stockNewsData.sort((a, b) => (a.date.compareTo(b.date)));
+    } else {
+      stockNewsData.sort((a, b) => (b.date.compareTo(a.date)));
+    }
   }
 }
 
-class UserInfo {
-  String name;
-  bool status;
-  String phone;
-  String registerDate;
-  String terminationDate;
+class StockNewsData {
+  String symbol;
+  String category;
+  DateTime date;
+  String title;
 
-  UserInfo(this.name, this.status, this.phone, this.registerDate,
-      this.terminationDate);
+  StockNewsData(this.symbol, this.date, this.category, this.title);
 }

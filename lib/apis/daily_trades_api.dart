@@ -38,12 +38,12 @@ class FetchDailyTradesAPI {
         returnData['tableData'].add({
           "symbol": apiResponse[i]["symbol"],
           "volume_traded": apiResponse[i]["volume_traded"],
-          "open_price": apiResponse[i]["open_price"],
-          "close_price": apiResponse[i]["close_price"],
-          "value_traded": apiResponse[i]["value_traded"],
-          "low": apiResponse[i]["low"],
-          "high": apiResponse[i]["high"],
-          "change_dollars": apiResponse[i]["change_dollars"],
+          "open_price": double.tryParse(apiResponse[i]["open_price"]),
+          "close_price": double.tryParse(apiResponse[i]["close_price"]),
+          "value_traded": double.tryParse(apiResponse[i]["value_traded"]),
+          "low": double.tryParse(apiResponse[i]["low"]),
+          "high": double.tryParse(apiResponse[i]["high"]),
+          "change_dollars": double.tryParse(apiResponse[i]["change_dollars"]),
         });
       }
     }

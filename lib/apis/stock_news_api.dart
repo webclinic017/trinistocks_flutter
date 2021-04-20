@@ -35,7 +35,7 @@ class StockNewsAPI {
       if (apiResponse[i]['symbol'] != null && apiResponse[i]['date'] != null) {
         Map newsData = new Map();
         newsData['symbol'] = apiResponse[i]['symbol'];
-        newsData['date'] = apiResponse[i]['date'];
+        newsData['date'] = formatter.parse(apiResponse[i]['date']);
         if (apiResponse[i]['category'] != null) {
           newsData['category'] = apiResponse[i]['category'];
         } else {

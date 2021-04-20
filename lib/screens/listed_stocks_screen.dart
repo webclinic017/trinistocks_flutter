@@ -43,6 +43,9 @@ class _ListedStocksPageState extends State<ListedStocksPage> {
                   overflow: TextOverflow.visible,
                   style: Theme.of(context).textTheme.headline5,
                 ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                ),
                 SizedBox(
                   height: 1000.0,
                   child: ListedStocksDataTable(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
+import 'package:intl/intl.dart';
 
 class DailyTradesDataTable extends StatefulWidget {
   //constructor to ask for tabledata
@@ -13,15 +14,32 @@ class DailyTradesDataTable extends StatefulWidget {
 }
 
 class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
-  static const int sortName = 0;
-  static const int sortStatus = 1;
-  bool isAscending = true;
-  int sortType = sortName;
+  int symbolSort = 0;
+  int valueTradedSort = -1;
 
   @override
   void initState() {
-    user.initData(100);
+    dailyTrades.initData(widget.tableData);
     super.initState();
+  }
+
+  String checkValueTradedSort() {
+    switch (valueTradedSort) {
+      case 0:
+        {
+          return '';
+        }
+      case -1:
+        {
+          return '↓';
+        }
+      case 1:
+        {
+          return '↑';
+        }
+      default:
+        return '';
+    }
   }
 
   @override
@@ -51,12 +69,12 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
   List<Widget> _getTitleWidget() {
     return [
       _getTitleItemWidget("Symbol", 80),
-      _getTitleItemWidget("Change(\$)", 80),
+      _getTitleItemWidget("Change", 80),
       _getTitleItemWidget("Open Price", 80),
       _getTitleItemWidget("Low", 60),
       _getTitleItemWidget("High", 60),
       _getTitleItemWidget("Close Price", 80),
-      _getTitleItemWidget("Value Traded", 100),
+      _getTitleItemWidget("Value Traded " + checkValueTradedSort(), 100),
     ];
   }
 
@@ -77,7 +95,7 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
 
   Widget _generateFirstColumnRow(BuildContext context, int index) {
     return Container(
-      child: Text(widget.tableData[index]["symbol"]),
+      child: Text(dailyTrades.dailyTradeData[index].symbol),
       width: 100,
       height: 52,
       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -87,12 +105,15 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
   }
 
   Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
+    var compactFormat =
+        NumberFormat.compactCurrency(locale: 'en_US', symbol: "\$");
     return Row(
       children: <Widget>[
         Container(
           child: Row(
             children: <Widget>[
-              Text("\$${widget.tableData[index]["change_dollars"]}")
+              Text(compactFormat
+                  .format(dailyTrades.dailyTradeData[index].changeDollars))
             ],
           ),
           width: 80,
@@ -101,35 +122,45 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
           alignment: Alignment.centerLeft,
         ),
         Container(
-          child: Text("\$${widget.tableData[index]["open_price"]}"),
+          child: Text(
+            compactFormat.format(dailyTrades.dailyTradeData[index].openPrice),
+          ),
           width: 80,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
         ),
         Container(
-          child: Text("\$${widget.tableData[index]["low"]}"),
+          child: Text(
+            compactFormat.format(dailyTrades.dailyTradeData[index].low),
+          ),
           width: 60,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
         ),
         Container(
-          child: Text("\$${widget.tableData[index]["high"]}"),
+          child: Text(
+            compactFormat.format(dailyTrades.dailyTradeData[index].high),
+          ),
           width: 60,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
         ),
         Container(
-          child: Text("\$${widget.tableData[index]["close_price"]}"),
+          child: Text(
+            compactFormat.format(dailyTrades.dailyTradeData[index].closePrice),
+          ),
           width: 80,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
         ),
         Container(
-          child: Text("\$${widget.tableData[index]["value_traded"]}"),
+          child: Text(
+            compactFormat.format(dailyTrades.dailyTradeData[index].valueTraded),
+          ),
           width: 80,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -140,52 +171,54 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
   }
 }
 
-User user = User();
+DailyTrades dailyTrades = DailyTrades();
 
-class User {
-  List<UserInfo> userInfo = [];
+class DailyTrades {
+  List<DailyTradeData> dailyTradeData = [];
 
-  void initData(int size) {
-    for (int i = 0; i < size; i++) {
-      userInfo.add(UserInfo(
-          "User_$i", i % 3 == 0, '+001 9999 9999', '2019-01-01', 'N/A'));
+  void initData(List<Map> tableData) {
+    for (int i = 0; i < tableData.length; i++) {
+      dailyTradeData.add(DailyTradeData(
+          tableData[i]['symbol'],
+          tableData[i]['date'],
+          tableData[i]['value_traded'],
+          tableData[i]['volume_traded'],
+          tableData[i]['open_price'],
+          tableData[i]['close_price'],
+          tableData[i]['change_dollars'],
+          tableData[i]['high'],
+          tableData[i]['low']));
     }
   }
 
-  ///
-  /// Single sort, sort Name's id
-  void sortName(bool isAscending) {
-    userInfo.sort((a, b) {
-      int aId = int.tryParse(a.name.replaceFirst('User_', ''))!;
-      int bId = int.tryParse(b.name.replaceFirst('User_', ''))!;
-      return (aId - bId) * (isAscending ? 1 : -1);
-    });
+  void sortSymbol(int symbolSort) {
+    if (symbolSort == -1) {
+      dailyTradeData.sort((a, b) => (a.symbol.compareTo(b.symbol)));
+    } else {
+      dailyTradeData.sort((a, b) => (b.symbol.compareTo(a.symbol)));
+    }
   }
 
-  ///
-  /// sort with Status and Name as the 2nd Sort
-  void sortStatus(bool isAscending) {
-    userInfo.sort((a, b) {
-      if (a.status == b.status) {
-        int aId = int.tryParse(a.name.replaceFirst('User_', ''))!;
-        int bId = int.tryParse(b.name.replaceFirst('User_', ''))!;
-        return (aId - bId);
-      } else if (a.status) {
-        return isAscending ? 1 : -1;
-      } else {
-        return isAscending ? -1 : 1;
-      }
-    });
+  void sortValueTraded(int valueTradedSort) {
+    if (valueTradedSort == -1) {
+      dailyTradeData.sort((a, b) => (a.valueTraded.compareTo(b.valueTraded)));
+    } else {
+      dailyTradeData.sort((a, b) => (b.valueTraded.compareTo(a.valueTraded)));
+    }
   }
 }
 
-class UserInfo {
-  String name;
-  bool status;
-  String phone;
-  String registerDate;
-  String terminationDate;
+class DailyTradeData {
+  String symbol;
+  DateTime date;
+  double valueTraded;
+  int volumeTraded;
+  double openPrice;
+  double closePrice;
+  double changeDollars;
+  double high;
+  double low;
 
-  UserInfo(this.name, this.status, this.phone, this.registerDate,
-      this.terminationDate);
+  DailyTradeData(this.symbol, this.date, this.valueTraded, this.volumeTraded,
+      this.openPrice, this.closePrice, this.changeDollars, this.high, this.low);
 }

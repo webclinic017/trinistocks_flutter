@@ -2,10 +2,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:trinistocks_flutter/screens/listed_stocks_screen.dart';
-import 'package:trinistocks_flutter/screens/technical_analysis_screen.dart';
+import 'screens/fundamental_analysis_screen.dart';
+import 'screens/listed_stocks_screen.dart';
+import 'screens/technical_analysis_screen.dart';
 import 'screens/home_screen.dart';
 import 'package:provider/provider.dart';
+import 'screens/stock_price_history_screen.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -29,19 +31,30 @@ class TriniStocks extends StatelessWidget {
       title: 'trinistocks',
       theme: ThemeData(
         brightness: Brightness.light,
-        primaryColor: Colors.red[900],
-        accentColor: Colors.red[900],
+        primaryColor: Colors.grey[400],
+        accentColor: Colors.grey[900],
         cardColor: Colors.grey[400],
+        shadowColor: Colors.grey[300],
+        backgroundColor: Colors.grey[50],
+        secondaryHeaderColor: Colors.black,
+        splashColor: Colors.red,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: Colors.red[900],
-        accentColor: Colors.red[900],
+        primaryColor: Colors.grey[900],
+        accentColor: Colors.grey[50],
+        cardColor: Colors.grey[900],
+        shadowColor: Colors.grey[850],
+        backgroundColor: Colors.grey[800],
+        secondaryHeaderColor: Colors.white,
+        splashColor: Colors.red,
       ),
       routes: {
         '/': (context) => HomePage(),
         '/listed_stocks': (context) => ListedStocksPage(),
         '/technical_analysis': (context) => TechnicalAnalysisPage(),
+        '/fundamental_analysis': (context) => FundamentalAnalysisPage(),
+        '/stock_price_history': (context) => StockPriceHistoryPage(),
       },
     );
   }

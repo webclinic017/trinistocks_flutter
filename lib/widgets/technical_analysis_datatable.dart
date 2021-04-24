@@ -7,9 +7,14 @@ import 'package:flutter/gestures.dart';
 
 class TechnicalAnalysisDataTable extends StatefulWidget {
   //constructor to ask for tabledata
-  const TechnicalAnalysisDataTable({required this.tableData});
+  const TechnicalAnalysisDataTable(
+      {required this.tableData,
+      required this.headerColor,
+      required this.leftHandColor});
 
   final List<Map> tableData;
+  final Color headerColor;
+  final Color leftHandColor;
 
   @override
   _TechnicalAnalysisDataTableState createState() =>
@@ -29,6 +34,7 @@ class _TechnicalAnalysisDataTableState
   int wtdSort = 0;
   int betaSort = 0;
   int adtvSort = 0;
+  TechnicalAnalysis technicalAnalysis = TechnicalAnalysis();
 
   @override
   void initState() {
@@ -52,8 +58,8 @@ class _TechnicalAnalysisDataTableState
           height: 1.0,
           thickness: 1.0,
         ),
-        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+        leftHandSideColBackgroundColor: widget.leftHandColor,
+        rightHandSideColBackgroundColor: Theme.of(context).backgroundColor,
         enablePullToRefresh: false,
       ),
       height: 52.0 * (widget.tableData.length + 1),
@@ -416,7 +422,7 @@ class _TechnicalAnalysisDataTableState
       backgroundColor: Colors.transparent,
       side: BorderSide(width: 0, style: BorderStyle.none),
       padding: EdgeInsets.zero,
-      primary: Colors.black,
+      primary: Theme.of(context).accentColor,
     );
     return [
       TextButton(
@@ -582,25 +588,27 @@ class _TechnicalAnalysisDataTableState
     return Container(
       child: Text(
         label,
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         textAlign: TextAlign.start,
       ),
       width: width,
       height: 50,
       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      color: Colors.grey[500],
+      color: widget.headerColor,
     );
   }
 
   Widget _generateFirstColumnRow(BuildContext context, int index) {
     return Container(
-      child: Text(technicalAnalysis.technicalAnalysisData[index].symbol),
+      child: Text(
+        technicalAnalysis.technicalAnalysisData[index].symbol,
+        style: TextStyle(color: Colors.black),
+      ),
       width: 100,
       height: 52,
       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      color: Colors.grey[300],
     );
   }
 
@@ -705,8 +713,6 @@ class _TechnicalAnalysisDataTableState
     );
   }
 }
-
-TechnicalAnalysis technicalAnalysis = TechnicalAnalysis();
 
 class TechnicalAnalysis {
   List<TechnicalAnalysisData> technicalAnalysisData = [];

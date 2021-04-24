@@ -9,6 +9,9 @@ class MainDrawer extends StatefulWidget {
 class _MainDrawerState extends State<MainDrawer> {
   @override
   Widget build(BuildContext context) {
+    double dropDownHeaderSize = 18;
+    double itemHeaderSize = 16;
+    double iconSize = 40;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -18,7 +21,11 @@ class _MainDrawerState extends State<MainDrawer> {
             child: DrawerHeader(
               child: Text(
                 'Menu',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
               ),
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             ),
@@ -27,23 +34,44 @@ class _MainDrawerState extends State<MainDrawer> {
             leading: Icon(
               Icons.house,
               color: Theme.of(context).accentColor,
-              size: 30.0,
+              size: iconSize,
             ),
-            title: Text('Home'),
+            title: Text(
+              'Home',
+              style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontWeight: FontWeight.w600,
+                fontSize: itemHeaderSize,
+              ),
+            ),
             onTap: () {
               Navigator.pushNamed(context, '/');
             },
           ),
           ExpansionTile(
-            title: Text("Summarized"),
+            title: Text(
+              "Summarized",
+              style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontWeight: FontWeight.w600,
+                fontSize: dropDownHeaderSize,
+              ),
+            ),
             children: [
               ListTile(
                 leading: Icon(
                   Icons.list_alt_rounded,
                   color: Theme.of(context).accentColor,
-                  size: 30.0,
+                  size: iconSize,
                 ),
-                title: Text('Listed Stocks'),
+                title: Text(
+                  'Listed Stocks',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: itemHeaderSize,
+                  ),
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, '/listed_stocks');
                 },
@@ -52,17 +80,69 @@ class _MainDrawerState extends State<MainDrawer> {
                 leading: FaIcon(
                   FontAwesomeIcons.chartLine,
                   color: Theme.of(context).accentColor,
-                  size: 30.0,
+                  size: iconSize,
                 ),
-                title: Text('Technical Analysis'),
+                title: Text(
+                  'Technical Analysis',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: itemHeaderSize,
+                  ),
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, '/technical_analysis');
+                },
+              ),
+              ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.bookReader,
+                  color: Theme.of(context).accentColor,
+                  size: iconSize,
+                ),
+                title: Text(
+                  'Fundamental Analysis',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: itemHeaderSize,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/fundamental_analysis');
                 },
               ),
             ],
           ),
           ExpansionTile(
-            title: Text("Historical"),
+            title: Text(
+              "Historical",
+              style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontWeight: FontWeight.w600,
+                fontSize: dropDownHeaderSize,
+              ),
+            ),
+            children: [
+              ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.chartBar,
+                  color: Theme.of(context).accentColor,
+                  size: iconSize,
+                ),
+                title: Text(
+                  'Stock Prices',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: itemHeaderSize,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/stock_price_history');
+                },
+              ),
+            ],
           ), /*or any other widget you want to apply the theme to.*/
         ],
       ),

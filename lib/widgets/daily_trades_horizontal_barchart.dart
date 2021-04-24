@@ -15,10 +15,24 @@ class DailyTradesHorizontalBarChart extends StatelessWidget {
       seriesList,
       animate: animate,
       vertical: false,
+      primaryMeasureAxis: NumericAxisSpec(
+        renderSpec: new SmallTickRendererSpec(
+          labelStyle: new TextStyleSpec(
+            color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
+          ),
+        ),
+      ),
+      domainAxis: AxisSpec<String>(
+        renderSpec: new SmallTickRendererSpec(
+          labelStyle: new TextStyleSpec(
+            color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
+          ),
+        ),
+      ),
       behaviors: [
         new ChartTitle('Price Volume (TTD\$)',
             titleStyleSpec: TextStyleSpec(
-                color: MaterialPalette.black,
+                color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
                 fontFamily: 'Roboto',
                 fontSize: 12),
             behaviorPosition: BehaviorPosition.bottom,

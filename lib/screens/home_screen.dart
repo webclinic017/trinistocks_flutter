@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:random_color/random_color.dart';
+import 'package:trinistocks_flutter/widgets/loading_widget.dart';
 import 'package:trinistocks_flutter/widgets/main_drawer.dart';
 import 'package:trinistocks_flutter/widgets/stock_news_datatable.dart';
 import '../apis/daily_trades_api.dart';
@@ -20,12 +22,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    ColorHue colorHue = ColorHue.red;
+    Color headerColor = RandomColor().randomColor(
+        colorHue: colorHue,
+        colorSaturation: ColorSaturation.lowSaturation,
+        colorBrightness: ColorBrightness.dark);
+    Color leftHandColor = RandomColor().randomColor(
+        colorHue: colorHue,
+        colorSaturation: ColorSaturation.lowSaturation,
+        colorBrightness: ColorBrightness.light);
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
@@ -46,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                   "TTSE Trailing 30-Day Composite Index",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.visible,
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
                 SizedBox(
                   height: 200.0,
@@ -55,30 +60,8 @@ class _HomePageState extends State<HomePage> {
               ]);
             } //while the data is loading, return a progress indicator
             else
-              return Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 3, color: Colors.redAccent),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Now loading latest market indexes.',
-                        style: Theme.of(context).textTheme.headline6,
-                        textAlign: TextAlign.center,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: CircularProgressIndicator(),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              return LoadingWidget(
+                  loadingText: 'Now loading market index data');
           },
         ),
         FutureBuilder<Map>(
@@ -93,42 +76,24 @@ class _HomePageState extends State<HomePage> {
                     "Stocks Traded on the TTSE on ${snapshot.data!['date']}",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.visible,
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(
                     height: 400.0,
                     child: DailyTradesHorizontalBarChart.withData(
                         snapshot.data!['chartData']),
                   ),
-                  DailyTradesDataTable(tableData: snapshot.data!['tableData']),
+                  DailyTradesDataTable(
+                    tableData: snapshot.data!['tableData'],
+                    headerColor: headerColor,
+                    leftHandColor: leftHandColor,
+                  ),
                 ],
               );
             } //while the data is loading, return a progress indicator
             else
-              return Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 3, color: Colors.redAccent),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Now loading daily trade data.',
-                        style: Theme.of(context).textTheme.headline6,
-                        textAlign: TextAlign.center,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: CircularProgressIndicator(),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              return LoadingWidget(
+                  loadingText: 'Now loading daily trades data');
           },
         ),
         FutureBuilder<List<Map>>(
@@ -144,39 +109,20 @@ class _HomePageState extends State<HomePage> {
                     "Latest Stock News",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.visible,
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
-                  StockNewsDataTable(tableData: snapshot.data!),
+                  StockNewsDataTable(
+                    tableData: snapshot.data!,
+                    headerColor: headerColor,
+                    leftHandColor: leftHandColor,
+                  ),
                 ]),
               );
             } else
-              return Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 3, color: Colors.redAccent),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Now loading stock news data.',
-                        style: Theme.of(context).textTheme.headline6,
-                        textAlign: TextAlign.center,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: CircularProgressIndicator(),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              return LoadingWidget(loadingText: 'Now loading stock news data');
           },
         ),
       ]),

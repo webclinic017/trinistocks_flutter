@@ -51,8 +51,6 @@ class StockNewsAPI {
         returnData.add(newsData);
       }
     }
-    // temp delay to display overlay
-    await Future.delayed(Duration(seconds: 2));
     // return the data from the api request
     return returnData;
   }

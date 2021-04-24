@@ -5,9 +5,14 @@ import 'package:intl/intl.dart';
 
 class DailyTradesDataTable extends StatefulWidget {
   //constructor to ask for tabledata
-  const DailyTradesDataTable({required this.tableData});
+  const DailyTradesDataTable(
+      {required this.tableData,
+      required this.headerColor,
+      required this.leftHandColor});
 
   final List<Map> tableData;
+  final Color headerColor;
+  final Color leftHandColor;
 
   @override
   _DailyTradesDataTableState createState() => _DailyTradesDataTableState();
@@ -58,8 +63,8 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
           height: 1.0,
           thickness: 1.0,
         ),
-        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+        leftHandSideColBackgroundColor: widget.leftHandColor,
+        rightHandSideColBackgroundColor: Theme.of(context).backgroundColor,
         enablePullToRefresh: false,
       ),
       height: 52.0 * (widget.tableData.length + 1),
@@ -70,11 +75,11 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
     return [
       _getTitleItemWidget("Symbol", 80),
       _getTitleItemWidget("Change", 80),
+      _getTitleItemWidget("Value Traded " + checkValueTradedSort(), 100),
       _getTitleItemWidget("Open Price", 80),
       _getTitleItemWidget("Low", 60),
       _getTitleItemWidget("High", 60),
       _getTitleItemWidget("Close Price", 80),
-      _getTitleItemWidget("Value Traded " + checkValueTradedSort(), 100),
     ];
   }
 
@@ -82,25 +87,27 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
     return Container(
       child: Text(
         label,
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         textAlign: TextAlign.start,
       ),
       width: width,
       height: 50,
       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      color: Colors.grey[500],
+      color: widget.headerColor,
     );
   }
 
   Widget _generateFirstColumnRow(BuildContext context, int index) {
     return Container(
-      child: Text(dailyTrades.dailyTradeData[index].symbol),
+      child: Text(
+        dailyTrades.dailyTradeData[index].symbol,
+        style: TextStyle(color: Colors.black),
+      ),
       width: 100,
       height: 52,
       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      color: Colors.grey[300],
     );
   }
 
@@ -128,7 +135,18 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
         ),
         Container(
           child: Text(
+            compactFormat.format(dailyTrades.dailyTradeData[index].valueTraded),
+            style: TextStyle(color: Theme.of(context).accentColor),
+          ),
+          width: 100,
+          height: 52,
+          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+        ),
+        Container(
+          child: Text(
             compactFormat.format(dailyTrades.dailyTradeData[index].openPrice),
+            style: TextStyle(color: Theme.of(context).accentColor),
           ),
           width: 80,
           height: 52,
@@ -138,6 +156,7 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
         Container(
           child: Text(
             compactFormat.format(dailyTrades.dailyTradeData[index].low),
+            style: TextStyle(color: Theme.of(context).accentColor),
           ),
           width: 60,
           height: 52,
@@ -147,6 +166,7 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
         Container(
           child: Text(
             compactFormat.format(dailyTrades.dailyTradeData[index].high),
+            style: TextStyle(color: Theme.of(context).accentColor),
           ),
           width: 60,
           height: 52,
@@ -156,15 +176,7 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
         Container(
           child: Text(
             compactFormat.format(dailyTrades.dailyTradeData[index].closePrice),
-          ),
-          width: 80,
-          height: 52,
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-        ),
-        Container(
-          child: Text(
-            compactFormat.format(dailyTrades.dailyTradeData[index].valueTraded),
+            style: TextStyle(color: Theme.of(context).accentColor),
           ),
           width: 80,
           height: 52,

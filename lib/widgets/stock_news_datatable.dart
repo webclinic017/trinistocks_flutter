@@ -7,9 +7,14 @@ import 'package:flutter/gestures.dart';
 
 class StockNewsDataTable extends StatefulWidget {
   //constructor to ask for tabledata
-  const StockNewsDataTable({required this.tableData});
+  const StockNewsDataTable(
+      {required this.tableData,
+      required this.headerColor,
+      required this.leftHandColor});
 
   final List<Map> tableData;
+  final Color headerColor;
+  final Color leftHandColor;
 
   @override
   _StockNewsDataTableState createState() => _StockNewsDataTableState();
@@ -60,8 +65,8 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
           height: 1.0,
           thickness: 1.0,
         ),
-        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+        leftHandSideColBackgroundColor: widget.leftHandColor,
+        rightHandSideColBackgroundColor: Theme.of(context).backgroundColor,
         enablePullToRefresh: false,
       ),
       height: 52.0 * (widget.tableData.length + 1),
@@ -72,8 +77,8 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
     return [
       _getTitleItemWidget("Symbol", 80),
       _getTitleItemWidget("Date" + checkDateSort(), 100),
-      _getTitleItemWidget("Category", 100),
       _getTitleItemWidget("Title", 300),
+      _getTitleItemWidget("Category", 100),
     ];
   }
 
@@ -81,25 +86,27 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
     return Container(
       child: Text(
         label,
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         textAlign: TextAlign.start,
       ),
       width: width,
       height: 50,
       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      color: Colors.grey[500],
+      color: widget.headerColor,
     );
   }
 
   Widget _generateFirstColumnRow(BuildContext context, int index) {
     return Container(
-      child: Text(stockNews.stockNewsData[index].symbol),
+      child: Text(
+        stockNews.stockNewsData[index].symbol,
+        style: TextStyle(color: Colors.black),
+      ),
       width: 100,
       height: 52,
       padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
       alignment: Alignment.centerLeft,
-      color: Colors.grey[300],
     );
   }
 
@@ -110,7 +117,10 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
         Container(
           child: Row(
             children: <Widget>[
-              Text(formatter.format(stockNews.stockNewsData[index].date))
+              Text(
+                formatter.format(stockNews.stockNewsData[index].date),
+                style: TextStyle(color: Theme.of(context).accentColor),
+              )
             ],
           ),
           width: 100,
@@ -119,18 +129,20 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
           alignment: Alignment.centerLeft,
         ),
         Container(
-          child: Text(stockNews.stockNewsData[index].category),
-          width: 100,
+          child: new InkWell(
+            child: new Text(stockNews.stockNewsData[index].title,
+                style: TextStyle(color: Theme.of(context).accentColor)),
+            onTap: () => launch(widget.tableData[index]["link"]),
+          ),
+          width: 300,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
         ),
         Container(
-          child: new InkWell(
-            child: new Text(stockNews.stockNewsData[index].title),
-            onTap: () => launch(widget.tableData[index]["link"]),
-          ),
-          width: 300,
+          child: Text(stockNews.stockNewsData[index].category,
+              style: TextStyle(color: Theme.of(context).accentColor)),
+          width: 100,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,

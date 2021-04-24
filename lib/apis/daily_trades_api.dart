@@ -47,8 +47,6 @@ class FetchDailyTradesAPI {
         });
       }
     }
-    // temp delay to display overlay
-    await Future.delayed(Duration(seconds: 2));
     return returnData;
   }
 }

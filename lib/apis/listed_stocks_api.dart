@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import '../utilities/config.dart' as config;
 import 'package:intl/intl.dart';
@@ -7,7 +8,7 @@ import 'dart:io';
 class ListedStocksAPI {
   ListedStocksAPI() {}
 
-  static Future<List<Map>> fetchAllListedStockData() async {
+  static Future<Map> fetchAllListedStockData() async {
     String url = 'https://trinistocks.com/api/listedstocks';
     const apiToken = config.APIKeys.app_api_token;
     final response =
@@ -41,8 +42,30 @@ class ListedStocksAPI {
     // sort the listed stocks by market capitalization
     returnData.sort((a, b) =>
         (b['market_capitalization']).compareTo(a['market_capitalization']));
-    // temp delay to display overlay
-    await Future.delayed(Duration(seconds: 2));
+    //group the data by sector
+    Map groupedSectorData = groupBy(returnData, (Map obj) => obj['sector']);
+    // return the data from the api request
+    return groupedSectorData;
+  }
+
+  static Future<List<String>> fetchListedStockSymbols() async {
+    String url = 'https://trinistocks.com/api/listedstocks';
+    const apiToken = config.APIKeys.app_api_token;
+    final response =
+        await http.get(url, headers: {"Authorization": "Token $apiToken"});
+    List apiResponse = [];
+    if (response.statusCode == 200) {
+      apiResponse = json.decode(response.body);
+    } else {
+      throw Exception("Could not fetch API data from $url");
+    }
+    //parse the apiresponse data to be returned
+    List<String> returnData = [];
+    for (int i = 0; i < apiResponse.length; i++) {
+      returnData.add(apiResponse[i]['symbol']);
+    }
+    // sort the listed stocks by market capitalization
+    returnData.sort((a, b) => (b).compareTo(a));
     // return the data from the api request
     return returnData;
   }

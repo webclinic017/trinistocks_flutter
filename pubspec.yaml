@@ -33,7 +33,7 @@ dependencies:
   # charts lib for bar,line and pie charts
   charts_flutter: ^0.10.0
   # intl lib for converting dates to strings 
-  intl: ^0.15.7
+  intl: ^0.17.0
   # provider lib which helps with state management between screens/widgets
   provider: ^5.0.0
   # table
@@ -41,6 +41,9 @@ dependencies:
   # url launcher
   url_launcher: ^6.0.0
   font_awesome_flutter: ^9.0.0
+  collection: ^1.15.0
+  random_color: ^1.0.5
+  syncfusion_flutter_charts: ^19.1.57+1
 
 dev_dependencies:
   flutter_test:

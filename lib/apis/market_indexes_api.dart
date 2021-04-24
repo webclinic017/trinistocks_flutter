@@ -28,8 +28,6 @@ class MarketIndexesAPI {
     }
     // sort the news by date
     apiResponse.sort((a, b) => (b['date']).compareTo(a['date']));
-    // temp delay to display overlay
-    await Future.delayed(Duration(seconds: 2));
     // return the data from the api request
     return apiResponse;
   }

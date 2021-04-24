@@ -16,12 +16,30 @@ class MarketIndexesLineChart extends StatelessWidget {
       primaryMeasureAxis: NumericAxisSpec(
         tickProviderSpec: BasicNumericTickProviderSpec(
             desiredTickCount: 10, zeroBound: false),
+        renderSpec: new SmallTickRendererSpec(
+          labelStyle: new TextStyleSpec(
+            color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
+          ),
+        ),
+      ),
+      domainAxis: DateTimeAxisSpec(
+        renderSpec: new SmallTickRendererSpec(
+          labelStyle: new TextStyleSpec(
+            color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
+          ),
+        ),
       ),
       behaviors: [
         new ChartTitle('Date',
+            titleStyleSpec: TextStyleSpec(
+              color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
+            ),
             behaviorPosition: BehaviorPosition.bottom,
             titleOutsideJustification: OutsideJustification.middleDrawArea),
         new ChartTitle('Index Value',
+            titleStyleSpec: TextStyleSpec(
+              color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
+            ),
             behaviorPosition: BehaviorPosition.start,
             titleOutsideJustification: OutsideJustification.middleDrawArea),
       ],

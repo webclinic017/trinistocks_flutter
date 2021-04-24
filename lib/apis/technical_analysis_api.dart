@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import '../utilities/config.dart' as config;
 import 'package:intl/intl.dart';
@@ -7,7 +8,7 @@ import 'dart:io';
 class TechnicalAnalysisAPI {
   TechnicalAnalysisAPI() {}
 
-  static Future<List<Map>> fetchLatestTechnicalAnalysisData() async {
+  static Future<Map> fetchLatestTechnicalAnalysisData() async {
     String url = 'https://trinistocks.com/api/technicalanalysis';
     const apiToken = config.APIKeys.app_api_token;
     final response =
@@ -23,6 +24,7 @@ class TechnicalAnalysisAPI {
     for (int i = 0; i < apiResponse.length; i++) {
       Map securityData = Map();
       securityData['symbol'] = apiResponse[i]['symbol'];
+      securityData['sector'] = apiResponse[i]['sector'];
       securityData['last_close_price'] =
           double.parse(apiResponse[i]['last_close_price']);
       securityData['sma_20'] = double.parse(apiResponse[i]['sma_20']);
@@ -42,9 +44,9 @@ class TechnicalAnalysisAPI {
     }
     // sort the listed stocks by market capitalization
     returnData.sort((a, b) => (a['symbol']).compareTo(b['symbol']));
-    // temp delay to display overlay
-    await Future.delayed(Duration(seconds: 2));
+    //group the data by sector
+    Map groupedSectorData = groupBy(returnData, (Map obj) => obj['sector']);
     // return the data from the api request
-    return returnData;
+    return groupedSectorData;
   }
 }

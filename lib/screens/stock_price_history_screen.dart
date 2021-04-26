@@ -19,6 +19,16 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
   List<Color> generatedColors = <Color>[];
   String selectedSymbol = 'AGL';
   String dateRange = StockPriceDateRange.oneYear;
+  double buttonBarLabelSize = 16;
+  bool symbolDropdownButtonBuilt = false;
+  late List<DropdownMenuItem<String>> listedSymbols;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +40,40 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
       endDrawer: MainDrawer(),
       //setup futurebuilders to wait on the API data
       body: ListView(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(0.0),
         children: [
+          FutureBuilder<List<String>>(
+            //make the API call
+            future: ListedStocksAPI.fetchListedStockSymbols(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return new ButtonBar(
+                  alignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Text(
+                        "Symbol:",
+                        style: TextStyle(fontSize: buttonBarLabelSize),
+                      ),
+                    ),
+                    symbolDropdownButton(context, snapshot.data!),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: Text(
+                        "Range:",
+                        style: TextStyle(fontSize: buttonBarLabelSize),
+                      ),
+                    ),
+                    startDateDropdownButton(context),
+                  ],
+                );
+              } //while the data is loading, return a progress indicator
+              else
+                return new LoadingWidget(
+                    loadingText: 'Loading all listed symbols.');
+            },
+          ),
           FutureBuilder<List<Map>>(
             //make the API call
             future:
@@ -45,78 +87,104 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
                     loadingText: 'Loading stock price data.');
             },
           ),
-          FutureBuilder<List<String>>(
-            //make the API call
-            future: ListedStocksAPI.fetchListedStockSymbols(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return new ButtonBar(
-                  alignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: Text(
-                            "Symbol:",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                        symbolDropdownButton(context, snapshot.data!),
-                      ],
-                    )
-                  ],
-                );
-              } //while the data is loading, return a progress indicator
-              else
-                return new LoadingWidget(
-                    loadingText: 'Loading stock price data.');
-            },
-          ),
         ],
       ),
     );
   }
 
-  List<DropdownMenuItem<String>> getListedSymbols(
-      BuildContext context, List<String> symbols) {
-    List<DropdownMenuItem<String>> list = [];
-    list.add(
-      new DropdownMenuItem<String>(
-        value: 'AGL',
-        child: Text(
-          'AGL',
-          style: TextStyle(color: Theme.of(context).accentColor),
+  Future<List<DropdownMenuItem<String>>> getListedSymbols(
+      BuildContext context, List<String> symbols) async {
+    List<DropdownMenuItem<String>> dropdownList = [];
+    for (String symbol in symbols) {
+      dropdownList.add(
+        new DropdownMenuItem<String>(
+          value: symbol,
+          child: Text(
+            symbol,
+            style: TextStyle(color: Theme.of(context).accentColor),
+          ),
         ),
-      ),
-    );
-    list.add(
-      new DropdownMenuItem(
-        value: 'helloji2',
-        child: Text(
-          'helloji2',
-          style: TextStyle(color: Theme.of(context).accentColor),
-        ),
-      ),
-    );
-    return list;
+      );
+    }
+    return dropdownList;
   }
 
   Widget symbolDropdownButton(BuildContext context, List<String> symbols) {
+    return FutureBuilder<List<DropdownMenuItem<String>>>(
+        future: getListedSymbols(context, symbols),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return DropdownButton<String>(
+              value: this.selectedSymbol,
+              icon: FaIcon(
+                FontAwesomeIcons.arrowAltCircleDown,
+                color: Theme.of(context).accentColor,
+              ),
+              items: snapshot.data,
+              underline: Container(
+                height: 2,
+                color: Theme.of(context).splashColor,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedSymbol = newValue!;
+                });
+              },
+            );
+          } else {
+            return DropdownButton<String>(
+              value: this.selectedSymbol,
+              icon: FaIcon(
+                FontAwesomeIcons.arrowAltCircleDown,
+                color: Theme.of(context).accentColor,
+              ),
+              items: [],
+              underline: Container(
+                height: 2,
+                color: Theme.of(context).splashColor,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedSymbol = newValue!;
+                });
+              },
+            );
+          }
+        });
+  }
+
+  Widget startDateDropdownButton(BuildContext context) {
     return DropdownButton<String>(
-      value: this.selectedSymbol,
+      value: dateRange,
       icon: FaIcon(
         FontAwesomeIcons.arrowAltCircleDown,
         color: Theme.of(context).accentColor,
       ),
-      items: getListedSymbols(context, symbols),
+      items: [
+        new DropdownMenuItem<String>(
+          value: StockPriceDateRange.oneMonth,
+          child: Text(StockPriceDateRange.oneMonth),
+        ),
+        new DropdownMenuItem<String>(
+          value: StockPriceDateRange.oneYear,
+          child: Text(StockPriceDateRange.oneYear),
+        ),
+        new DropdownMenuItem<String>(
+          value: StockPriceDateRange.fiveYears,
+          child: Text(StockPriceDateRange.fiveYears),
+        ),
+        new DropdownMenuItem<String>(
+          value: StockPriceDateRange.tenYears,
+          child: Text(StockPriceDateRange.tenYears),
+        ),
+      ],
       underline: Container(
         height: 2,
         color: Theme.of(context).splashColor,
       ),
       onChanged: (String? newValue) {
         setState(() {
-          selectedSymbol = newValue!;
+          dateRange = newValue!;
         });
       },
     );

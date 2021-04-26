@@ -69,7 +69,7 @@ class _StockNewsDataTableState extends State<StockNewsDataTable> {
         rightHandSideColBackgroundColor: Theme.of(context).backgroundColor,
         enablePullToRefresh: false,
       ),
-      height: 52.0 * (widget.tableData.length + 1),
+      height: 53.0 * (widget.tableData.length + 1),
     );
   }
 

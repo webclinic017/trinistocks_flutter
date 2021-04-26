@@ -10,7 +10,7 @@ class StockPriceAPI {
   static Future<List<Map>> fetchStockPriceData(
       String symbol, String dateRange) async {
     DateTime startDate = DateTime.now();
-    DateFormat dateFormat = DateFormat.yMMMMd('en_US');
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
     switch (dateRange) {
       case StockPriceDateRange.oneMonth:
         startDate = startDate.subtract(Duration(days: 30));

@@ -65,7 +65,7 @@ class ListedStocksAPI {
       returnData.add(apiResponse[i]['symbol']);
     }
     // sort the listed stocks by market capitalization
-    returnData.sort((a, b) => (b).compareTo(a));
+    returnData.sort((a, b) => (a).compareTo(b));
     // return the data from the api request
     return returnData;
   }

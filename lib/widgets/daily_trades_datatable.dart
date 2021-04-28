@@ -66,6 +66,7 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
         leftHandSideColBackgroundColor: widget.leftHandColor,
         rightHandSideColBackgroundColor: Theme.of(context).backgroundColor,
         enablePullToRefresh: false,
+        elevation: 0.0,
       ),
       height: 53.0 * (widget.tableData.length + 1),
     );

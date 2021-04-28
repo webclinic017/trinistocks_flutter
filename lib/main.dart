@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:trinistocks_flutter/screens/dividend_history_screen.dart';
 import 'screens/fundamental_analysis_screen.dart';
 import 'screens/listed_stocks_screen.dart';
 import 'screens/technical_analysis_screen.dart';
@@ -55,6 +56,7 @@ class TriniStocks extends StatelessWidget {
         '/technical_analysis': (context) => TechnicalAnalysisPage(),
         '/fundamental_analysis': (context) => FundamentalAnalysisPage(),
         '/stock_price_history': (context) => StockPriceHistoryPage(),
+        '/dividend_history': (context) => DividendHistoryPage(),
       },
     );
   }

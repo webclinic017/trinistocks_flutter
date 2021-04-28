@@ -142,6 +142,24 @@ class _MainDrawerState extends State<MainDrawer> {
                   Navigator.pushNamed(context, '/stock_price_history');
                 },
               ),
+              ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.handHoldingUsd,
+                  color: Theme.of(context).accentColor,
+                  size: iconSize,
+                ),
+                title: Text(
+                  'Dividends',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: itemHeaderSize,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/dividend_history');
+                },
+              ),
             ],
           ), /*or any other widget you want to apply the theme to.*/
         ],

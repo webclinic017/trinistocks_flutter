@@ -29,12 +29,12 @@ class _StockPriceCandlestickChartState
       primaryYAxis: NumericAxis(
         labelFormat: '\${value}',
       ),
-      series: _getCandleSeries2(),
+      series: _getCandleSeries(),
     );
     return chart;
   }
 
-  List<CandleSeries<StockPriceChartData, DateTime>> _getCandleSeries2() {
+  List<CandleSeries<StockPriceChartData, DateTime>> _getCandleSeries() {
     final List<StockPriceChartData> stockData = [];
     for (Map chartData in widget.chartData) {
       stockData.add(StockPriceChartData(

@@ -1,4 +1,4 @@
-package com.example.trinistocks_flutter
+package com.trinistocks_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 

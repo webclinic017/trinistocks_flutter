@@ -7,7 +7,8 @@ import 'dart:io';
 class DividendAPI {
   DividendAPI() {}
 
-  static Future<Map> fetchDividendData(String symbol, String dateRange) async {
+  static Future<List> fetchDividendPaymentData(
+      String symbol, String dateRange) async {
     DateTime startDate = DateTime.now();
     DateFormat dateFormat = DateFormat("yyyy-MM-dd");
     switch (dateRange) {
@@ -24,11 +25,8 @@ class DividendAPI {
         startDate = startDate.subtract(Duration(days: 365 * 5));
         break;
     }
-    // create a map to store the parsed api response
-    Map returnData = new Map();
     //set up lists to store all the dividend data that we need
     List<Map> dividendPayments = [];
-    List<Map> dividendYields = [];
     //first get the dividend payment data
     String url =
         'https://trinistocks.com/api/dividendpayments?symbol=$symbol&start_date=${dateFormat.format(startDate)}';
@@ -50,11 +48,37 @@ class DividendAPI {
         dividendPayments.add(parsedData);
       }
     }
+    await Future.delayed(const Duration(seconds: 5));
+    return dividendPayments;
+  }
+
+  static Future<List> fetchDividendYieldData(
+      String symbol, String dateRange) async {
+    DateTime startDate = DateTime.now();
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+    switch (dateRange) {
+      case DividendDateRange.threeYears:
+        startDate = startDate.subtract(Duration(days: 365 * 3));
+        break;
+      case DividendDateRange.fiveYears:
+        startDate = startDate.subtract(Duration(days: 365 * 5));
+        break;
+      case DividendDateRange.tenYears:
+        startDate = startDate.subtract(Duration(days: 365 * 10));
+        break;
+      default:
+        startDate = startDate.subtract(Duration(days: 365 * 5));
+        break;
+    }
+    //set up lists to store all the dividend data that we need
+    List<Map> dividendYields = [];
     //now repeat for the dividend yields
-    url =
+    String url =
         'https://trinistocks.com/api/dividendyields?symbol=$symbol&start_date=${dateFormat.format(startDate)}';
-    response =
+    const apiToken = config.APIKeys.app_api_token;
+    var response =
         await http.get(url, headers: {"Authorization": "Token $apiToken"});
+    List apiResponse = [];
     if (response.statusCode == 200) {
       apiResponse = json.decode(response.body);
     } else {
@@ -69,9 +93,7 @@ class DividendAPI {
         dividendYields.add(parsedData);
       }
     }
-    returnData['dividendPayments'] = dividendPayments;
-    returnData['dividendYields'] = dividendYields;
-    return returnData;
+    return dividendYields;
   }
 }
 

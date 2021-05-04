@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class DividendLineChart extends StatefulWidget {
+class DividendYieldLineChart extends StatefulWidget {
   final bool? animate;
-  final Map chartData;
+  final List chartData;
 
-  DividendLineChart(this.chartData, {this.animate});
+  DividendYieldLineChart(this.chartData, {this.animate});
 
   @override
-  _DividendLineChartState createState() => _DividendLineChartState();
+  _DividendYieldLineChartState createState() => _DividendYieldLineChartState();
 }
 
-class _DividendLineChartState extends State<DividendLineChart> {
+class _DividendYieldLineChartState extends State<DividendYieldLineChart> {
   @override
   Widget build(BuildContext context) {
     SfCartesianChart chart = SfCartesianChart(
@@ -21,49 +21,46 @@ class _DividendLineChartState extends State<DividendLineChart> {
       ),
       plotAreaBorderWidth: 0,
       primaryXAxis: DateTimeAxis(
-        title: AxisTitle(text: 'Date'),
         dateFormat: DateFormat('dd/MM/yyyy'),
       ),
       primaryYAxis: NumericAxis(
-        labelFormat: '\${value}',
+        labelFormat: '{value}%',
       ),
       series: _getDividendPaymentSeries(),
+      palette: <Color>[Colors.pinkAccent],
     );
-    return chart;
+    return Container(
+      child: chart,
+      height: 250,
+    );
   }
 
-  List<LineSeries<DividendPaymentChartData, DateTime>>
+  List<LineSeries<DividendYieldChartData, DateTime>>
       _getDividendPaymentSeries() {
     //set up a list to hold the chart datapoints
-    final List<DividendPaymentChartData> stockData = [];
+    final List<DividendYieldChartData> stockData = [];
     //get the list of dividend payments
-    List dividendPayments = widget.chartData['dividendPayments'];
+    List dividendPayments = widget.chartData;
     for (Map chartData in dividendPayments) {
       stockData.add(
-        DividendPaymentChartData(
+        DividendYieldChartData(
           chartData['date'],
-          chartData['dividendPayment'],
+          chartData['dividend_yield'],
         ),
       );
     }
     //now build the chart series from this list
-    List<LineSeries<DividendPaymentChartData, DateTime>> lineSeries = [
-      LineSeries<DividendPaymentChartData, DateTime>(
+    List<LineSeries<DividendYieldChartData, DateTime>> lineSeries = [
+      LineSeries<DividendYieldChartData, DateTime>(
         dataSource: stockData,
-        xValueMapper: (DividendPaymentChartData stockData, _) => stockData.date,
-        yValueMapper: (DividendPaymentChartData stockData, _) =>
-            stockData.dividendPayment,
+        xValueMapper: (DividendYieldChartData stockData, _) => stockData.date,
+        yValueMapper: (DividendYieldChartData stockData, _) =>
+            stockData.dividendYield,
       ),
     ];
     //and return the line series
     return lineSeries;
   }
-}
-
-class DividendPaymentChartData {
-  final DateTime date;
-  final double dividendPayment;
-  DividendPaymentChartData(this.date, this.dividendPayment);
 }
 
 class DividendYieldChartData {

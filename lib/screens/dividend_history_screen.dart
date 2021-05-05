@@ -78,7 +78,7 @@ class _DividendHistoryPageState extends State<DividendHistoryPage> {
               alignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(right: 10),
+                  padding: EdgeInsets.only(right: 5),
                   child: Text(
                     "Symbol:",
                     style: TextStyle(fontSize: buttonBarLabelSize),
@@ -86,7 +86,7 @@ class _DividendHistoryPageState extends State<DividendHistoryPage> {
                 ),
                 symbolDropdown,
                 Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
+                  padding: EdgeInsets.only(right: 5),
                   child: Text(
                     "Range:",
                     style: TextStyle(fontSize: buttonBarLabelSize),

@@ -23,6 +23,7 @@ class _DividendPaymentsLineChartState extends State<DividendPaymentsLineChart> {
       plotAreaBorderWidth: 0,
       primaryXAxis: DateTimeAxis(
         dateFormat: DateFormat('dd/MM/yyyy'),
+        labelRotation: 90,
       ),
       primaryYAxis: NumericAxis(
         labelFormat: '\${value}',

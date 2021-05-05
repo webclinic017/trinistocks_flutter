@@ -14,8 +14,8 @@ class MarketIndexesLineChart extends StatelessWidget {
       seriesList,
       animate: animate,
       primaryMeasureAxis: NumericAxisSpec(
-        tickProviderSpec: BasicNumericTickProviderSpec(
-            desiredTickCount: 10, zeroBound: false),
+        tickProviderSpec:
+            BasicNumericTickProviderSpec(desiredTickCount: 5, zeroBound: false),
         renderSpec: new SmallTickRendererSpec(
           labelStyle: new TextStyleSpec(
             color: ColorUtil.fromDartColor(Theme.of(context).accentColor),

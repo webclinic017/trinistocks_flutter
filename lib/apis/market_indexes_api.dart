@@ -7,16 +7,30 @@ import 'dart:io';
 class MarketIndexesAPI {
   MarketIndexesAPI() {}
 
-  static Future<List> fetchLast30Days() async {
+  static Future<List> fetchMarketIndexData(
+      String dateRange, String indexName) async {
     //first get todays date
-    var today = new DateTime.now();
     var formatter = new DateFormat('yyyy-MM-dd');
-    String todayDate = formatter.format(today);
-    // then get the date from 30 days ago
-    var monthBack = today.subtract(const Duration(days: 30));
-    String monthBackDate = formatter.format(monthBack);
+    DateTime startDate = DateTime.now();
+    switch (dateRange) {
+      case MarketIndexDateRange.oneMonth:
+        startDate = startDate.subtract(Duration(days: 30));
+        break;
+      case MarketIndexDateRange.oneYear:
+        startDate = startDate.subtract(Duration(days: 365));
+        break;
+      case MarketIndexDateRange.fiveYears:
+        startDate = startDate.subtract(Duration(days: 365 * 5));
+        break;
+      case MarketIndexDateRange.tenYears:
+        startDate = startDate.subtract(Duration(days: 365 * 10));
+        break;
+      default:
+        startDate = startDate.subtract(Duration(days: 365));
+        break;
+    }
     String url =
-        'https://trinistocks.com/api/marketindices?start_date=$monthBackDate&end_date=$todayDate';
+        'https://trinistocks.com/api/marketindices?start_date=${formatter.format(startDate)}&index_name=$indexName';
     const apiToken = config.APIKeys.app_api_token;
     final response =
         await http.get(url, headers: {"Authorization": "Token $apiToken"});
@@ -31,4 +45,11 @@ class MarketIndexesAPI {
     // return the data from the api request
     return apiResponse;
   }
+}
+
+class MarketIndexDateRange {
+  static const String oneMonth = '1 Month';
+  static const String oneYear = '1 Year';
+  static const String fiveYears = '5 Years';
+  static const String tenYears = '10 Years';
 }

@@ -35,7 +35,9 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
             value: symbol,
             child: Text(
               symbol,
-              style: TextStyle(color: Theme.of(context).accentColor),
+              style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontSize: buttonBarLabelSize),
             ),
           ),
         );
@@ -133,19 +135,31 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
       items: [
         new DropdownMenuItem<String>(
           value: StockPriceDateRange.oneMonth,
-          child: Text(StockPriceDateRange.oneMonth),
+          child: Text(
+            StockPriceDateRange.oneMonth,
+            style: TextStyle(fontSize: buttonBarLabelSize),
+          ),
         ),
         new DropdownMenuItem<String>(
           value: StockPriceDateRange.oneYear,
-          child: Text(StockPriceDateRange.oneYear),
+          child: Text(
+            StockPriceDateRange.oneYear,
+            style: TextStyle(fontSize: buttonBarLabelSize),
+          ),
         ),
         new DropdownMenuItem<String>(
           value: StockPriceDateRange.fiveYears,
-          child: Text(StockPriceDateRange.fiveYears),
+          child: Text(
+            StockPriceDateRange.fiveYears,
+            style: TextStyle(fontSize: buttonBarLabelSize),
+          ),
         ),
         new DropdownMenuItem<String>(
           value: StockPriceDateRange.tenYears,
-          child: Text(StockPriceDateRange.tenYears),
+          child: Text(
+            StockPriceDateRange.tenYears,
+            style: TextStyle(fontSize: buttonBarLabelSize),
+          ),
         ),
       ],
       underline: Container(

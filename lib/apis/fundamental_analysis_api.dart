@@ -27,8 +27,17 @@ class FundamentalAnalysisAPI {
     List<Map> fullResponseData = [];
     for (int i = 0; i < apiResponse.length; i++) {
       if (apiResponse[i]['report_type'] == "annual") {
+        //make sure all keys are not null
+        for (var key in apiResponse[i].keys) {
+          if (apiResponse[i][key] == null) {
+            apiResponse[i][key] = "";
+          }
+        }
         Map securityData = Map();
         securityData['symbol'] = apiResponse[i]['symbol'];
+        if (securityData['symbol'] == "SFC") {
+          print('meep');
+        }
         if (apiResponse[i]['sector'] == null) {
           securityData['sector'] = 'N/A';
         } else {
@@ -36,40 +45,56 @@ class FundamentalAnalysisAPI {
         }
         securityData['date'] = formatter.parse(apiResponse[i]['date']);
         securityData['report_type'] = apiResponse[i]['report_type'];
-        securityData['RoE'] = double.tryParse(apiResponse[i]['RoE']);
-        securityData['EPS'] = double.tryParse(apiResponse[i]['EPS']);
-        securityData['RoIC'] = double.tryParse(apiResponse[i]['RoIC']);
-        securityData['current_ratio'] =
-            double.tryParse(apiResponse[i]['current_ratio']);
-        if (apiResponse[i]['price_to_earnings_ratio'] == null) {
-          securityData['price_to_earnings_ratio'] = double.nan;
-        } else {
+        try {
+          securityData['RoE'] = double.parse(apiResponse[i]['RoE']);
+        } catch (e) {
+          securityData['RoE'] = 0.0;
+        }
+        try {
+          securityData['EPS'] = double.parse(apiResponse[i]['EPS']);
+        } catch (e) {
+          securityData['EPS'] = 0.0;
+        }
+        try {
+          securityData['RoIC'] = double.parse(apiResponse[i]['RoIC']);
+        } catch (e) {
+          securityData['RoIC'] = 0.0;
+        }
+        try {
+          securityData['current_ratio'] =
+              double.parse(apiResponse[i]['current_ratio']);
+        } catch (e) {
+          securityData['current_ratio'] = 0.0;
+        }
+        try {
           securityData['price_to_earnings_ratio'] =
-              double.tryParse(apiResponse[i]['price_to_earnings_ratio']);
+              double.parse(apiResponse[i]['price_to_earnings_ratio']);
+        } catch (e) {
+          securityData['price_to_earnings_ratio'] = 0.0;
         }
-        if (apiResponse[i]['dividend_yield'] == null) {
-          securityData['dividend_yield'] = double.nan;
-        } else {
+        try {
           securityData['dividend_yield'] =
-              double.tryParse(apiResponse[i]['dividend_yield']);
+              double.parse(apiResponse[i]['dividend_yield']);
+        } catch (e) {
+          securityData['dividend_yield'] = 0.0;
         }
-        if (apiResponse[i]['dividend_payout_ratio'] == null) {
-          securityData['dividend_payout_ratio'] = double.nan;
-        } else {
+        try {
           securityData['dividend_payout_ratio'] =
-              double.tryParse(apiResponse[i]['dividend_payout_ratio']);
+              double.parse(apiResponse[i]['dividend_payout_ratio']);
+        } catch (e) {
+          securityData['dividend_payout_ratio'] = 0.0;
         }
-        if (apiResponse[i]['price_to_book_ratio'] == null) {
-          securityData['dividend_payout_ratio'] = double.nan;
-        } else {
+        try {
           securityData['price_to_book_ratio'] =
-              double.tryParse(apiResponse[i]['price_to_book_ratio']);
+              double.parse(apiResponse[i]['price_to_book_ratio']);
+        } catch (e) {
+          securityData['price_to_book_ratio'] = 0.0;
         }
-        if (apiResponse[i]['cash_per_share'] == null) {
-          securityData['cash_per_share'] = double.nan;
-        } else {
+        try {
           securityData['cash_per_share'] =
-              double.tryParse(apiResponse[i]['cash_per_share']);
+              double.parse(apiResponse[i]['cash_per_share']);
+        } catch (e) {
+          securityData['cash_per_share'] = 0.0;
         }
         fullResponseData.add(securityData);
       }

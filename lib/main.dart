@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:trinistocks_flutter/screens/dividend_history_screen.dart';
 import 'screens/fundamental_analysis_screen.dart';
 import 'screens/listed_stocks_screen.dart';
+import 'screens/market_index_history_screen.dart';
 import 'screens/technical_analysis_screen.dart';
 import 'screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +58,7 @@ class TriniStocks extends StatelessWidget {
         '/fundamental_analysis': (context) => FundamentalAnalysisPage(),
         '/stock_price_history': (context) => StockPriceHistoryPage(),
         '/dividend_history': (context) => DividendHistoryPage(),
+        '/market_index_history': (context) => MarketIndexHistoryPage(),
       },
     );
   }

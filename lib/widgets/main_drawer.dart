@@ -160,6 +160,24 @@ class _MainDrawerState extends State<MainDrawer> {
                   Navigator.pushNamed(context, '/dividend_history');
                 },
               ),
+              ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.landmark,
+                  color: Theme.of(context).accentColor,
+                  size: iconSize,
+                ),
+                title: Text(
+                  'Market Indices',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: itemHeaderSize,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/market_index_history');
+                },
+              ),
             ],
           ), /*or any other widget you want to apply the theme to.*/
         ],

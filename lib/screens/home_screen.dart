@@ -42,7 +42,8 @@ class _HomePageState extends State<HomePage> {
       body: ListView(padding: const EdgeInsets.all(10.0), children: [
         FutureBuilder<List>(
           //make the API call
-          future: MarketIndexesAPI.fetchLast30Days(),
+          future: MarketIndexesAPI.fetchMarketIndexData(
+              MarketIndexDateRange.oneMonth, "Composite Totals"),
           initialData: [],
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data!.length > 0) {

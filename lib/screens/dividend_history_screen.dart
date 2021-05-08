@@ -40,7 +40,9 @@ class _DividendHistoryPageState extends State<DividendHistoryPage> {
             value: symbol,
             child: Text(
               symbol,
-              style: TextStyle(color: Theme.of(context).accentColor),
+              style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontSize: buttonBarLabelSize),
             ),
           ),
         );
@@ -120,15 +122,24 @@ class _DividendHistoryPageState extends State<DividendHistoryPage> {
       items: [
         new DropdownMenuItem<String>(
           value: DividendDateRange.threeYears,
-          child: Text(DividendDateRange.threeYears),
+          child: Text(
+            DividendDateRange.threeYears,
+            style: TextStyle(fontSize: buttonBarLabelSize),
+          ),
         ),
         new DropdownMenuItem<String>(
           value: DividendDateRange.fiveYears,
-          child: Text(DividendDateRange.fiveYears),
+          child: Text(
+            DividendDateRange.fiveYears,
+            style: TextStyle(fontSize: buttonBarLabelSize),
+          ),
         ),
         new DropdownMenuItem<String>(
           value: DividendDateRange.tenYears,
-          child: Text(DividendDateRange.tenYears),
+          child: Text(
+            DividendDateRange.tenYears,
+            style: TextStyle(fontSize: buttonBarLabelSize),
+          ),
         ),
       ],
       underline: Container(

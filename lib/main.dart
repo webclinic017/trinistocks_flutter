@@ -6,6 +6,7 @@ import 'package:trinistocks_flutter/screens/dividend_history_screen.dart';
 import 'screens/fundamental_analysis_screen.dart';
 import 'screens/listed_stocks_screen.dart';
 import 'screens/market_index_history_screen.dart';
+import 'screens/outstanding_trade_history_screen.dart';
 import 'screens/technical_analysis_screen.dart';
 import 'screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,8 @@ class TriniStocks extends StatelessWidget {
         shadowColor: Colors.grey[300],
         backgroundColor: Colors.grey[50],
         secondaryHeaderColor: Colors.black,
-        splashColor: Colors.red,
+        splashColor: Colors.deepOrange,
+        hintColor: Colors.teal,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -49,7 +51,8 @@ class TriniStocks extends StatelessWidget {
         shadowColor: Colors.grey[850],
         backgroundColor: Colors.grey[800],
         secondaryHeaderColor: Colors.white,
-        splashColor: Colors.red,
+        splashColor: Colors.deepOrange,
+        hintColor: Colors.teal,
       ),
       routes: {
         '/': (context) => HomePage(),
@@ -59,6 +62,8 @@ class TriniStocks extends StatelessWidget {
         '/stock_price_history': (context) => StockPriceHistoryPage(),
         '/dividend_history': (context) => DividendHistoryPage(),
         '/market_index_history': (context) => MarketIndexHistoryPage(),
+        '/outstanding_trade_history': (context) =>
+            OutstandingTradesHistoryPage(),
       },
     );
   }

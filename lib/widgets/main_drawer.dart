@@ -178,6 +178,24 @@ class _MainDrawerState extends State<MainDrawer> {
                   Navigator.pushNamed(context, '/market_index_history');
                 },
               ),
+              ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.balanceScale,
+                  color: Theme.of(context).accentColor,
+                  size: iconSize,
+                ),
+                title: Text(
+                  'Outstanding Trades',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: itemHeaderSize,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/outstanding_trade_history');
+                },
+              ),
             ],
           ), /*or any other widget you want to apply the theme to.*/
         ],

@@ -3,10 +3,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:trinistocks_flutter/screens/dividend_history_screen.dart';
+import 'screens/fundamental_analysis_history_screen.dart';
 import 'screens/fundamental_analysis_screen.dart';
 import 'screens/listed_stocks_screen.dart';
+import 'screens/login_screen.dart';
 import 'screens/market_index_history_screen.dart';
 import 'screens/outstanding_trade_history_screen.dart';
+import 'screens/stock_news_history_screen.dart';
 import 'screens/technical_analysis_screen.dart';
 import 'screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -36,26 +39,29 @@ class TriniStocks extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: Colors.grey[400],
         accentColor: Colors.grey[900],
-        cardColor: Colors.grey[400],
+        cardColor: Colors.grey[300],
         shadowColor: Colors.grey[300],
         backgroundColor: Colors.grey[50],
         secondaryHeaderColor: Colors.black,
         splashColor: Colors.deepOrange,
+        dividerColor: Colors.black,
         hintColor: Colors.teal,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.grey[900],
         accentColor: Colors.grey[50],
-        cardColor: Colors.grey[900],
+        cardColor: Colors.grey[800],
         shadowColor: Colors.grey[850],
         backgroundColor: Colors.grey[800],
         secondaryHeaderColor: Colors.white,
         splashColor: Colors.deepOrange,
+        dividerColor: Colors.white,
         hintColor: Colors.teal,
       ),
       routes: {
         '/': (context) => HomePage(),
+        '/login': (context) => LoginPage(),
         '/listed_stocks': (context) => ListedStocksPage(),
         '/technical_analysis': (context) => TechnicalAnalysisPage(),
         '/fundamental_analysis': (context) => FundamentalAnalysisPage(),
@@ -64,6 +70,9 @@ class TriniStocks extends StatelessWidget {
         '/market_index_history': (context) => MarketIndexHistoryPage(),
         '/outstanding_trade_history': (context) =>
             OutstandingTradesHistoryPage(),
+        '/stock_news_history': (context) => StockNewsHistoryPage(),
+        '/fundamental_analysis_history': (context) =>
+            FundamentalAnalysisHistoryPage(),
       },
     );
   }

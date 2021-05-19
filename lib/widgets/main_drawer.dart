@@ -19,15 +19,36 @@ class _MainDrawerState extends State<MainDrawer> {
           Container(
             height: 120,
             child: DrawerHeader(
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Theme.of(context).accentColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+              child: ElevatedButton(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.user,
+                      color: Theme.of(context).accentColor,
+                      size: iconSize,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        'Guest',
+                        style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/login');
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Theme.of(context).canvasColor),
                 ),
               ),
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             ),
           ),
           ListTile(
@@ -194,6 +215,42 @@ class _MainDrawerState extends State<MainDrawer> {
                 ),
                 onTap: () {
                   Navigator.pushNamed(context, '/outstanding_trade_history');
+                },
+              ),
+              ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.newspaper,
+                  color: Theme.of(context).accentColor,
+                  size: iconSize,
+                ),
+                title: Text(
+                  'Stock News History',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: itemHeaderSize,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/stock_news_history');
+                },
+              ),
+              ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.bookReader,
+                  color: Theme.of(context).accentColor,
+                  size: iconSize,
+                ),
+                title: Text(
+                  'Fundamental History',
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: itemHeaderSize,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/fundamental_analysis_history');
                 },
               ),
             ],

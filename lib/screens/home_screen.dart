@@ -11,6 +11,7 @@ import '../widgets/daily_trades_horizontal_barchart.dart';
 import '../widgets/market_indexes_linechart.dart';
 import '../widgets/daily_trades_datatable.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -20,6 +21,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  void _onRefresh() async {
+    // monitor network fetch
+    Navigator.pushNamed(context, '/');
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
   @override
   Widget build(BuildContext context) {
     ColorHue colorHue = ColorHue.red;
@@ -39,94 +50,101 @@ class _HomePageState extends State<HomePage> {
       //add a drawer for navigation
       endDrawer: MainDrawer(),
       //setup futurebuilders to wait on the API data
-      body: ListView(padding: const EdgeInsets.all(10.0), children: [
-        FutureBuilder<List>(
-          //make the API call
-          future: MarketIndexesAPI.fetchMarketIndexData(
-              MarketIndexDateRange.oneMonth, "Composite Totals"),
-          initialData: [],
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data!.length > 0) {
-              return new Column(children: <Widget>[
-                Text(
-                  "TTSE Trailing 30-Day Composite Index",
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.visible,
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                SizedBox(
-                  height: 200.0,
-                  child: MarketIndexesLineChart.withData(snapshot.data!),
-                ),
-              ]);
-            } //while the data is loading, return a progress indicator
-            else
-              return LoadingWidget(
-                  loadingText: 'Now loading market index data');
-          },
-        ),
-        FutureBuilder<Map>(
-          //make the API call
-          future: FetchDailyTradesAPI.fetchLatestTrades(),
-          initialData: Map(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data!.containsKey('date')) {
-              return new Column(
-                children: <Widget>[
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        enablePullUp: false,
+        onRefresh: _onRefresh,
+        child: ListView(padding: const EdgeInsets.all(10.0), children: [
+          FutureBuilder<List>(
+            //make the API call
+            future: MarketIndexesAPI.fetchMarketIndexData(
+                MarketIndexDateRange.oneMonth, "Composite Totals"),
+            initialData: [],
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data!.length > 0) {
+                return new Column(children: <Widget>[
                   Text(
-                    "Stocks Traded on the TTSE on ${snapshot.data!['date']}",
+                    "TTSE Trailing 30-Day Composite Index",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.visible,
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(
-                    height: 400.0,
-                    child: DailyTradesHorizontalBarChart.withData(
-                        snapshot.data!['chartData']),
+                    height: 200.0,
+                    child: MarketIndexesLineChart.withData(snapshot.data!),
                   ),
-                  DailyTradesDataTable(
-                    tableData: snapshot.data!['tableData'],
-                    headerColor: headerColor,
-                    leftHandColor: leftHandColor,
-                  ),
-                ],
-              );
-            } //while the data is loading, return a progress indicator
-            else
-              return LoadingWidget(
-                  loadingText: 'Now loading daily trades data');
-          },
-        ),
-        FutureBuilder<List<Map>>(
-          //make the API call
-          future: StockNewsAPI.fetch10LatestNews(),
-          initialData: [],
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data!.length > 0) {
-              return new Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                child: Column(children: <Widget>[
-                  Text(
-                    "Latest Stock News",
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.visible,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                  ),
-                  StockNewsDataTable(
-                    tableData: snapshot.data!,
-                    headerColor: headerColor,
-                    leftHandColor: leftHandColor,
-                  ),
-                ]),
-              );
-            } else
-              return LoadingWidget(loadingText: 'Now loading stock news data');
-          },
-        ),
-      ]),
+                ]);
+              } //while the data is loading, return a progress indicator
+              else
+                return LoadingWidget(
+                    loadingText: 'Now loading market index data');
+            },
+          ),
+          FutureBuilder<Map>(
+            //make the API call
+            future: FetchDailyTradesAPI.fetchLatestTrades(),
+            initialData: Map(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data!.containsKey('date')) {
+                return new Column(
+                  children: <Widget>[
+                    Text(
+                      "Stocks Traded on the TTSE on ${snapshot.data!['date']}",
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.visible,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    SizedBox(
+                      height: 400.0,
+                      child: DailyTradesHorizontalBarChart.withData(
+                          snapshot.data!['chartData']),
+                    ),
+                    DailyTradesDataTable(
+                      tableData: snapshot.data!['tableData'],
+                      headerColor: headerColor,
+                      leftHandColor: leftHandColor,
+                    ),
+                  ],
+                );
+              } //while the data is loading, return a progress indicator
+              else
+                return LoadingWidget(
+                    loadingText: 'Now loading daily trades data');
+            },
+          ),
+          FutureBuilder<List<Map>>(
+            //make the API call
+            future: StockNewsAPI.fetch10LatestNews(),
+            initialData: [],
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data!.length > 0) {
+                return new Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Column(children: <Widget>[
+                    Text(
+                      "Latest Stock News",
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.visible,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                    ),
+                    StockNewsDataTable(
+                      tableData: snapshot.data!,
+                      headerColor: headerColor,
+                      leftHandColor: leftHandColor,
+                    ),
+                  ]),
+                );
+              } else
+                return LoadingWidget(
+                    loadingText: 'Now loading stock news data');
+            },
+          ),
+        ]),
+      ),
     );
   }
 }

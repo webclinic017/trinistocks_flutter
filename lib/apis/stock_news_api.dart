@@ -17,7 +17,7 @@ class StockNewsAPI {
     String monthBackDate = formatter.format(monthBack);
     String url =
         'https://trinistocks.com/api/stocknewsdata?start_date=$monthBackDate&end_date=$todayDate';
-    const apiToken = config.APIKeys.app_api_token;
+    const apiToken = config.APIKeys.guest_api_token;
     final response =
         await http.get(url, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];
@@ -75,7 +75,7 @@ class StockNewsAPI {
     }
     String url =
         'https://trinistocks.com/api/stocknewsdata?start_date=${dateFormat.format(startDate)}&symbol=$symbol';
-    const apiToken = config.APIKeys.app_api_token;
+    const apiToken = config.APIKeys.guest_api_token;
     final response =
         await http.get(url, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];

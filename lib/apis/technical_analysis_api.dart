@@ -10,7 +10,7 @@ class TechnicalAnalysisAPI {
 
   static Future<Map> fetchLatestTechnicalAnalysisData() async {
     String url = 'https://trinistocks.com/api/technicalanalysis';
-    const apiToken = config.APIKeys.app_api_token;
+    const apiToken = config.APIKeys.guest_api_token;
     final response =
         await http.get(url, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];

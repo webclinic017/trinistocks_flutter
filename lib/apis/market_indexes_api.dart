@@ -31,7 +31,7 @@ class MarketIndexesAPI {
     }
     String url =
         'https://trinistocks.com/api/marketindices?start_date=${formatter.format(startDate)}&index_name=$indexName';
-    const apiToken = config.APIKeys.app_api_token;
+    const apiToken = config.APIKeys.guest_api_token;
     final response =
         await http.get(url, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];

@@ -13,7 +13,7 @@ class FundamentalAnalysisAPI {
     //first get the main data from the fundamental analysis api
     String fundamentalDataURL =
         'https://trinistocks.com/api/fundamentalanalysis';
-    const apiToken = config.APIKeys.app_api_token;
+    const apiToken = config.APIKeys.guest_api_token;
     Response response = await http
         .get(fundamentalDataURL, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];
@@ -134,7 +134,7 @@ class FundamentalAnalysisAPI {
     //first get the main data from the fundamental analysis api
     String fundamentalDataURL =
         'https://trinistocks.com/api/fundamentalanalysis?symbol=$symbol&start_date=${dateFormat.format(startDate)}';
-    const apiToken = config.APIKeys.app_api_token;
+    const apiToken = config.APIKeys.guest_api_token;
     Response response = await http
         .get(fundamentalDataURL, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];
@@ -242,7 +242,7 @@ class FundamentalAnalysisAPI {
     //first get the main data from the fundamental analysis api
     String fundamentalDataURL =
         'https://trinistocks.com/api/fundamentalanalysis?symbol=$symbol&start_date=${dateFormat.format(startDate)}';
-    const apiToken = config.APIKeys.app_api_token;
+    const apiToken = config.APIKeys.guest_api_token;
     Response response = await http
         .get(fundamentalDataURL, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];

@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onRefresh() async {
     // monitor network fetch
-    Navigator.pushNamed(context, '/');
+    Navigator.pushReplacementNamed(context, '/');
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }

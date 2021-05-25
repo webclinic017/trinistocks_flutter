@@ -30,7 +30,7 @@ class OutstandingTradesAPI {
     //now repeat for the dividend yields
     String url =
         'https://trinistocks.com/api/outstandingtrades?symbol=$symbol&start_date=${dateFormat.format(startDate)}';
-    const apiToken = config.APIKeys.app_api_token;
+    const apiToken = config.APIKeys.guest_api_token;
     var response =
         await http.get(url, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];

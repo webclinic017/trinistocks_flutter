@@ -30,7 +30,7 @@ class StockPriceAPI {
     }
     String url =
         'https://trinistocks.com/api/stockprices?symbol=$symbol&start_date=${dateFormat.format(startDate)}';
-    const apiToken = config.APIKeys.app_api_token;
+    const apiToken = config.APIKeys.guest_api_token;
     final response =
         await http.get(url, headers: {"Authorization": "Token $apiToken"});
     List apiResponse = [];

@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:trinistocks_flutter/models/login_model.dart';
 import 'package:trinistocks_flutter/screens/dividend_history_screen.dart';
 import 'screens/fundamental_analysis_history_screen.dart';
 import 'screens/fundamental_analysis_screen.dart';
@@ -26,7 +27,12 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
-  runApp(TriniStocks());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => LoginModel(),
+      child: TriniStocks(),
+    ),
+  );
 }
 
 class TriniStocks extends StatelessWidget {
@@ -37,27 +43,27 @@ class TriniStocks extends StatelessWidget {
       title: 'trinistocks',
       theme: ThemeData(
         brightness: Brightness.light,
-        primaryColor: Colors.grey[400],
+        primaryColor: Colors.grey[500],
         accentColor: Colors.grey[900],
         cardColor: Colors.grey[300],
         shadowColor: Colors.grey[300],
         backgroundColor: Colors.grey[50],
         secondaryHeaderColor: Colors.black,
-        splashColor: Colors.deepOrange,
+        splashColor: Colors.brown,
         dividerColor: Colors.black,
-        hintColor: Colors.teal,
+        hintColor: Colors.grey,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.grey[900],
         accentColor: Colors.grey[50],
-        cardColor: Colors.grey[800],
+        cardColor: Colors.grey[700],
         shadowColor: Colors.grey[850],
         backgroundColor: Colors.grey[800],
         secondaryHeaderColor: Colors.white,
-        splashColor: Colors.deepOrange,
+        splashColor: Colors.brown,
         dividerColor: Colors.white,
-        hintColor: Colors.teal,
+        hintColor: Colors.grey,
       ),
       routes: {
         '/': (context) => HomePage(),

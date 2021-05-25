@@ -1,55 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:trinistocks_flutter/apis/profile_management_api.dart';
 
 class MainDrawer extends StatefulWidget {
   _MainDrawerState createState() => _MainDrawerState();
 }
 
 class _MainDrawerState extends State<MainDrawer> {
+  double drawerMainHeaderSize = 18;
+  double dropDownHeaderSize = 18;
+  double itemHeaderSize = 16;
+  double iconSize = 34;
+
   @override
   Widget build(BuildContext context) {
-    double dropDownHeaderSize = 18;
-    double itemHeaderSize = 16;
-    double iconSize = 40;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           Container(
             height: 120,
-            child: DrawerHeader(
-              child: ElevatedButton(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    FaIcon(
-                      FontAwesomeIcons.user,
-                      color: Theme.of(context).accentColor,
-                      size: iconSize,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        'Guest',
-                        style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/login');
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Theme.of(context).canvasColor),
-                ),
-              ),
-            ),
+            child: DrawerHeader(child: checkUserLoggedIn()),
           ),
           ListTile(
             leading: Icon(
@@ -258,5 +230,74 @@ class _MainDrawerState extends State<MainDrawer> {
         ],
       ),
     );
+  }
+
+  Widget checkUserLoggedIn() {
+    return FutureBuilder<Map>(
+        future: ProfileManagementAPI.checkUserLoggedIn(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data!['isLoggedIn'] == true) {
+            return ElevatedButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.userCheck,
+                    color: Theme.of(context).accentColor,
+                    size: iconSize,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      snapshot.data!['username'],
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: drawerMainHeaderSize,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/');
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Theme.of(context).canvasColor),
+              ),
+            );
+          } else
+            return ElevatedButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.userNinja,
+                    color: Theme.of(context).accentColor,
+                    size: iconSize,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Guest',
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: drawerMainHeaderSize,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Theme.of(context).canvasColor),
+              ),
+            );
+        });
   }
 }

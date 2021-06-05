@@ -260,7 +260,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 ],
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/user_profile');
               },
               style: ButtonStyle(
                 backgroundColor:

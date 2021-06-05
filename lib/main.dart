@@ -15,6 +15,7 @@ import 'screens/technical_analysis_screen.dart';
 import 'screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'screens/stock_price_history_screen.dart';
+import 'screens/user_profile_screen.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -51,7 +52,7 @@ class TriniStocks extends StatelessWidget {
         secondaryHeaderColor: Colors.black,
         splashColor: Colors.brown,
         dividerColor: Colors.black,
-        hintColor: Colors.grey,
+        primarySwatch: Colors.brown,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -61,13 +62,14 @@ class TriniStocks extends StatelessWidget {
         shadowColor: Colors.grey[850],
         backgroundColor: Colors.grey[800],
         secondaryHeaderColor: Colors.white,
-        splashColor: Colors.brown,
+        splashColor: Colors.green,
         dividerColor: Colors.white,
-        hintColor: Colors.grey,
+        primarySwatch: Colors.green,
       ),
       routes: {
         '/': (context) => HomePage(),
         '/login': (context) => LoginPage(),
+        '/user_profile': (context) => UserProfilePage(),
         '/listed_stocks': (context) => ListedStocksPage(),
         '/technical_analysis': (context) => TechnicalAnalysisPage(),
         '/fundamental_analysis': (context) => FundamentalAnalysisPage(),

@@ -6,16 +6,25 @@ import 'package:flutter/material.dart';
 class MarketIndexesLineChart extends StatelessWidget {
   final bool? animate;
   final List chartData;
+  String name;
+  ZoomPanBehavior zoomPanBehavior = ZoomPanBehavior(
+    enablePinching: true,
+    enableMouseWheelZooming: true,
+    enablePanning: true,
+    enableDoubleTapZooming: true,
+    enableSelectionZooming: true,
+  );
 
-  MarketIndexesLineChart(this.chartData, {this.animate});
+  MarketIndexesLineChart(this.chartData, this.name, {this.animate});
+  void resetZoom() {
+    zoomPanBehavior.reset();
+  }
 
   @override
   Widget build(BuildContext context) {
     return new SfCartesianChart(
       series: _createSeriesFromData(chartData, context),
-      zoomPanBehavior: ZoomPanBehavior(
-        enablePinching: true,
-      ),
+      zoomPanBehavior: zoomPanBehavior,
       plotAreaBorderWidth: 0,
       primaryXAxis: DateTimeAxis(
         dateFormat: DateFormat('dd/MM/yyyy'),
@@ -27,51 +36,38 @@ class MarketIndexesLineChart extends StatelessWidget {
     );
   }
 
-  static List<LineSeries<MarketIndexData, DateTime>> _createSeriesFromData(
+  List<LineSeries<MarketIndexData, DateTime>> _createSeriesFromData(
       List indexDataPoints, BuildContext context) {
-    List<MarketIndexData> compositeIndexData = [];
-    for (int i = 0; i < indexDataPoints.length; i++) {
-      if (indexDataPoints[i]['index_name'] == "Composite Totals") {
-        final dataPoint = new MarketIndexData(
-            DateTime.parse(indexDataPoints[i]['date']),
-            double.parse(indexDataPoints[i]['index_value']));
-        compositeIndexData.add(dataPoint);
-      }
+    //rename if necessary
+    if (name == 'All T%26T Totals') {
+      name = 'All T&T Totals';
     }
-    List<MarketIndexData> tntIndexData = [];
+    List<MarketIndexData> indexData = [];
     for (int i = 0; i < indexDataPoints.length; i++) {
-      if (indexDataPoints[i]['index_name'] == "All T&T Totals") {
+      if (indexDataPoints[i]['index_name'] == name) {
         final dataPoint = new MarketIndexData(
             DateTime.parse(indexDataPoints[i]['date']),
             double.parse(indexDataPoints[i]['index_value']));
-        tntIndexData.add(dataPoint);
+        indexData.add(dataPoint);
       }
     }
     List<LineSeries<MarketIndexData, DateTime>> returnSeries = [
       new LineSeries<MarketIndexData, DateTime>(
+        name: "Index value",
         xValueMapper: (MarketIndexData data, _) => data.dateTime,
         yValueMapper: (MarketIndexData data, _) => data.indexValue,
-        dataSource: compositeIndexData,
-        color: Theme.of(context).splashColor,
+        dataSource: indexData,
+        color: Colors.amber,
         markerSettings: MarkerSettings(
             isVisible: true,
             height: 4,
             width: 4,
             shape: DataMarkerType.triangle,
             borderWidth: 3,
-            borderColor: Theme.of(context).highlightColor),
+            borderColor: Colors.orange),
       )
     ];
     return returnSeries;
-  }
-
-  /// Setup the data for the latest daily trades bar chart
-  static Widget withData(List indexData) {
-    return new MarketIndexesLineChart(
-      indexData,
-      // Disable animations for image tests.
-      animate: true,
-    );
   }
 }
 

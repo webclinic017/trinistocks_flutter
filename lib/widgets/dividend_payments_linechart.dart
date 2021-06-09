@@ -30,6 +30,7 @@ class _DividendPaymentsLineChartState extends State<DividendPaymentsLineChart> {
       ),
       series: _getDividendPaymentSeries(),
       palette: <Color>[Colors.purple],
+      tooltipBehavior: TooltipBehavior(enable: true),
     );
     return Container(
       child: chart,
@@ -54,10 +55,19 @@ class _DividendPaymentsLineChartState extends State<DividendPaymentsLineChart> {
     //now build the chart series from this list
     List<LineSeries<DividendPaymentChartData, DateTime>> lineSeries = [
       LineSeries<DividendPaymentChartData, DateTime>(
+        name: "Dividend Payments",
         dataSource: stockData,
         xValueMapper: (DividendPaymentChartData stockData, _) => stockData.date,
         yValueMapper: (DividendPaymentChartData stockData, _) =>
             stockData.dividendPayment,
+        color: Colors.purple,
+        markerSettings: MarkerSettings(
+            isVisible: true,
+            height: 4,
+            width: 4,
+            shape: DataMarkerType.triangle,
+            borderWidth: 3,
+            borderColor: Colors.purpleAccent),
       ),
     ];
     //and return the line series

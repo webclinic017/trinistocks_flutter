@@ -1,18 +1,14 @@
+import 'package:a_colors/a_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:trinistocks_flutter/apis/listed_stocks_api.dart';
 import 'package:trinistocks_flutter/apis/market_indexes_api.dart';
 import 'package:trinistocks_flutter/apis/outstanding_trades_api.dart';
-import 'package:trinistocks_flutter/apis/stock_price_api.dart';
-import 'package:trinistocks_flutter/widgets/loading_widget.dart';
 import 'package:trinistocks_flutter/widgets/main_drawer.dart';
-import 'package:provider/provider.dart';
-import 'package:trinistocks_flutter/widgets/market_index_line_chart.dart';
-import 'package:trinistocks_flutter/widgets/market_trades_line_chart.dart';
 import 'package:trinistocks_flutter/widgets/outstanding_prices_chart.dart';
 import 'package:trinistocks_flutter/widgets/outstanding_volume_chart.dart';
-import 'package:trinistocks_flutter/widgets/stock_price_candlestick_chart.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 class OutstandingTradesHistoryPage extends StatefulWidget {
@@ -34,6 +30,8 @@ class _OutstandingTradesHistoryPageState
   bool _loading = true;
   Widget outstandingPriceChart = Text("");
   Widget outstandingVolumeChart = Text("");
+  Map? latestOutstandingTrade;
+  final oCcy = new NumberFormat("#,##0.00", "en_US");
 
   @override
   void initState() {
@@ -58,6 +56,89 @@ class _OutstandingTradesHistoryPageState
 
   @override
   Widget build(BuildContext context) {
+    ListView view = ListView();
+    if (symbolDropdownButtonBuilt) {
+      view = ListView(
+        padding: const EdgeInsets.all(0.0),
+        children: [
+          ButtonBar(
+            alignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: Text(
+                  "Index:",
+                  style: TextStyle(fontSize: buttonBarLabelSize),
+                ),
+              ),
+              buildSymbolDropdownButton(context),
+              Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: Text(
+                  "Range:",
+                  style: TextStyle(fontSize: buttonBarLabelSize),
+                ),
+              ),
+              startDateDropdownButton(context),
+            ],
+          ),
+          Card(
+            child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: RichText(
+                      text: TextSpan(
+                        text: "Current Highest Bid: ",
+                        style: TextStyle(
+                            color: Theme.of(context).secondaryHeaderColor),
+                        children: [
+                          TextSpan(
+                            text:
+                                "\$${oCcy.format(latestOutstandingTrade['os_bid'])} (${latestOutstandingTrade['os_bid_vol']} shares)",
+                            style: TextStyle(
+                              color: Theme.of(context).highlightColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: RichText(
+                      text: TextSpan(
+                        text: "Current Lowest Offer: ",
+                        style: TextStyle(
+                            color: Theme.of(context).secondaryHeaderColor),
+                        children: [
+                          TextSpan(
+                            text:
+                                "\$${oCcy.format(latestOutstandingTrade['os_offer'])} (${latestOutstandingTrade['os_offer_vol']} shares)",
+                            style: TextStyle(
+                              color: Theme.of(context).hoverColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ]),
+          ),
+          outstandingPriceChart,
+          outstandingVolumeChart,
+        ],
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Outstanding Trades'),
@@ -67,34 +148,7 @@ class _OutstandingTradesHistoryPageState
       endDrawer: MainDrawer(),
       //setup futurebuilders to wait on the API data
       body: LoadingOverlay(
-        child: ListView(
-          padding: const EdgeInsets.all(0.0),
-          children: [
-            ButtonBar(
-              alignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: Text(
-                    "Index:",
-                    style: TextStyle(fontSize: buttonBarLabelSize),
-                  ),
-                ),
-                buildSymbolDropdownButton(context),
-                Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: Text(
-                    "Range:",
-                    style: TextStyle(fontSize: buttonBarLabelSize),
-                  ),
-                ),
-                startDateDropdownButton(context),
-              ],
-            ),
-            outstandingPriceChart,
-            outstandingVolumeChart,
-          ],
-        ),
+        child: view,
         isLoading: _loading,
       ),
     );
@@ -125,6 +179,9 @@ class _OutstandingTradesHistoryPageState
   void updateOutstandingTradeDataCharts(BuildContext context) {
     OutstandingTradesAPI.fetchOutstandingTradeData(selectedSymbol, dateRange)
         .then((List outstandingTradeData) {
+      //update the latest trade
+      latestOutstandingTrade = outstandingTradeData.last;
+      //now update the two charts
       outstandingPriceChart = OutstandingPricesAreaChart(
         outstandingTradeData,
         animate: true,

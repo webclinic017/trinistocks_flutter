@@ -5,8 +5,19 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class MarketTradesLineChart extends StatefulWidget {
   final bool? animate;
   final List chartData;
+  ZoomPanBehavior zoomPanBehavior = ZoomPanBehavior(
+    enablePinching: true,
+    enableMouseWheelZooming: true,
+    enablePanning: true,
+    enableDoubleTapZooming: true,
+    enableSelectionZooming: true,
+  );
 
   MarketTradesLineChart(this.chartData, {this.animate});
+
+  void resetZoom() {
+    zoomPanBehavior.reset();
+  }
 
   @override
   _MarketTradesLineChartState createState() => _MarketTradesLineChartState();
@@ -17,9 +28,7 @@ class _MarketTradesLineChartState extends State<MarketTradesLineChart> {
   Widget build(BuildContext context) {
     SfCartesianChart chart = SfCartesianChart(
       title: ChartTitle(text: "Number of Trades"),
-      zoomPanBehavior: ZoomPanBehavior(
-        enablePinching: true,
-      ),
+      zoomPanBehavior: widget.zoomPanBehavior,
       plotAreaBorderWidth: 0,
       primaryXAxis: DateTimeAxis(
         title: AxisTitle(text: 'Date'),
@@ -46,10 +55,19 @@ class _MarketTradesLineChartState extends State<MarketTradesLineChart> {
     }
     List<LineSeries<MarketTradesChartData, DateTime>> lineSeries = [
       LineSeries<MarketTradesChartData, DateTime>(
+        name: "Number of trades",
         dataSource: indexData,
         xValueMapper: (MarketTradesChartData stockData, _) => stockData.date,
         yValueMapper: (MarketTradesChartData stockData, _) =>
             stockData.numTrades,
+        color: Colors.cyan,
+        markerSettings: MarkerSettings(
+            isVisible: true,
+            height: 4,
+            width: 4,
+            shape: DataMarkerType.triangle,
+            borderWidth: 3,
+            borderColor: Colors.cyanAccent),
       ),
     ];
     return lineSeries;

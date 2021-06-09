@@ -5,7 +5,13 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class StockPriceCandlestickChart extends StatefulWidget {
   final bool? animate;
   final List<Map> chartData;
-  late ZoomPanBehavior zoomPanBehavior;
+  ZoomPanBehavior zoomPanBehavior = ZoomPanBehavior(
+    enablePinching: true,
+    enableMouseWheelZooming: true,
+    enablePanning: true,
+    enableDoubleTapZooming: true,
+    enableSelectionZooming: true,
+  );
 
   StockPriceCandlestickChart(this.chartData, {this.animate});
 
@@ -24,13 +30,6 @@ class _StockPriceCandlestickChartState
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.zoomPanBehavior = ZoomPanBehavior(
-      enablePinching: true,
-      enableMouseWheelZooming: true,
-      enablePanning: true,
-      enableDoubleTapZooming: true,
-      enableSelectionZooming: true,
-    );
   }
 
   @override

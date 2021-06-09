@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:trinistocks_flutter/apis/listed_stocks_api.dart';
 import 'package:trinistocks_flutter/apis/market_indexes_api.dart';
 import 'package:trinistocks_flutter/apis/stock_price_api.dart';
-import 'package:trinistocks_flutter/widgets/loading_widget.dart';
 import 'package:trinistocks_flutter/widgets/main_drawer.dart';
-import 'package:provider/provider.dart';
-import 'package:trinistocks_flutter/widgets/market_index_line_chart.dart';
+import 'package:trinistocks_flutter/widgets/market_indexes_linechart.dart';
 import 'package:trinistocks_flutter/widgets/market_trades_line_chart.dart';
-import 'package:trinistocks_flutter/widgets/stock_price_candlestick_chart.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 class MarketIndexHistoryPage extends StatefulWidget {
@@ -27,8 +23,10 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
   bool symbolDropdownButtonBuilt = false;
   List<DropdownMenuItem<String>> marketIndexName = [];
   bool _loading = true;
-  Widget marketIndexChart = Text("");
-  Widget marketTradesChart = Text("");
+  late MarketIndexesLineChart marketIndexChart;
+  bool marketIndexChartBuilt = false;
+  late MarketTradesLineChart marketTradesChart;
+  bool marketTradesChartBuilt = false;
 
   @override
   void initState() {
@@ -71,8 +69,25 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
                 startDateDropdownButton(context),
               ],
             ),
-            marketIndexChart,
-            marketTradesChart,
+            marketIndexChartBuilt ? marketIndexChart : Text(""),
+            marketTradesChartBuilt ? marketTradesChart : Text(""),
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  ),
+                  onPressed: resetZoom,
+                  child: Row(
+                    children: [
+                      FaIcon(FontAwesomeIcons.searchMinus),
+                      Text(" Reset Zoom")
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
         isLoading: _loading,
@@ -80,11 +95,17 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
     );
   }
 
+  void resetZoom() {
+    marketIndexChart.resetZoom();
+    marketTradesChart.resetZoom();
+  }
+
   void updateMarketIndexChart(BuildContext context) {
     MarketIndexesAPI.fetchMarketIndexData(dateRange, selectedIndexName)
         .then((List indexData) {
-      marketIndexChart = MarketIndexLineChart(
+      marketIndexChart = MarketIndexesLineChart(
         indexData,
+        selectedIndexName,
         animate: true,
       );
       marketTradesChart = MarketTradesLineChart(
@@ -92,6 +113,8 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
         animate: true,
       );
       setState(() {
+        marketIndexChartBuilt = true;
+        marketTradesChartBuilt = true;
         _loading = false;
       });
     });
@@ -174,34 +197,6 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
           value: 'Cross-Listed Totals',
           child: Text(
             'Cross-Listed Totals',
-            style: TextStyle(fontSize: buttonBarLabelSize),
-          ),
-        ),
-        new DropdownMenuItem<String>(
-          value: 'Mutual Funds Totals',
-          child: Text(
-            'Mutual Funds Totals',
-            style: TextStyle(fontSize: buttonBarLabelSize),
-          ),
-        ),
-        new DropdownMenuItem<String>(
-          value: 'Second Tier Totals',
-          child: Text(
-            'Second Tier Totals',
-            style: TextStyle(fontSize: buttonBarLabelSize),
-          ),
-        ),
-        new DropdownMenuItem<String>(
-          value: 'Non Sector Totals',
-          child: Text(
-            'Non Sector Totals',
-            style: TextStyle(fontSize: buttonBarLabelSize),
-          ),
-        ),
-        new DropdownMenuItem<String>(
-          value: 'Usd Equity Totals',
-          child: Text(
-            'USD Equity Totals',
             style: TextStyle(fontSize: buttonBarLabelSize),
           ),
         ),

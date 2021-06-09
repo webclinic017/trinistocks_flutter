@@ -16,6 +16,7 @@ import 'screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'screens/stock_price_history_screen.dart';
 import 'screens/user_profile_screen.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -46,12 +47,13 @@ class TriniStocks extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: Colors.grey[500],
         accentColor: Colors.grey[900],
-        cardColor: Colors.grey[300],
+        cardColor: Colors.grey[200],
         shadowColor: Colors.grey[300],
         backgroundColor: Colors.grey[50],
         secondaryHeaderColor: Colors.black,
         splashColor: Colors.green,
-        highlightColor: Colors.greenAccent,
+        highlightColor: Colors.green[800],
+        hoverColor: Colors.orange[800],
         dividerColor: Colors.black,
         primarySwatch: Colors.green,
       ),
@@ -64,9 +66,11 @@ class TriniStocks extends StatelessWidget {
         backgroundColor: Colors.grey[800],
         secondaryHeaderColor: Colors.white,
         splashColor: Colors.green,
-        highlightColor: Colors.greenAccent,
+        highlightColor: Colors.green[200],
+        hoverColor: Colors.orange[200],
         dividerColor: Colors.white,
         primarySwatch: Colors.green,
+        textTheme: TextTheme(),
       ),
       routes: {
         '/': (context) => HomePage(),

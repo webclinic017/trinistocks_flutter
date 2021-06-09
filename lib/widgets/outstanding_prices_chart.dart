@@ -1,3 +1,4 @@
+import 'package:a_colors/a_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -20,17 +21,15 @@ class _OutstandingPricesAreaChartState
   Widget build(BuildContext context) {
     SfCartesianChart chart = SfCartesianChart(
       title: ChartTitle(
-        text: 'Bid-Offer Spread',
+        text: 'Bid/Offer Prices',
         textStyle: TextStyle(fontSize: 14),
       ),
       zoomPanBehavior: ZoomPanBehavior(
         enablePinching: true,
       ),
+      legend: Legend(isVisible: true),
       plotAreaBorderWidth: 0,
-      primaryXAxis: DateTimeAxis(
-        dateFormat: DateFormat('dd/MM/yyyy'),
-        labelRotation: 90,
-      ),
+      primaryXAxis: DateTimeAxis(),
       primaryYAxis: NumericAxis(labelFormat: '\${value}'),
       // adding multiple axis
       axes: <ChartAxis>[
@@ -44,10 +43,6 @@ class _OutstandingPricesAreaChartState
       series: _getOutstandingPriceSeries(
         context,
       ),
-      palette: <Color>[
-        Theme.of(context).splashColor,
-        Theme.of(context).buttonColor
-      ],
     );
     return Container(
       child: chart,
@@ -55,7 +50,7 @@ class _OutstandingPricesAreaChartState
     );
   }
 
-  List<RangeAreaSeries<OutstandingPriceChartData, DateTime>>
+  List<SplineSeries<OutstandingPriceChartData, DateTime>>
       _getOutstandingPriceSeries(
     BuildContext context,
   ) {
@@ -70,23 +65,28 @@ class _OutstandingPricesAreaChartState
         ),
       );
     }
-    //now build the chart series from this list
-    List<RangeAreaSeries<OutstandingPriceChartData, DateTime>> areaSeries = [
-      RangeAreaSeries<OutstandingPriceChartData, DateTime>(
+    List<SplineSeries<OutstandingPriceChartData, DateTime>> chartSeries = [
+      SplineSeries<OutstandingPriceChartData, DateTime>(
         dataSource: outstandingTradeData,
-        borderDrawMode: RangeAreaBorderMode.excludeSides,
-        borderColor: Theme.of(context).accentColor,
-        borderWidth: 2,
         xValueMapper: (OutstandingPriceChartData tradeData, _) =>
             tradeData.date,
-        lowValueMapper: (OutstandingPriceChartData tradeData, _) =>
+        yValueMapper: (OutstandingPriceChartData tradeData, _) =>
             tradeData.outstandingBidPrice,
-        highValueMapper: (OutstandingPriceChartData tradeData, _) =>
+        name: "Bid Price",
+        color: Theme.of(context).highlightColor,
+      ),
+      SplineSeries<OutstandingPriceChartData, DateTime>(
+        dataSource: outstandingTradeData,
+        xValueMapper: (OutstandingPriceChartData tradeData, _) =>
+            tradeData.date,
+        yValueMapper: (OutstandingPriceChartData tradeData, _) =>
             tradeData.outstandingOfferPrice,
+        name: "Offer Price",
+        color: Theme.of(context).hoverColor,
       ),
     ];
     //and return the line series
-    return areaSeries;
+    return chartSeries;
   }
 }
 

@@ -112,7 +112,7 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
   void updateStockPriceChart(BuildContext context) {
     StockPriceAPI.fetchStockPriceData(selectedSymbol, dateRange)
         .then((List<Map> stockData) {
-      stockPriceCandlestickChart = StockPriceCandlestickChart(
+      stockPriceCandlestickChart = new StockPriceCandlestickChart(
         stockData,
         animate: true,
       );

@@ -50,9 +50,9 @@ dependencies:
   flutter_login: ^1.1.0
   shared_preferences: ^2.0.5
   fluttertoast: ^8.0.7
-
-
-
+  a_colors: ^0.0.2
+  flex_color_scheme: any
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,3 +1,4 @@
+import 'package:a_colors/a_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -26,10 +27,7 @@ class _OutstandingVolumeChartState extends State<OutstandingVolumeChart> {
         enablePinching: true,
       ),
       plotAreaBorderWidth: 0,
-      primaryXAxis: DateTimeAxis(
-        dateFormat: DateFormat('dd/MM/yyyy'),
-        labelRotation: 90,
-      ),
+      primaryXAxis: DateTimeAxis(),
       primaryYAxis: NumericAxis(labelFormat: '{value}'),
       // adding multiple axis
       axes: <ChartAxis>[
@@ -43,10 +41,6 @@ class _OutstandingVolumeChartState extends State<OutstandingVolumeChart> {
       series: _getOutstandingVolumeSeries(
         context,
       ),
-      palette: <Color>[
-        Theme.of(context).splashColor,
-        Theme.of(context).hintColor
-      ],
     );
     return Container(
       child: chart,
@@ -72,21 +66,21 @@ class _OutstandingVolumeChartState extends State<OutstandingVolumeChart> {
     //now build the chart series from this list
     List<SplineSeries<OutstandingVolumeChartData, DateTime>> chartSeries = [
       SplineSeries<OutstandingVolumeChartData, DateTime>(
-        dataSource: outstandingTradeData,
-        xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
-            tradeData.date,
-        yValueMapper: (OutstandingVolumeChartData tradeData, _) =>
-            tradeData.outstandingBidVolume,
-        name: "Bid Vol.",
-      ),
+          dataSource: outstandingTradeData,
+          xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
+              tradeData.date,
+          yValueMapper: (OutstandingVolumeChartData tradeData, _) =>
+              tradeData.outstandingBidVolume,
+          name: "Bid Vol.",
+          color: Theme.of(context).highlightColor),
       SplineSeries<OutstandingVolumeChartData, DateTime>(
-        dataSource: outstandingTradeData,
-        xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
-            tradeData.date,
-        yValueMapper: (OutstandingVolumeChartData tradeData, _) =>
-            tradeData.outstandingOfferVolume,
-        name: "Offer Vol.",
-      ),
+          dataSource: outstandingTradeData,
+          xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
+              tradeData.date,
+          yValueMapper: (OutstandingVolumeChartData tradeData, _) =>
+              tradeData.outstandingOfferVolume,
+          name: "Offer Vol.",
+          color: Theme.of(context).hoverColor),
     ];
     //and return the line series
     return chartSeries;

@@ -67,7 +67,11 @@ class _HomePageState extends State<HomePage> {
             MarketIndexDateRange.oneMonth, "Composite Totals")
         .then((value) {
       setState(() {
-        marketIndexesLineChart = MarketIndexesLineChart.withData(value);
+        marketIndexesLineChart = MarketIndexesLineChart(
+          value,
+          "Composite Totals",
+          animate: true,
+        );
       });
     });
     FetchDailyTradesAPI.fetchLatestTrades().then((value) {

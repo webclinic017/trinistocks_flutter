@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:random_color/random_color.dart';
@@ -23,25 +25,103 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  Widget marketIndexesLineChart =
+      LoadingWidget(loadingText: 'Now loading market index data');
+  Widget headlineText =
+      LoadingWidget(loadingText: 'Now loading daily trades data');
+  Widget latestTradesBarChart = Text("");
+  Widget latestTradesTable = Text("");
+  Widget stockNewsTable =
+      LoadingWidget(loadingText: 'Now loading stock news data');
+  ColorHue colorHue = ColorHue.green;
+  late Color headerColor;
+  late Color leftHandColor;
 
   void _onRefresh() async {
-    // monitor network fetch
-    Navigator.pushReplacementNamed(context, '/');
-    // if failed,use refreshFailed()
+    updateAllWidgets();
     _refreshController.refreshCompleted();
   }
 
   @override
-  Widget build(BuildContext context) {
-    ColorHue colorHue = ColorHue.red;
-    Color headerColor = RandomColor().randomColor(
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    headerColor = RandomColor().randomColor(
         colorHue: colorHue,
         colorSaturation: ColorSaturation.lowSaturation,
         colorBrightness: ColorBrightness.dark);
-    Color leftHandColor = RandomColor().randomColor(
+    leftHandColor = RandomColor().randomColor(
         colorHue: colorHue,
         colorSaturation: ColorSaturation.lowSaturation,
         colorBrightness: ColorBrightness.light);
+    updateAllWidgets();
+    new Timer.periodic(
+        Duration(minutes: 15),
+        (Timer t) => setState(() {
+              updateAllWidgets();
+            }));
+  }
+
+  void updateAllWidgets() {
+    MarketIndexesAPI.fetchMarketIndexData(
+            MarketIndexDateRange.oneMonth, "Composite Totals")
+        .then((value) {
+      setState(() {
+        marketIndexesLineChart = MarketIndexesLineChart.withData(value);
+      });
+    });
+    FetchDailyTradesAPI.fetchLatestTrades().then((value) {
+      setState(() {
+        headlineText = Text(
+          "Stocks Traded on the TTSE on ${value['date']}",
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.visible,
+          style: Theme.of(context).textTheme.headline6,
+        );
+        latestTradesBarChart = SizedBox(
+          height: 400.0,
+          child: DailyTradesHorizontalBarChart.withData(value['chartData']),
+        );
+        latestTradesTable = DailyTradesDataTable(
+          tableData: value['tableData'],
+          headerColor: headerColor,
+          leftHandColor: leftHandColor,
+        );
+      });
+    });
+    StockNewsAPI.fetch10LatestNews().then((value) {
+      setState(() {
+        stockNewsTable = Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    "Latest Stock News",
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.visible,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  StockNewsDataTable(
+                    tableData: value,
+                    headerColor: headerColor,
+                    leftHandColor: leftHandColor,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
@@ -56,93 +136,20 @@ class _HomePageState extends State<HomePage> {
         enablePullUp: false,
         onRefresh: _onRefresh,
         child: ListView(padding: const EdgeInsets.all(10.0), children: [
-          FutureBuilder<List>(
-            //make the API call
-            future: MarketIndexesAPI.fetchMarketIndexData(
-                MarketIndexDateRange.oneMonth, "Composite Totals"),
-            initialData: [],
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data!.length > 0) {
-                return new Column(children: <Widget>[
-                  Text(
-                    "TTSE Trailing 30-Day Composite Index",
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.visible,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(
-                    height: 200.0,
-                    child: MarketIndexesLineChart.withData(snapshot.data!),
-                  ),
-                ]);
-              } //while the data is loading, return a progress indicator
-              else
-                return LoadingWidget(
-                    loadingText: 'Now loading market index data');
-            },
+          Text(
+            "TTSE 30-Day Composite Index",
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.visible,
+            style: Theme.of(context).textTheme.headline6,
           ),
-          FutureBuilder<Map>(
-            //make the API call
-            future: FetchDailyTradesAPI.fetchLatestTrades(),
-            initialData: Map(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data!.containsKey('date')) {
-                return new Column(
-                  children: <Widget>[
-                    Text(
-                      "Stocks Traded on the TTSE on ${snapshot.data!['date']}",
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.visible,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    SizedBox(
-                      height: 400.0,
-                      child: DailyTradesHorizontalBarChart.withData(
-                          snapshot.data!['chartData']),
-                    ),
-                    DailyTradesDataTable(
-                      tableData: snapshot.data!['tableData'],
-                      headerColor: headerColor,
-                      leftHandColor: leftHandColor,
-                    ),
-                  ],
-                );
-              } //while the data is loading, return a progress indicator
-              else
-                return LoadingWidget(
-                    loadingText: 'Now loading daily trades data');
-            },
+          SizedBox(
+            height: 200.0,
+            child: marketIndexesLineChart,
           ),
-          FutureBuilder<List<Map>>(
-            //make the API call
-            future: StockNewsAPI.fetch10LatestNews(),
-            initialData: [],
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data!.length > 0) {
-                return new Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
-                  child: Column(children: <Widget>[
-                    Text(
-                      "Latest Stock News",
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.visible,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                    ),
-                    StockNewsDataTable(
-                      tableData: snapshot.data!,
-                      headerColor: headerColor,
-                      leftHandColor: leftHandColor,
-                    ),
-                  ]),
-                );
-              } else
-                return LoadingWidget(
-                    loadingText: 'Now loading stock news data');
-            },
-          ),
+          headlineText,
+          latestTradesBarChart,
+          latestTradesTable,
+          stockNewsTable,
         ]),
       ),
     );

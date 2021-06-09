@@ -5,8 +5,13 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class StockPriceCandlestickChart extends StatefulWidget {
   final bool? animate;
   final List<Map> chartData;
+  late ZoomPanBehavior zoomPanBehavior;
 
   StockPriceCandlestickChart(this.chartData, {this.animate});
+
+  void resetZoom() {
+    zoomPanBehavior.reset();
+  }
 
   @override
   _StockPriceCandlestickChartState createState() =>
@@ -16,11 +21,22 @@ class StockPriceCandlestickChart extends StatefulWidget {
 class _StockPriceCandlestickChartState
     extends State<StockPriceCandlestickChart> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.zoomPanBehavior = ZoomPanBehavior(
+      enablePinching: true,
+      enableMouseWheelZooming: true,
+      enablePanning: true,
+      enableDoubleTapZooming: true,
+      enableSelectionZooming: true,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     SfCartesianChart chart = SfCartesianChart(
-      zoomPanBehavior: ZoomPanBehavior(
-        enablePinching: true,
-      ),
+      zoomPanBehavior: widget.zoomPanBehavior,
       plotAreaBorderWidth: 0,
       primaryXAxis: DateTimeAxis(
         title: AxisTitle(text: 'Date'),

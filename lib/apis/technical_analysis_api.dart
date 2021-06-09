@@ -23,24 +23,68 @@ class TechnicalAnalysisAPI {
     List<Map> returnData = [];
     for (int i = 0; i < apiResponse.length; i++) {
       Map securityData = Map();
-      securityData['symbol'] = apiResponse[i]['symbol'];
-      securityData['sector'] = apiResponse[i]['sector'];
-      securityData['last_close_price'] =
-          double.parse(apiResponse[i]['last_close_price']);
-      securityData['sma_20'] = double.parse(apiResponse[i]['sma_20']);
-      securityData['sma_200'] = double.parse(apiResponse[i]['sma_200']);
-      if (apiResponse[i]['beta'] == null) {
-        securityData['beta'] = double.nan;
-      } else {
-        securityData['beta'] = double.parse(apiResponse[i]['beta']);
+      if (apiResponse[i]['symbol'] != null) {
+        securityData['symbol'] = apiResponse[i]['symbol'];
+        if (apiResponse[i]['sector'] == null) {
+          securityData['sector'] = "";
+        } else {
+          securityData['sector'] = apiResponse[i]['sector'];
+        }
+        try {
+          securityData['last_close_price'] =
+              double.parse(apiResponse[i]['last_close_price']);
+        } catch (e) {
+          securityData['last_close_price'] = 0.0;
+        }
+        try {
+          securityData['sma_20'] = double.parse(apiResponse[i]['sma_20']);
+        } catch (e) {
+          securityData['sma_20'] = 0.0;
+        }
+        try {
+          securityData['sma_200'] = double.parse(apiResponse[i]['sma_200']);
+        } catch (e) {
+          securityData['sma_200'] = 0.0;
+        }
+        try {
+          securityData['beta'] = double.parse(apiResponse[i]['beta']);
+        } catch (e) {
+          securityData['beta'] = 0.0;
+        }
+        try {
+          securityData['adtv'] = apiResponse[i]['adtv'];
+        } catch (e) {
+          securityData['adtv'] = 0;
+        }
+        try {
+          securityData['high_52w'] = double.parse(apiResponse[i]['high_52w']);
+        } catch (e) {
+          securityData['high_52w'] = 0.0;
+        }
+        try {
+          securityData['low_52w'] = double.parse(apiResponse[i]['low_52w']);
+        } catch (e) {
+          securityData['low_52w'] = 0.0;
+        }
+        try {
+          securityData['wtd'] = double.parse(apiResponse[i]['wtd']);
+        } catch (e) {
+          securityData['wtd'] = 0.0;
+        }
+        try {
+          securityData['mtd'] = double.parse(apiResponse[i]['mtd']);
+        } catch (e) {
+          securityData['mtd'] = 0.0;
+        }
+
+        try {
+          securityData['ytd'] = double.parse(apiResponse[i]['ytd']);
+        } catch (e) {
+          securityData['ytd'] = 0.0;
+        }
+
+        returnData.add(securityData);
       }
-      securityData['adtv'] = apiResponse[i]['adtv'];
-      securityData['high_52w'] = double.parse(apiResponse[i]['high_52w']);
-      securityData['low_52w'] = double.parse(apiResponse[i]['low_52w']);
-      securityData['wtd'] = double.parse(apiResponse[i]['wtd']);
-      securityData['mtd'] = double.parse(apiResponse[i]['mtd']);
-      securityData['ytd'] = double.parse(apiResponse[i]['ytd']);
-      returnData.add(securityData);
     }
     // sort the listed stocks by market capitalization
     returnData.sort((a, b) => (a['symbol']).compareTo(b['symbol']));

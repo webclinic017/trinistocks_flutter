@@ -24,7 +24,8 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
   bool symbolDropdownButtonBuilt = false;
   List<DropdownMenuItem<String>> listedSymbols = [];
   bool _loading = true;
-  Widget stockPriceCandlestickChart = Text("");
+  late StockPriceCandlestickChart stockPriceCandlestickChart;
+  bool stockPriceChartBuilt = false;
 
   @override
   void initState() {
@@ -60,7 +61,7 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
       body: LoadingOverlay(
         child: ListView(
           padding: const EdgeInsets.all(0.0),
-          children: [
+          children: <Widget>[
             ButtonBar(
               alignment: MainAxisAlignment.start,
               children: [
@@ -82,12 +83,30 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
                 startDateDropdownButton(context),
               ],
             ),
-            stockPriceCandlestickChart,
+            stockPriceChartBuilt ? stockPriceCandlestickChart : Text(""),
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    ),
+                    onPressed: resetZoom,
+                    child: Row(children: [
+                      FaIcon(FontAwesomeIcons.searchMinus),
+                      Text(" Reset Zoom")
+                    ]))
+              ],
+            )
           ],
         ),
         isLoading: _loading,
       ),
     );
+  }
+
+  void resetZoom() {
+    stockPriceCandlestickChart.resetZoom();
   }
 
   void updateStockPriceChart(BuildContext context) {
@@ -99,6 +118,7 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
       );
       setState(() {
         _loading = false;
+        stockPriceChartBuilt = true;
       });
     });
   }

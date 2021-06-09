@@ -38,7 +38,7 @@ class _TechnicalAnalysisPageState extends State<TechnicalAnalysisPage> {
               Color? headerColor;
               Color? leftHandColor;
               while (generatedColors.length < snapshot.data!.keys.length * 2) {
-                ColorHue colorHue = ColorHue.red;
+                ColorHue colorHue = ColorHue.green;
                 headerColor = RandomColor().randomColor(
                     colorHue: colorHue,
                     colorSaturation: ColorSaturation.lowSaturation,

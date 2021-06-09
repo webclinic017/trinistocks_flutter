@@ -78,8 +78,23 @@ class ProfileManagementAPI {
         //don't do anything else, the email was sent successfully
         return null;
       } else {
-        return "We ran into an error! ${response.reasonPhrase}";
+        return "We ran into an error! ${response.body}";
       }
+    }
+  }
+
+  static Future<String?> deleteUser(String? token) async {
+    if (token == null) {
+      return "Ensure that a user token has been provided.";
+    }
+    String url = 'https://trinistocks.com/api/deleteuser';
+    final response =
+        await http.delete(url, headers: {'Authorization': 'Token $token'});
+    if (response.statusCode == 200) {
+      //don't do anything else, the email was sent successfully
+      return null;
+    } else {
+      return "We ran into an error! ${response.reasonPhrase}";
     }
   }
 

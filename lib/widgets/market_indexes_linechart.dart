@@ -1,53 +1,34 @@
 /// Example of a simple line chart.
-import 'package:charts_flutter/flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 
 class MarketIndexesLineChart extends StatelessWidget {
   final bool? animate;
-  final List<Series<MarketIndexData, DateTime>>? seriesList;
+  final List chartData;
 
-  MarketIndexesLineChart(this.seriesList, {this.animate});
+  MarketIndexesLineChart(this.chartData, {this.animate});
 
   @override
   Widget build(BuildContext context) {
-    return new TimeSeriesChart(
-      seriesList,
-      animate: animate,
-      primaryMeasureAxis: NumericAxisSpec(
-        tickProviderSpec:
-            BasicNumericTickProviderSpec(desiredTickCount: 5, zeroBound: false),
-        renderSpec: new SmallTickRendererSpec(
-          labelStyle: new TextStyleSpec(
-            color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
-          ),
-        ),
+    return new SfCartesianChart(
+      series: _createSeriesFromData(chartData, context),
+      zoomPanBehavior: ZoomPanBehavior(
+        enablePinching: true,
       ),
-      domainAxis: DateTimeAxisSpec(
-        renderSpec: new SmallTickRendererSpec(
-          labelStyle: new TextStyleSpec(
-            color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
-          ),
-        ),
+      plotAreaBorderWidth: 0,
+      primaryXAxis: DateTimeAxis(
+        dateFormat: DateFormat('dd/MM/yyyy'),
       ),
-      behaviors: [
-        new ChartTitle('Date',
-            titleStyleSpec: TextStyleSpec(
-              color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
-            ),
-            behaviorPosition: BehaviorPosition.bottom,
-            titleOutsideJustification: OutsideJustification.middleDrawArea),
-        new ChartTitle('Index Value',
-            titleStyleSpec: TextStyleSpec(
-              color: ColorUtil.fromDartColor(Theme.of(context).accentColor),
-            ),
-            behaviorPosition: BehaviorPosition.start,
-            titleOutsideJustification: OutsideJustification.middleDrawArea),
-      ],
+      primaryYAxis: NumericAxis(
+        labelFormat: '{value}',
+      ),
+      tooltipBehavior: TooltipBehavior(enable: true),
     );
   }
 
-  static List<Series<MarketIndexData, DateTime>>? _createSeriesFromData(
-      List indexDataPoints) {
+  static List<LineSeries<MarketIndexData, DateTime>> _createSeriesFromData(
+      List indexDataPoints, BuildContext context) {
     List<MarketIndexData> compositeIndexData = [];
     for (int i = 0; i < indexDataPoints.length; i++) {
       if (indexDataPoints[i]['index_name'] == "Composite Totals") {
@@ -66,14 +47,20 @@ class MarketIndexesLineChart extends StatelessWidget {
         tntIndexData.add(dataPoint);
       }
     }
-    List<Series<MarketIndexData, DateTime>> returnSeries = [
-      new Series<MarketIndexData, DateTime>(
-        id: 'Composite Index',
-        colorFn: (_, __) => MaterialPalette.red.shadeDefault,
-        domainFn: (MarketIndexData data, _) => data.dateTime,
-        measureFn: (MarketIndexData data, _) => data.indexValue,
-        data: compositeIndexData,
-      ),
+    List<LineSeries<MarketIndexData, DateTime>> returnSeries = [
+      new LineSeries<MarketIndexData, DateTime>(
+        xValueMapper: (MarketIndexData data, _) => data.dateTime,
+        yValueMapper: (MarketIndexData data, _) => data.indexValue,
+        dataSource: compositeIndexData,
+        color: Theme.of(context).splashColor,
+        markerSettings: MarkerSettings(
+            isVisible: true,
+            height: 4,
+            width: 4,
+            shape: DataMarkerType.triangle,
+            borderWidth: 3,
+            borderColor: Theme.of(context).highlightColor),
+      )
     ];
     return returnSeries;
   }
@@ -81,7 +68,7 @@ class MarketIndexesLineChart extends StatelessWidget {
   /// Setup the data for the latest daily trades bar chart
   static Widget withData(List indexData) {
     return new MarketIndexesLineChart(
-      _createSeriesFromData(indexData),
+      indexData,
       // Disable animations for image tests.
       animate: true,
     );

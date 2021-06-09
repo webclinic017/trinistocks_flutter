@@ -56,7 +56,7 @@ class DailyTradesHorizontalBarChart extends StatelessWidget {
         domainFn: (DailyTrades trade, _) => trade.symbol,
         measureFn: (DailyTrades trade, _) => trade.valueTraded,
         data: parsedData,
-        colorFn: (_, __) => MaterialPalette.red.shadeDefault,
+        colorFn: (_, __) => MaterialPalette.green.shadeDefault,
       )
     ];
     return returnSeries;

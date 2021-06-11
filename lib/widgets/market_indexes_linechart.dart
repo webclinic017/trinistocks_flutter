@@ -57,14 +57,14 @@ class MarketIndexesLineChart extends StatelessWidget {
         xValueMapper: (MarketIndexData data, _) => data.dateTime,
         yValueMapper: (MarketIndexData data, _) => data.indexValue,
         dataSource: indexData,
-        color: Colors.amber,
+        color: Colors.purple,
         markerSettings: MarkerSettings(
             isVisible: true,
             height: 4,
             width: 4,
             shape: DataMarkerType.triangle,
             borderWidth: 3,
-            borderColor: Colors.orange),
+            borderColor: Colors.purpleAccent),
       )
     ];
     return returnSeries;

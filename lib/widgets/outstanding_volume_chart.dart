@@ -41,6 +41,7 @@ class _OutstandingVolumeChartState extends State<OutstandingVolumeChart> {
       series: _getOutstandingVolumeSeries(
         context,
       ),
+      tooltipBehavior: TooltipBehavior(enable: true),
     );
     return Container(
       child: chart,
@@ -66,21 +67,37 @@ class _OutstandingVolumeChartState extends State<OutstandingVolumeChart> {
     //now build the chart series from this list
     List<SplineSeries<OutstandingVolumeChartData, DateTime>> chartSeries = [
       SplineSeries<OutstandingVolumeChartData, DateTime>(
-          dataSource: outstandingTradeData,
-          xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
-              tradeData.date,
-          yValueMapper: (OutstandingVolumeChartData tradeData, _) =>
-              tradeData.outstandingBidVolume,
-          name: "Bid Vol.",
-          color: Theme.of(context).highlightColor),
+        dataSource: outstandingTradeData,
+        xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
+            tradeData.date,
+        yValueMapper: (OutstandingVolumeChartData tradeData, _) =>
+            tradeData.outstandingBidVolume,
+        name: "Bid Vol.",
+        color: Colors.teal,
+        markerSettings: MarkerSettings(
+            isVisible: true,
+            height: 4,
+            width: 4,
+            shape: DataMarkerType.diamond,
+            borderWidth: 3,
+            borderColor: Colors.tealAccent),
+      ),
       SplineSeries<OutstandingVolumeChartData, DateTime>(
-          dataSource: outstandingTradeData,
-          xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
-              tradeData.date,
-          yValueMapper: (OutstandingVolumeChartData tradeData, _) =>
-              tradeData.outstandingOfferVolume,
-          name: "Offer Vol.",
-          color: Theme.of(context).hoverColor),
+        dataSource: outstandingTradeData,
+        xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
+            tradeData.date,
+        yValueMapper: (OutstandingVolumeChartData tradeData, _) =>
+            tradeData.outstandingOfferVolume,
+        name: "Offer Vol.",
+        color: Colors.purple,
+        markerSettings: MarkerSettings(
+            isVisible: true,
+            height: 4,
+            width: 4,
+            shape: DataMarkerType.verticalLine,
+            borderWidth: 3,
+            borderColor: Colors.purpleAccent),
+      ),
     ];
     //and return the line series
     return chartSeries;

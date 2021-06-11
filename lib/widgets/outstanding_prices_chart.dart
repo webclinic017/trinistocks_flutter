@@ -43,6 +43,7 @@ class _OutstandingPricesAreaChartState
       series: _getOutstandingPriceSeries(
         context,
       ),
+      tooltipBehavior: TooltipBehavior(enable: true),
     );
     return Container(
       child: chart,
@@ -73,7 +74,14 @@ class _OutstandingPricesAreaChartState
         yValueMapper: (OutstandingPriceChartData tradeData, _) =>
             tradeData.outstandingBidPrice,
         name: "Bid Price",
-        color: Theme.of(context).highlightColor,
+        color: Colors.teal,
+        markerSettings: MarkerSettings(
+            isVisible: true,
+            height: 4,
+            width: 4,
+            shape: DataMarkerType.diamond,
+            borderWidth: 3,
+            borderColor: Colors.tealAccent),
       ),
       SplineSeries<OutstandingPriceChartData, DateTime>(
         dataSource: outstandingTradeData,
@@ -82,7 +90,14 @@ class _OutstandingPricesAreaChartState
         yValueMapper: (OutstandingPriceChartData tradeData, _) =>
             tradeData.outstandingOfferPrice,
         name: "Offer Price",
-        color: Theme.of(context).hoverColor,
+        color: Colors.purple,
+        markerSettings: MarkerSettings(
+            isVisible: true,
+            height: 4,
+            width: 4,
+            shape: DataMarkerType.verticalLine,
+            borderWidth: 3,
+            borderColor: Colors.purpleAccent),
       ),
     ];
     //and return the line series

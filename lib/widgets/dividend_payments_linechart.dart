@@ -21,15 +21,11 @@ class _DividendPaymentsLineChartState extends State<DividendPaymentsLineChart> {
         enablePinching: true,
       ),
       plotAreaBorderWidth: 0,
-      primaryXAxis: DateTimeAxis(
-        dateFormat: DateFormat('dd/MM/yyyy'),
-        labelRotation: 90,
-      ),
+      primaryXAxis: DateTimeAxis(),
       primaryYAxis: NumericAxis(
         labelFormat: '\${value}',
       ),
       series: _getDividendPaymentSeries(),
-      palette: <Color>[Colors.purple],
       tooltipBehavior: TooltipBehavior(enable: true),
     );
     return Container(

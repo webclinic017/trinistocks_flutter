@@ -45,7 +45,7 @@ class _FundamentalAnalysisDataTableState
     return Container(
       child: HorizontalDataTable(
         leftHandSideColumnWidth: 80,
-        rightHandSideColumnWidth: 560,
+        rightHandSideColumnWidth: 600,
         isFixedHeader: true,
         headerWidgets: _getTitleWidget(),
         leftSideItemBuilder: _generateFirstColumnRow,
@@ -444,7 +444,7 @@ class _FundamentalAnalysisDataTableState
       _getTitleItemWidget("RoE", 60),
       _getTitleItemWidget("P/B", 60),
       _getTitleItemWidget("Current Ratio", 60),
-      _getTitleItemWidget("Dividend Yield", 60),
+      _getTitleItemWidget("Dividend Yield", 70),
       _getTitleItemWidget("Payout Ratio", 60),
       _getTitleItemWidget("Cash Per Share", 60),
       _getTitleItemWidget("Last Updated", 130),
@@ -521,7 +521,7 @@ class _FundamentalAnalysisDataTableState
           child: Text(decimalFormat.format(fundamentalAnalysis
                   .fundamentalAnalysisData[index].dividendYield) +
               "%"),
-          width: 60,
+          width: 70,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,

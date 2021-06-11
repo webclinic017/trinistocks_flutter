@@ -23,7 +23,7 @@ class _OutstandingTradesHistoryPageState
     extends State<OutstandingTradesHistoryPage> {
   List<Color> generatedColors = <Color>[];
   String selectedSymbol = 'AGL';
-  String dateRange = MarketIndexDateRange.oneYear;
+  String dateRange = MarketIndexDateRange.oneMonth;
   double buttonBarLabelSize = 14;
   bool symbolDropdownButtonBuilt = false;
   List<DropdownMenuItem<String>> listedSymbols = [];
@@ -57,7 +57,7 @@ class _OutstandingTradesHistoryPageState
   @override
   Widget build(BuildContext context) {
     ListView view = ListView();
-    if (symbolDropdownButtonBuilt) {
+    if (latestOutstandingTrade != null) {
       view = ListView(
         padding: const EdgeInsets.all(0.0),
         children: [
@@ -97,10 +97,8 @@ class _OutstandingTradesHistoryPageState
                         children: [
                           TextSpan(
                             text:
-                                "\$${oCcy.format(latestOutstandingTrade['os_bid'])} (${latestOutstandingTrade['os_bid_vol']} shares)",
-                            style: TextStyle(
-                              color: Theme.of(context).highlightColor,
-                            ),
+                                "\$${oCcy.format(latestOutstandingTrade!['os_bid'])} (${latestOutstandingTrade!['os_bid_vol']} shares)",
+                            style: TextStyle(),
                           ),
                         ],
                       ),
@@ -121,10 +119,8 @@ class _OutstandingTradesHistoryPageState
                         children: [
                           TextSpan(
                             text:
-                                "\$${oCcy.format(latestOutstandingTrade['os_offer'])} (${latestOutstandingTrade['os_offer_vol']} shares)",
-                            style: TextStyle(
-                              color: Theme.of(context).hoverColor,
-                            ),
+                                "\$${oCcy.format(latestOutstandingTrade!['os_offer'])} (${latestOutstandingTrade!['os_offer_vol']} shares)",
+                            style: TextStyle(),
                           ),
                         ],
                       ),
@@ -191,6 +187,7 @@ class _OutstandingTradesHistoryPageState
         animate: true,
       );
       setState(() {
+        symbolDropdownButtonBuilt = true;
         _loading = false;
       });
     });

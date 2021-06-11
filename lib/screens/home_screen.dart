@@ -84,7 +84,10 @@ class _HomePageState extends State<HomePage> {
         );
         latestTradesBarChart = SizedBox(
           height: 400.0,
-          child: DailyTradesHorizontalBarChart.withData(value['chartData']),
+          child: DailyTradesHorizontalBarChart(
+            value['chartData'],
+            animate: true,
+          ),
         );
         latestTradesTable = DailyTradesDataTable(
           tableData: value['tableData'],

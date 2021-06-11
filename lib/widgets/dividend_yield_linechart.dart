@@ -20,15 +20,12 @@ class _DividendYieldLineChartState extends State<DividendYieldLineChart> {
         enablePinching: true,
       ),
       plotAreaBorderWidth: 0,
-      primaryXAxis: DateTimeAxis(
-        dateFormat: DateFormat('dd/MM/yyyy'),
-        labelRotation: 90,
-      ),
+      primaryXAxis: DateTimeAxis(),
       primaryYAxis: NumericAxis(
         labelFormat: '{value}%',
       ),
       series: _getDividendPaymentSeries(),
-      palette: <Color>[Colors.pinkAccent],
+      palette: <Color>[Colors.teal],
       tooltipBehavior: TooltipBehavior(enable: true),
     );
     return Container(
@@ -59,14 +56,14 @@ class _DividendYieldLineChartState extends State<DividendYieldLineChart> {
         xValueMapper: (DividendYieldChartData stockData, _) => stockData.date,
         yValueMapper: (DividendYieldChartData stockData, _) =>
             stockData.dividendYield,
-        color: Colors.pink,
+        color: Colors.teal,
         markerSettings: MarkerSettings(
             isVisible: true,
             height: 4,
             width: 4,
             shape: DataMarkerType.triangle,
             borderWidth: 3,
-            borderColor: Colors.pinkAccent),
+            borderColor: Colors.tealAccent),
       ),
     ];
     //and return the line series

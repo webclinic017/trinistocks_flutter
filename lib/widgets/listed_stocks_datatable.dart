@@ -44,7 +44,7 @@ class _ListedStocksDataTableState extends State<ListedStocksDataTable> {
     return Container(
       child: HorizontalDataTable(
         leftHandSideColumnWidth: 80,
-        rightHandSideColumnWidth: 870,
+        rightHandSideColumnWidth: 900,
         isFixedHeader: true,
         headerWidgets: _getTitleWidget(),
         leftSideItemBuilder: _generateFirstColumnRow,
@@ -243,7 +243,7 @@ class _ListedStocksDataTableState extends State<ListedStocksDataTable> {
       TextButton(
         style: titleButtonStyle,
         child: _getTitleItemWidget(
-            "Market Capitalization" + checkMarketCapitalSort(), 100),
+            "Market\r\nCapitalization" + checkMarketCapitalSort(), 120),
         onPressed: () {
           changeMarketCapitalSort();
           listedStock.sortMarketCapitalization(marketCapitalizationSort);
@@ -309,7 +309,7 @@ class _ListedStocksDataTableState extends State<ListedStocksDataTable> {
             '\$${compactFormat.format(listedStock.listedStockData[index].marketCapitalization)}',
             style: TextStyle(color: Theme.of(context).accentColor),
           ),
-          width: 100,
+          width: 120,
           height: 52,
           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,

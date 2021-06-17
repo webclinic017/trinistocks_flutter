@@ -2,8 +2,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:trinistocks_flutter/models/login_model.dart';
 import 'package:trinistocks_flutter/screens/dividend_history_screen.dart';
+import 'package:trinistocks_flutter/screens/portfolio_summary_screen.dart';
+import 'package:trinistocks_flutter/screens/portfolio_transactions_screen.dart';
 import 'screens/fundamental_analysis_history_screen.dart';
 import 'screens/fundamental_analysis_screen.dart';
 import 'screens/listed_stocks_screen.dart';
@@ -30,10 +31,7 @@ class MyHttpOverrides extends HttpOverrides {
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => LoginModel(),
-      child: TriniStocks(),
-    ),
+    TriniStocks(),
   );
 }
 
@@ -60,6 +58,8 @@ class TriniStocks extends StatelessWidget {
         '/stock_news_history': (context) => StockNewsHistoryPage(),
         '/fundamental_analysis_history': (context) =>
             FundamentalAnalysisHistoryPage(),
+        '/portfolio_summary': (context) => PortfolioSummaryPage(),
+        '/portfolio_transactions': (context) => PortfolioTransactionsPage(),
       },
     );
   }

@@ -1,0 +1,408 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:loading_overlay/loading_overlay.dart';
+import 'package:trinistocks_flutter/apis/listed_stocks_api.dart';
+import 'package:trinistocks_flutter/apis/profile_management_api.dart';
+import 'package:trinistocks_flutter/widgets/main_drawer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+class PortfolioTransactionsPage extends StatefulWidget {
+  PortfolioTransactionsPage({Key? key}) : super(key: key);
+
+  @override
+  _PortfolioTransactionsPageState createState() =>
+      _PortfolioTransactionsPageState();
+}
+
+class _PortfolioTransactionsPageState extends State<PortfolioTransactionsPage> {
+  bool isLoading = true;
+  TextEditingController numSharesController = new TextEditingController();
+  TextEditingController priceController = new TextEditingController();
+  TextEditingController dateController = new TextEditingController();
+  late FToast fToast;
+  String cardView = "Initial";
+  late Card initialCardView;
+  late Card submitRequestCardView;
+  List<DropdownMenuItem<String>> listedSymbols = [];
+  String selectedSymbol = 'AGL';
+  String boughtOrSold = 'Bought';
+  double buttonBarLabelSize = 16;
+  double spacing = 20.0;
+
+  Widget checkCardView() {
+    if (cardView == "Initial") {
+      return initialCardView;
+    } else if (cardView == "Submit") {
+      return submitRequestCardView;
+    } else
+      return initialCardView;
+  }
+
+  @override
+  void initState() {
+    ListedStocksAPI.fetchListedStockSymbols().then((List<String> symbols) {
+      for (String symbol in symbols) {
+        listedSymbols.add(
+          new DropdownMenuItem<String>(
+            value: symbol,
+            child: Text(
+              symbol,
+              style: TextStyle(),
+            ),
+          ),
+        );
+      }
+      setState(() {
+        isLoading = false;
+      });
+    });
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    initialCardView = Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+        side: BorderSide(color: Theme.of(context).accentColor),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Table(
+              border: TableBorder(),
+              columnWidths: {0: FixedColumnWidth(130)},
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: [
+                TableRow(
+                  children: [
+                    Text(
+                      "Symbol",
+                      style: TextStyle(fontSize: buttonBarLabelSize),
+                    ),
+                    buildSymbolDropdownButton(context),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                  ],
+                ),
+                TableRow(children: [
+                  Text(
+                    "Shares traded",
+                    style: TextStyle(fontSize: buttonBarLabelSize),
+                  ),
+                  SizedBox(
+                    width: 200,
+                    height: 40,
+                    child: TextFormField(
+                      controller: numSharesController,
+                      decoration: const InputDecoration(
+                        labelText: 'Number of shares',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ]),
+                TableRow(
+                  children: [
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Text(
+                      "Bought or Sold?",
+                      style: TextStyle(fontSize: buttonBarLabelSize),
+                    ),
+                    DropdownButton<String>(
+                      isExpanded: true,
+                      value: this.boughtOrSold,
+                      icon: FaIcon(
+                        FontAwesomeIcons.arrowAltCircleDown,
+                        color: Theme.of(context).secondaryHeaderColor,
+                      ),
+                      items: <DropdownMenuItem<String>>[
+                        DropdownMenuItem(
+                          value: "Bought",
+                          child: Text("Bought "),
+                        ),
+                        DropdownMenuItem(
+                          value: "Sold",
+                          child: Text("Sold "),
+                        ),
+                      ],
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedSymbol = newValue!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Text(
+                      "Price per share",
+                      style: TextStyle(fontSize: buttonBarLabelSize),
+                    ),
+                    SizedBox(
+                      width: 200,
+                      height: 40,
+                      child: TextFormField(
+                        controller: priceController,
+                        decoration: const InputDecoration(
+                          labelText: 'Share Price(\$)',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    Text(
+                      "Date executed",
+                      style: TextStyle(fontSize: buttonBarLabelSize),
+                    ),
+                    SizedBox(
+                      width: 200,
+                      height: 40,
+                      child: TextFormField(
+                        readOnly: true,
+                        controller: dateController,
+                        decoration: InputDecoration(
+                          labelText: 'Click to pick date',
+                          border: OutlineInputBorder(),
+                        ),
+                        onTap: () async {
+                          var date = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime(2100));
+                          dateController.text =
+                              date.toString().substring(0, 10);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    SizedBox(
+                      height: spacing,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            ElevatedButton(
+              child: Text(
+                "Add Transaction",
+                style: TextStyle(color: Theme.of(context).backgroundColor),
+              ),
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).primaryColor)),
+              onPressed: () {
+                isLoading = true;
+              },
+            )
+          ],
+        ),
+      ),
+    );
+
+    // style: ButtonStyle(
+    //     padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+    //     backgroundColor: MaterialStateProperty.all(Colors.green)),
+    // onPressed: () {
+    //   isLoading = true;
+    //   tryLogin(usernameController.text, passwordController.text)
+    //       .then(
+    //     (Map returnValue) {
+    //       String? returnMessage = returnValue['message'];
+    //       isLoading = false;
+    //       if (returnMessage != null) {
+    //         fToast.showToast(
+    //           child: returnToast(returnMessage, false),
+    //           toastDuration: Duration(seconds: 5),
+    //           gravity: ToastGravity.BOTTOM,
+    //         );
+    //       } else {
+    //         fToast.showToast(
+    //           child: returnToast("Login Success!", true),
+    //           gravity: ToastGravity.BOTTOM,
+    //           toastDuration: Duration(seconds: 2),
+    //         );
+    //         Navigator.pushReplacementNamed(context, '/');
+    //       }
+    //     },
+
+    //   Padding(
+    //     padding: EdgeInsets.only(),
+    //     child: ButtonBar(
+    //       alignment: MainAxisAlignment.spaceEvenly,
+    //       children: [
+    //         ElevatedButton(
+    //           child: Text(
+    //             "Register",
+    //             style: TextStyle(fontSize: 12),
+    //           ),
+    //           style: ButtonStyle(
+    //             padding: MaterialStateProperty.all(EdgeInsets.all(5)),
+    //             backgroundColor: MaterialStateProperty.all(Colors.red),
+    //           ),
+    //           onPressed: () {
+    //             setState(() {
+    //               cardView = "Register";
+    //             });
+    //           },
+    //         ),
+    //         ElevatedButton(
+    //           child: Text(
+    //             "Reset Password",
+    //             style: TextStyle(fontSize: 12),
+    //           ),
+    //           style: ButtonStyle(
+    //             padding: MaterialStateProperty.all(EdgeInsets.all(5)),
+    //             backgroundColor: MaterialStateProperty.all(Colors.orange),
+    //           ),
+    //           onPressed: () {
+    //             setState(() {
+    //               cardView = "Reset Password";
+    //             });
+    //           },
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Portfolio Transactions'),
+        centerTitle: true,
+      ),
+      //add a drawer for navigation
+      endDrawer: MainDrawer(),
+      //setup futurebuilders to wait on the API data
+      body: LoadingOverlay(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              checkCardView(),
+            ],
+          ),
+        ),
+        isLoading: isLoading,
+      ),
+    );
+  }
+
+  Widget returnToast(String text, bool success) {
+    Widget toast = Text("");
+    if (success) {
+      toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.green,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            FaIcon(FontAwesomeIcons.check),
+            SizedBox(
+              width: 12.0,
+            ),
+            Expanded(
+              child: Text(text),
+            ),
+          ],
+        ),
+      );
+    } else {
+      toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.red,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FaIcon(FontAwesomeIcons.exclamation),
+            SizedBox(
+              width: 12.0,
+            ),
+            Expanded(
+              child: Text(text),
+            ),
+          ],
+        ),
+      );
+    }
+    return toast;
+  }
+
+  Widget buildSymbolDropdownButton(BuildContext context) {
+    return DropdownButton<String>(
+      value: this.selectedSymbol,
+      isExpanded: true,
+      icon: FaIcon(
+        FontAwesomeIcons.arrowAltCircleDown,
+        color: Theme.of(context).secondaryHeaderColor,
+      ),
+      items: listedSymbols,
+      onChanged: (String? newValue) {
+        setState(() {
+          selectedSymbol = newValue!;
+        });
+      },
+    );
+  }
+}

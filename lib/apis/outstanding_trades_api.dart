@@ -75,7 +75,7 @@ class OutstandingTradesAPI {
 }
 
 class OutstandingTradesRange {
-  static const String oneWeek = '1 Week';
-  static const String oneMonth = '1 Month';
-  static const String oneYear = '1 Year';
+  static const String oneWeek = '1 Week ';
+  static const String oneMonth = '1 Month ';
+  static const String oneYear = '1 Year ';
 }

@@ -12,6 +12,20 @@ class _MainDrawerState extends State<MainDrawer> {
   double dropDownHeaderSize = 18;
   double itemHeaderSize = 16;
   double iconSize = 34;
+  bool userLoggedIn = false;
+  String username = "";
+
+  @override
+  void initState() {
+    super.initState();
+    //check if user is logged in
+    ProfileManagementAPI.checkUserLoggedIn().then((Map userInfo) {
+      setState(() {
+        userLoggedIn = userInfo['isLoggedIn'];
+        username = userInfo['username'];
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +35,20 @@ class _MainDrawerState extends State<MainDrawer> {
         children: [
           Container(
             height: 120,
-            child: DrawerHeader(child: checkUserLoggedIn()),
+            child: DrawerHeader(
+              child: buildUserProfile(),
+            ),
           ),
           ListTile(
             leading: Icon(
               Icons.house,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).secondaryHeaderColor,
               size: iconSize,
             ),
             title: Text(
               'Home',
               style: TextStyle(
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).secondaryHeaderColor,
                 fontWeight: FontWeight.w600,
                 fontSize: itemHeaderSize,
               ),
@@ -42,10 +58,15 @@ class _MainDrawerState extends State<MainDrawer> {
             },
           ),
           ExpansionTile(
+            leading: Icon(
+              Icons.table_chart,
+              color: Theme.of(context).secondaryHeaderColor,
+              size: iconSize,
+            ),
             title: Text(
               "Summarized",
               style: TextStyle(
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).secondaryHeaderColor,
                 fontWeight: FontWeight.w600,
                 fontSize: dropDownHeaderSize,
               ),
@@ -54,13 +75,13 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: Icon(
                   Icons.list_alt_rounded,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Listed Stocks',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -72,13 +93,13 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.chartLine,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Technical Analysis',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -90,13 +111,13 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.bookReader,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Fundamental Analysis',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -108,10 +129,15 @@ class _MainDrawerState extends State<MainDrawer> {
             ],
           ),
           ExpansionTile(
+            leading: Icon(
+              Icons.stacked_line_chart_rounded,
+              color: Theme.of(context).secondaryHeaderColor,
+              size: iconSize,
+            ),
             title: Text(
               "Historical",
               style: TextStyle(
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).secondaryHeaderColor,
                 fontWeight: FontWeight.w600,
                 fontSize: dropDownHeaderSize,
               ),
@@ -120,13 +146,13 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.chartBar,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Stock Prices',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -138,13 +164,13 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.handHoldingUsd,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Dividends',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -156,13 +182,13 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.landmark,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Market Indices',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -174,13 +200,13 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.balanceScale,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Outstanding Trades',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -192,13 +218,13 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.newspaper,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Stock News History',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -210,13 +236,13 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.bookReader,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Fundamental History',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -226,78 +252,135 @@ class _MainDrawerState extends State<MainDrawer> {
                 },
               ),
             ],
-          ), /*or any other widget you want to apply the theme to.*/
+          ),
+          buildPortfolioExpansion(),
         ],
       ),
     );
   }
 
-  Widget checkUserLoggedIn() {
-    return FutureBuilder<Map>(
-        future: ProfileManagementAPI.checkUserLoggedIn(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data!['isLoggedIn'] == true) {
-            return ElevatedButton(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  FaIcon(
-                    FontAwesomeIcons.userCheck,
-                    color: Theme.of(context).accentColor,
-                    size: iconSize,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      snapshot.data!['username'],
-                      style: TextStyle(
-                        color: Theme.of(context).accentColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: drawerMainHeaderSize,
-                      ),
-                    ),
-                  ),
-                ],
+  Widget buildPortfolioExpansion() {
+    if (userLoggedIn) {
+      return ExpansionTile(
+        leading: FaIcon(
+          FontAwesomeIcons.piggyBank,
+          color: Theme.of(context).secondaryHeaderColor,
+          size: iconSize,
+        ),
+        title: Text(
+          "Portfolio",
+          style: TextStyle(
+            color: Theme.of(context).secondaryHeaderColor,
+            fontWeight: FontWeight.w600,
+            fontSize: dropDownHeaderSize,
+          ),
+        ),
+        children: [
+          ListTile(
+            leading: FaIcon(
+              FontAwesomeIcons.chartPie,
+              color: Theme.of(context).secondaryHeaderColor,
+              size: iconSize,
+            ),
+            title: Text(
+              'Summary',
+              style: TextStyle(
+                color: Theme.of(context).secondaryHeaderColor,
+                fontWeight: FontWeight.w600,
+                fontSize: itemHeaderSize,
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/user_profile');
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(Theme.of(context).canvasColor),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/portfolio_summary');
+            },
+          ),
+          ListTile(
+            leading: FaIcon(
+              FontAwesomeIcons.cashRegister,
+              color: Theme.of(context).secondaryHeaderColor,
+              size: iconSize,
+            ),
+            title: Text(
+              'Transactions',
+              style: TextStyle(
+                color: Theme.of(context).secondaryHeaderColor,
+                fontWeight: FontWeight.w600,
+                fontSize: itemHeaderSize,
               ),
-            );
-          } else
-            return ElevatedButton(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  FaIcon(
-                    FontAwesomeIcons.userNinja,
-                    color: Theme.of(context).accentColor,
-                    size: iconSize,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Guest',
-                      style: TextStyle(
-                        color: Theme.of(context).accentColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: drawerMainHeaderSize,
-                      ),
-                    ),
-                  ),
-                ],
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/portfolio_transactions');
+            },
+          ),
+        ],
+      );
+    } else {
+      return Text("");
+    }
+  }
+
+  Widget buildUserProfile() {
+    if (userLoggedIn) {
+      return ElevatedButton(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            FaIcon(
+              FontAwesomeIcons.userCheck,
+              color: Theme.of(context).secondaryHeaderColor,
+              size: iconSize,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                username,
+                style: TextStyle(
+                  color: Theme.of(context).secondaryHeaderColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: drawerMainHeaderSize,
+                ),
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/login');
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(Theme.of(context).canvasColor),
+            ),
+          ],
+        ),
+        onPressed: () {
+          Navigator.pushNamed(context, '/user_profile');
+        },
+        style: ButtonStyle(
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).canvasColor),
+        ),
+      );
+    } else
+      return ElevatedButton(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            FaIcon(
+              FontAwesomeIcons.userNinja,
+              color: Theme.of(context).secondaryHeaderColor,
+              size: iconSize,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                'Guest',
+                style: TextStyle(
+                  color: Theme.of(context).secondaryHeaderColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: drawerMainHeaderSize,
+                ),
               ),
-            );
-        });
+            ),
+          ],
+        ),
+        onPressed: () {
+          Navigator.pushNamed(context, '/login');
+        },
+        style: ButtonStyle(
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).cardColor),
+        ),
+      );
   }
 }

@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
             animate: true,
           ),
         );
-        latestTradesTable = DailyTradesDataTable(
+        latestTradesTable = new DailyTradesDataTable(
           tableData: value['tableData'],
           headerColor: headerColor,
           leftHandColor: leftHandColor,

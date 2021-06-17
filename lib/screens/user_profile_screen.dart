@@ -65,7 +65,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     height: 50,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).accentColor,
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(5),
@@ -88,20 +88,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     width: 60,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: Theme.of(context).splashColor,
+                      color: Theme.of(context).accentColor,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.person,
-                          color: Colors.white,
+                          color: Theme.of(context).canvasColor,
                           size: 16,
                         ),
                         Text(
                           ' Username',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).canvasColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -125,7 +125,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     height: 50,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).accentColor,
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(5),
@@ -148,20 +148,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     width: 60,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: Theme.of(context).splashColor,
+                      color: Theme.of(context).accentColor,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.mail,
-                          color: Colors.white,
+                          color: Theme.of(context).canvasColor,
                           size: 16,
                         ),
                         Text(
                           ' Email',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).canvasColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),

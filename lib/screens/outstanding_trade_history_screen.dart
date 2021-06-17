@@ -23,15 +23,19 @@ class _OutstandingTradesHistoryPageState
     extends State<OutstandingTradesHistoryPage> {
   List<Color> generatedColors = <Color>[];
   String selectedSymbol = 'AGL';
-  String dateRange = MarketIndexDateRange.oneMonth;
+  String dateRange = OutstandingTradesRange.oneMonth;
   double buttonBarLabelSize = 14;
   bool symbolDropdownButtonBuilt = false;
   List<DropdownMenuItem<String>> listedSymbols = [];
   bool _loading = true;
   Widget outstandingPriceChart = Text("");
   Widget outstandingVolumeChart = Text("");
-  Map? latestOutstandingTrade;
-  final oCcy = new NumberFormat("#,##0.00", "en_US");
+  String latestOutstandingBid = 'N.A';
+  String latestOutstandingBidVol = 'N.A';
+  String latestOutstandingOffer = 'N.A';
+  String latestOutstandingOfferVol = 'N.A';
+  final dollarFormat = new NumberFormat("#,##0.00", "en_US");
+  final shareFormat = new NumberFormat("#,##0", "en_US");
 
   @override
   void initState() {
@@ -57,84 +61,83 @@ class _OutstandingTradesHistoryPageState
   @override
   Widget build(BuildContext context) {
     ListView view = ListView();
-    if (latestOutstandingTrade != null) {
-      view = ListView(
-        padding: const EdgeInsets.all(0.0),
-        children: [
-          ButtonBar(
-            alignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(right: 5),
-                child: Text(
-                  "Index:",
-                  style: TextStyle(fontSize: buttonBarLabelSize),
-                ),
+    view = ListView(
+      padding: const EdgeInsets.all(0.0),
+      children: [
+        ButtonBar(
+          alignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: 5),
+              child: Text(
+                "Index:",
+                style: TextStyle(fontSize: buttonBarLabelSize),
               ),
-              buildSymbolDropdownButton(context),
-              Padding(
-                padding: EdgeInsets.only(right: 5),
-                child: Text(
-                  "Range:",
-                  style: TextStyle(fontSize: buttonBarLabelSize),
-                ),
+            ),
+            buildSymbolDropdownButton(context),
+            Padding(
+              padding: EdgeInsets.only(right: 5),
+              child: Text(
+                "Range:",
+                style: TextStyle(fontSize: buttonBarLabelSize),
               ),
-              startDateDropdownButton(context),
-            ],
-          ),
-          Card(
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: RichText(
-                      text: TextSpan(
-                        text: "Current Highest Bid: ",
-                        style: TextStyle(
-                            color: Theme.of(context).secondaryHeaderColor),
-                        children: [
-                          TextSpan(
-                            text:
-                                "\$${oCcy.format(latestOutstandingTrade!['os_bid'])} (${latestOutstandingTrade!['os_bid_vol']} shares)",
-                            style: TextStyle(),
-                          ),
-                        ],
-                      ),
+            ),
+            startDateDropdownButton(context),
+          ],
+        ),
+        Card(
+          child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Current Highest Bid: ",
+                      style: TextStyle(
+                          color: Theme.of(context).secondaryHeaderColor),
+                      children: [
+                        TextSpan(
+                          text:
+                              "$latestOutstandingBid ($latestOutstandingBidVol shares)",
+                          style: TextStyle(),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: RichText(
-                      text: TextSpan(
-                        text: "Current Lowest Offer: ",
-                        style: TextStyle(
-                            color: Theme.of(context).secondaryHeaderColor),
-                        children: [
-                          TextSpan(
-                            text:
-                                "\$${oCcy.format(latestOutstandingTrade!['os_offer'])} (${latestOutstandingTrade!['os_offer_vol']} shares)",
-                            style: TextStyle(),
-                          ),
-                        ],
-                      ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Current Lowest Offer: ",
+                      style: TextStyle(
+                          color: Theme.of(context).secondaryHeaderColor),
+                      children: [
+                        TextSpan(
+                          text:
+                              "$latestOutstandingOffer ($latestOutstandingOfferVol shares)",
+                          style: TextStyle(),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ]),
-          ),
-          outstandingPriceChart,
-          outstandingVolumeChart,
-        ],
-      );
-    }
+                ),
+              ],
+            ),
+          ]),
+        ),
+        outstandingPriceChart,
+        outstandingVolumeChart,
+      ],
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Outstanding Trades'),
@@ -175,8 +178,36 @@ class _OutstandingTradesHistoryPageState
   void updateOutstandingTradeDataCharts(BuildContext context) {
     OutstandingTradesAPI.fetchOutstandingTradeData(selectedSymbol, dateRange)
         .then((List outstandingTradeData) {
-      //update the latest trade
-      latestOutstandingTrade = outstandingTradeData.last;
+      //update the latest trade data
+      Map? latestOutstandingTrade = outstandingTradeData.last;
+      if (latestOutstandingTrade != null) {
+        if (latestOutstandingTrade['os_bid'] != null) {
+          latestOutstandingBid = "\$" +
+              dollarFormat.format(latestOutstandingTrade['os_bid']) +
+              " ";
+        } else {
+          latestOutstandingBid = 'N.A ';
+        }
+        if (latestOutstandingTrade['os_bid_vol'] != null) {
+          latestOutstandingBidVol =
+              shareFormat.format(latestOutstandingTrade['os_bid_vol']);
+        } else {
+          latestOutstandingBidVol = '(N.A)';
+        }
+        if (latestOutstandingTrade['os_offer'] != null) {
+          latestOutstandingOffer = "\$" +
+              dollarFormat.format(latestOutstandingTrade['os_offer']) +
+              " ";
+        } else {
+          latestOutstandingOffer = 'N.A ';
+        }
+        if (latestOutstandingTrade['os_offer_vol'] != null) {
+          latestOutstandingOfferVol =
+              shareFormat.format(latestOutstandingTrade['os_offer_vol']);
+        } else {
+          latestOutstandingOfferVol = 'N.A';
+        }
+      }
       //now update the two charts
       outstandingPriceChart = OutstandingPricesAreaChart(
         outstandingTradeData,

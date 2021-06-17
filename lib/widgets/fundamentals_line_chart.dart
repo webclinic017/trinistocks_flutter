@@ -75,7 +75,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
                 color: Theme.of(context).accentColor,
               ),
               name: "Earnings Per Share",
-              color: Theme.of(context).splashColor,
+              color: Colors.teal,
             ),
           ];
           return lineSeries;
@@ -94,7 +94,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
                 color: Theme.of(context).accentColor,
               ),
               name: "RoIC",
-              color: Theme.of(context).splashColor,
+              color: Colors.teal,
             ),
           ];
           return lineSeries;
@@ -113,7 +113,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
                 color: Theme.of(context).accentColor,
               ),
               name: "Current Ratio",
-              color: Theme.of(context).splashColor,
+              color: Colors.teal,
             ),
           ];
           return lineSeries;
@@ -132,7 +132,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
                 color: Theme.of(context).accentColor,
               ),
               name: "P/E",
-              color: Theme.of(context).splashColor,
+              color: Colors.teal,
             ),
           ];
           return lineSeries;
@@ -151,7 +151,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
                 color: Theme.of(context).accentColor,
               ),
               name: "Dividend Yield",
-              color: Theme.of(context).splashColor,
+              color: Colors.teal,
             ),
           ];
           return lineSeries;
@@ -170,7 +170,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
                 color: Theme.of(context).accentColor,
               ),
               name: "P/B",
-              color: Theme.of(context).splashColor,
+              color: Colors.teal,
             ),
           ];
           return lineSeries;
@@ -189,7 +189,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
                 color: Theme.of(context).accentColor,
               ),
               name: "Dividend Payout",
-              color: Theme.of(context).splashColor,
+              color: Colors.teal,
             ),
           ];
           return lineSeries;
@@ -208,7 +208,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
                 color: Theme.of(context).accentColor,
               ),
               name: "Cash Per Share",
-              color: Theme.of(context).splashColor,
+              color: Colors.teal,
             ),
           ];
           return lineSeries;

@@ -76,7 +76,8 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
               children: [
                 ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).buttonColor),
                   ),
                   onPressed: resetZoom,
                   child: Row(

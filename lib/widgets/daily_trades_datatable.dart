@@ -5,12 +5,12 @@ import 'package:intl/intl.dart';
 
 class DailyTradesDataTable extends StatefulWidget {
   //constructor to ask for tabledata
-  const DailyTradesDataTable(
+  DailyTradesDataTable(
       {required this.tableData,
       required this.headerColor,
       required this.leftHandColor});
 
-  final List<Map> tableData;
+  List<Map> tableData;
   final Color headerColor;
   final Color leftHandColor;
 
@@ -24,7 +24,6 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
 
   @override
   void initState() {
-    dailyTrades.initData(widget.tableData);
     super.initState();
   }
 
@@ -49,6 +48,7 @@ class _DailyTradesDataTableState extends State<DailyTradesDataTable> {
 
   @override
   Widget build(BuildContext context) {
+    dailyTrades.initData(widget.tableData);
     return Container(
       child: HorizontalDataTable(
         leftHandSideColumnWidth: 80,

@@ -89,7 +89,8 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
               children: [
                 ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).buttonColor),
                     ),
                     onPressed: resetZoom,
                     child: Row(children: [

@@ -116,4 +116,26 @@ class PortfolioAPI {
       return portfolioData;
     });
   }
+
+  static Future<Map> addPortfolioTransaction(Map transactionData) async {
+    //ensure that the user is signed in
+    return ProfileManagementAPI.checkUserLoggedIn().then((Map userInfo) async {
+      Map response = Map();
+      if (userInfo['isLoggedIn'] = true) {
+        String url = 'https://trinistocks.com/api/portfoliotransaction';
+        final apiToken = userInfo['token'];
+        var apiResponse = await http.put(url,
+            headers: {"Authorization": "Token $apiToken"},
+            body: transactionData);
+        if (apiResponse.statusCode == 201) {
+          response['message'] = null;
+        } else {
+          response['message'] = apiResponse.body;
+        }
+      } else {
+        response['message'] = "No user logged in";
+      }
+      return response;
+    });
+  }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:trinistocks_flutter/apis/listed_stocks_api.dart';
+import 'package:trinistocks_flutter/apis/portfolio_api.dart';
 import 'package:trinistocks_flutter/apis/profile_management_api.dart';
 import 'package:trinistocks_flutter/widgets/main_drawer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,22 +25,12 @@ class _PortfolioTransactionsPageState extends State<PortfolioTransactionsPage> {
   TextEditingController dateController = new TextEditingController();
   late FToast fToast;
   String cardView = "Initial";
-  late Card initialCardView;
-  late Card submitRequestCardView;
+  late Card addTransactionCardView;
   List<DropdownMenuItem<String>> listedSymbols = [];
   String selectedSymbol = 'AGL';
   String boughtOrSold = 'Bought';
   double buttonBarLabelSize = 16;
   double spacing = 20.0;
-
-  Widget checkCardView() {
-    if (cardView == "Initial") {
-      return initialCardView;
-    } else if (cardView == "Submit") {
-      return submitRequestCardView;
-    } else
-      return initialCardView;
-  }
 
   @override
   void initState() {
@@ -66,7 +57,7 @@ class _PortfolioTransactionsPageState extends State<PortfolioTransactionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    initialCardView = Card(
+    addTransactionCardView = Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
         side: BorderSide(color: Theme.of(context).accentColor),
@@ -111,6 +102,7 @@ class _PortfolioTransactionsPageState extends State<PortfolioTransactionsPage> {
                       controller: numSharesController,
                       decoration: const InputDecoration(
                         labelText: 'Number of shares',
+                        hintText: "100",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -180,6 +172,7 @@ class _PortfolioTransactionsPageState extends State<PortfolioTransactionsPage> {
                         controller: priceController,
                         decoration: const InputDecoration(
                           labelText: 'Share Price(\$)',
+                          hintText: "20.00",
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -216,8 +209,8 @@ class _PortfolioTransactionsPageState extends State<PortfolioTransactionsPage> {
                           var date = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime(2100));
+                              firstDate: DateTime(1950),
+                              lastDate: DateTime(2150));
                           dateController.text =
                               date.toString().substring(0, 10);
                         },
@@ -248,78 +241,53 @@ class _PortfolioTransactionsPageState extends State<PortfolioTransactionsPage> {
                       Theme.of(context).primaryColor)),
               onPressed: () {
                 isLoading = true;
+                //first ensure that correct values have been put in the numshares and price fields
+                try {
+                  if (numSharesController.text == '') {
+                    throw FormatException(
+                        "Please enter the number of shares traded.");
+                  }
+                  int numShares = int.parse(numSharesController.text);
+                  if (priceController.text == '') {
+                    throw FormatException(
+                        "Please enter the price for the shares traded.");
+                  }
+                  double sharePrice = double.parse(priceController.text);
+                  addPortfolioTransaction(selectedSymbol, dateController.text,
+                          boughtOrSold, numShares, sharePrice)
+                      .then(
+                    (Map returnValue) {
+                      String? returnMessage = returnValue['message'];
+                      isLoading = false;
+                      if (returnMessage != null) {
+                        fToast.showToast(
+                          child: returnToast(returnMessage, false),
+                          toastDuration: Duration(seconds: 5),
+                          gravity: ToastGravity.BOTTOM,
+                        );
+                      } else {
+                        fToast.showToast(
+                          child: returnToast(
+                              "Transaction added successfully!", true),
+                          gravity: ToastGravity.BOTTOM,
+                          toastDuration: Duration(seconds: 2),
+                        );
+                      }
+                    },
+                  );
+                } catch (e) {
+                  fToast.showToast(
+                    child: returnToast(e.toString(), false),
+                    toastDuration: Duration(seconds: 5),
+                    gravity: ToastGravity.BOTTOM,
+                  );
+                }
               },
-            )
+            ),
           ],
         ),
       ),
     );
-
-    // style: ButtonStyle(
-    //     padding: MaterialStateProperty.all(EdgeInsets.all(15)),
-    //     backgroundColor: MaterialStateProperty.all(Colors.green)),
-    // onPressed: () {
-    //   isLoading = true;
-    //   tryLogin(usernameController.text, passwordController.text)
-    //       .then(
-    //     (Map returnValue) {
-    //       String? returnMessage = returnValue['message'];
-    //       isLoading = false;
-    //       if (returnMessage != null) {
-    //         fToast.showToast(
-    //           child: returnToast(returnMessage, false),
-    //           toastDuration: Duration(seconds: 5),
-    //           gravity: ToastGravity.BOTTOM,
-    //         );
-    //       } else {
-    //         fToast.showToast(
-    //           child: returnToast("Login Success!", true),
-    //           gravity: ToastGravity.BOTTOM,
-    //           toastDuration: Duration(seconds: 2),
-    //         );
-    //         Navigator.pushReplacementNamed(context, '/');
-    //       }
-    //     },
-
-    //   Padding(
-    //     padding: EdgeInsets.only(),
-    //     child: ButtonBar(
-    //       alignment: MainAxisAlignment.spaceEvenly,
-    //       children: [
-    //         ElevatedButton(
-    //           child: Text(
-    //             "Register",
-    //             style: TextStyle(fontSize: 12),
-    //           ),
-    //           style: ButtonStyle(
-    //             padding: MaterialStateProperty.all(EdgeInsets.all(5)),
-    //             backgroundColor: MaterialStateProperty.all(Colors.red),
-    //           ),
-    //           onPressed: () {
-    //             setState(() {
-    //               cardView = "Register";
-    //             });
-    //           },
-    //         ),
-    //         ElevatedButton(
-    //           child: Text(
-    //             "Reset Password",
-    //             style: TextStyle(fontSize: 12),
-    //           ),
-    //           style: ButtonStyle(
-    //             padding: MaterialStateProperty.all(EdgeInsets.all(5)),
-    //             backgroundColor: MaterialStateProperty.all(Colors.orange),
-    //           ),
-    //           onPressed: () {
-    //             setState(() {
-    //               cardView = "Reset Password";
-    //             });
-    //           },
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // ],
     return Scaffold(
       appBar: AppBar(
         title: Text('Portfolio Transactions'),
@@ -333,7 +301,7 @@ class _PortfolioTransactionsPageState extends State<PortfolioTransactionsPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              checkCardView(),
+              addTransactionCardView,
             ],
           ),
         ),
@@ -404,5 +372,17 @@ class _PortfolioTransactionsPageState extends State<PortfolioTransactionsPage> {
         });
       },
     );
+  }
+
+  Future<Map> addPortfolioTransaction(String symbol, String date,
+      String boughtOrSold, int numShares, double sharePrice) {
+    Map putData = {
+      'symbol': symbol,
+      'date': date,
+      'bought_or_sold': boughtOrSold,
+      'num_shares': numShares.toString(),
+      'share_price': sharePrice.toString()
+    };
+    return PortfolioAPI.addPortfolioTransaction(putData);
   }
 }

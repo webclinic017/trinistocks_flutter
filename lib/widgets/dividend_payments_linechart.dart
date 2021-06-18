@@ -51,6 +51,7 @@ class _DividendPaymentsLineChartState extends State<DividendPaymentsLineChart> {
     //now build the chart series from this list
     List<LineSeries<DividendPaymentChartData, DateTime>> lineSeries = [
       LineSeries<DividendPaymentChartData, DateTime>(
+        animationDuration: 0,
         name: "Dividend Payments",
         dataSource: stockData,
         xValueMapper: (DividendPaymentChartData stockData, _) => stockData.date,

@@ -42,13 +42,11 @@ class _MainDrawerState extends State<MainDrawer> {
           ListTile(
             leading: Icon(
               Icons.house,
-              color: Theme.of(context).accentColor,
               size: iconSize,
             ),
             title: Text(
               'Home',
               style: TextStyle(
-                color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.w600,
                 fontSize: itemHeaderSize,
               ),
@@ -60,13 +58,11 @@ class _MainDrawerState extends State<MainDrawer> {
           ExpansionTile(
             leading: Icon(
               Icons.table_chart,
-              color: Theme.of(context).accentColor,
               size: iconSize,
             ),
             title: Text(
               "Summarized",
               style: TextStyle(
-                color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.w600,
                 fontSize: dropDownHeaderSize,
               ),
@@ -75,13 +71,11 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: Icon(
                   Icons.list_alt_rounded,
-                  color: Theme.of(context).accentColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Listed Stocks',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -93,13 +87,11 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.chartLine,
-                  color: Theme.of(context).accentColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Technical Analysis',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -111,13 +103,11 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.bookReader,
-                  color: Theme.of(context).accentColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Fundamental Analysis',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -131,13 +121,11 @@ class _MainDrawerState extends State<MainDrawer> {
           ExpansionTile(
             leading: Icon(
               Icons.stacked_line_chart_rounded,
-              color: Theme.of(context).accentColor,
               size: iconSize,
             ),
             title: Text(
               "Historical",
               style: TextStyle(
-                color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.w600,
                 fontSize: dropDownHeaderSize,
               ),
@@ -146,13 +134,11 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.chartBar,
-                  color: Theme.of(context).accentColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Stock Prices',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -164,13 +150,11 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.handHoldingUsd,
-                  color: Theme.of(context).accentColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Dividends',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -182,13 +166,11 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.landmark,
-                  color: Theme.of(context).accentColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Market Indices',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -200,13 +182,11 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.balanceScale,
-                  color: Theme.of(context).accentColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Outstanding Trades',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -218,13 +198,11 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.newspaper,
-                  color: Theme.of(context).accentColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Stock News History',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -236,13 +214,11 @@ class _MainDrawerState extends State<MainDrawer> {
               ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.bookReader,
-                  color: Theme.of(context).accentColor,
                   size: iconSize,
                 ),
                 title: Text(
                   'Fundamental History',
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w600,
                     fontSize: itemHeaderSize,
                   ),
@@ -264,7 +240,6 @@ class _MainDrawerState extends State<MainDrawer> {
       return ExpansionTile(
         leading: FaIcon(
           FontAwesomeIcons.piggyBank,
-          color: Theme.of(context).accentColor,
           size: iconSize,
         ),
         title: Text(
@@ -279,13 +254,11 @@ class _MainDrawerState extends State<MainDrawer> {
           ListTile(
             leading: FaIcon(
               FontAwesomeIcons.chartPie,
-              color: Theme.of(context).accentColor,
               size: iconSize,
             ),
             title: Text(
               'Summary',
               style: TextStyle(
-                color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.w600,
                 fontSize: itemHeaderSize,
               ),
@@ -297,13 +270,11 @@ class _MainDrawerState extends State<MainDrawer> {
           ListTile(
             leading: FaIcon(
               FontAwesomeIcons.cashRegister,
-              color: Theme.of(context).accentColor,
               size: iconSize,
             ),
             title: Text(
               'Transactions',
               style: TextStyle(
-                color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.w600,
                 fontSize: itemHeaderSize,
               ),
@@ -327,7 +298,6 @@ class _MainDrawerState extends State<MainDrawer> {
           children: [
             FaIcon(
               FontAwesomeIcons.userCheck,
-              color: Theme.of(context).accentColor,
               size: iconSize,
             ),
             Padding(
@@ -335,7 +305,6 @@ class _MainDrawerState extends State<MainDrawer> {
               child: Text(
                 username,
                 style: TextStyle(
-                  color: Theme.of(context).accentColor,
                   fontWeight: FontWeight.bold,
                   fontSize: drawerMainHeaderSize,
                 ),
@@ -347,8 +316,8 @@ class _MainDrawerState extends State<MainDrawer> {
           Navigator.pushNamed(context, '/user_profile');
         },
         style: ButtonStyle(
-          backgroundColor:
-              MaterialStateProperty.all(Theme.of(context).canvasColor),
+          backgroundColor: MaterialStateProperty.all(
+              Theme.of(context).toggleableActiveColor),
         ),
       );
     } else
@@ -358,7 +327,6 @@ class _MainDrawerState extends State<MainDrawer> {
           children: [
             FaIcon(
               FontAwesomeIcons.userNinja,
-              color: Theme.of(context).accentColor,
               size: iconSize,
             ),
             Padding(
@@ -366,7 +334,6 @@ class _MainDrawerState extends State<MainDrawer> {
               child: Text(
                 'Guest',
                 style: TextStyle(
-                  color: Theme.of(context).accentColor,
                   fontWeight: FontWeight.bold,
                   fontSize: drawerMainHeaderSize,
                 ),
@@ -378,8 +345,8 @@ class _MainDrawerState extends State<MainDrawer> {
           Navigator.pushNamed(context, '/login');
         },
         style: ButtonStyle(
-          backgroundColor:
-              MaterialStateProperty.all(Theme.of(context).cardColor),
+          backgroundColor: MaterialStateProperty.all(
+              Theme.of(context).toggleableActiveColor),
         ),
       );
   }

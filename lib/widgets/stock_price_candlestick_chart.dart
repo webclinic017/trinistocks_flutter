@@ -28,13 +28,12 @@ class _StockPriceCandlestickChartState
     extends State<StockPriceCandlestickChart> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    SfCartesianChart chart = SfCartesianChart(
+    return SfCartesianChart(
       zoomPanBehavior: widget.zoomPanBehavior,
       plotAreaBorderWidth: 0,
       primaryXAxis: DateTimeAxis(
@@ -46,7 +45,6 @@ class _StockPriceCandlestickChartState
       ),
       series: _getCandleSeries(),
     );
-    return chart;
   }
 
   List<CandleSeries<StockPriceChartData, DateTime>> _getCandleSeries() {
@@ -61,6 +59,7 @@ class _StockPriceCandlestickChartState
     }
     List<CandleSeries<StockPriceChartData, DateTime>> candleSeries = [
       CandleSeries<StockPriceChartData, DateTime>(
+          animationDuration: 0,
           dataSource: stockData,
           xValueMapper: (StockPriceChartData stockData, _) => stockData.date,
           lowValueMapper: (StockPriceChartData stockData, _) => stockData.low,

@@ -11,7 +11,7 @@
             "args": [
                 "",
             ],
-            "flutterMode": "debug"
+            "flutterMode": "profile",
         }
     ],
 }

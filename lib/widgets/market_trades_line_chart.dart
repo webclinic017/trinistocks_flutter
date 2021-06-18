@@ -55,6 +55,7 @@ class _MarketTradesLineChartState extends State<MarketTradesLineChart> {
     }
     List<LineSeries<MarketTradesChartData, DateTime>> lineSeries = [
       LineSeries<MarketTradesChartData, DateTime>(
+        animationDuration: 0,
         name: "Number of trades",
         dataSource: indexData,
         xValueMapper: (MarketTradesChartData stockData, _) => stockData.date,

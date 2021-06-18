@@ -67,6 +67,7 @@ class _OutstandingVolumeChartState extends State<OutstandingVolumeChart> {
     //now build the chart series from this list
     List<SplineSeries<OutstandingVolumeChartData, DateTime>> chartSeries = [
       SplineSeries<OutstandingVolumeChartData, DateTime>(
+        animationDuration: 0,
         dataSource: outstandingTradeData,
         xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
             tradeData.date,
@@ -83,6 +84,7 @@ class _OutstandingVolumeChartState extends State<OutstandingVolumeChart> {
             borderColor: Colors.tealAccent),
       ),
       SplineSeries<OutstandingVolumeChartData, DateTime>(
+        animationDuration: 0,
         dataSource: outstandingTradeData,
         xValueMapper: (OutstandingVolumeChartData tradeData, _) =>
             tradeData.date,

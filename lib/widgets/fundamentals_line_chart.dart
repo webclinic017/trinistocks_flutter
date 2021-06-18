@@ -65,6 +65,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
         {
           List<LineSeries<FundamentalAnalysisData, DateTime>> lineSeries = [
             LineSeries<FundamentalAnalysisData, DateTime>(
+              animationDuration: 0,
               dataSource: indexData,
               xValueMapper: (FundamentalAnalysisData stockData, _) =>
                   stockData.date,
@@ -84,6 +85,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
         {
           List<LineSeries<FundamentalAnalysisData, DateTime>> lineSeries = [
             LineSeries<FundamentalAnalysisData, DateTime>(
+              animationDuration: 0,
               dataSource: indexData,
               xValueMapper: (FundamentalAnalysisData stockData, _) =>
                   stockData.date,
@@ -103,6 +105,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
         {
           List<LineSeries<FundamentalAnalysisData, DateTime>> lineSeries = [
             LineSeries<FundamentalAnalysisData, DateTime>(
+              animationDuration: 0,
               dataSource: indexData,
               xValueMapper: (FundamentalAnalysisData stockData, _) =>
                   stockData.date,
@@ -122,6 +125,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
         {
           List<LineSeries<FundamentalAnalysisData, DateTime>> lineSeries = [
             LineSeries<FundamentalAnalysisData, DateTime>(
+              animationDuration: 0,
               dataSource: indexData,
               xValueMapper: (FundamentalAnalysisData stockData, _) =>
                   stockData.date,
@@ -141,6 +145,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
         {
           List<LineSeries<FundamentalAnalysisData, DateTime>> lineSeries = [
             LineSeries<FundamentalAnalysisData, DateTime>(
+              animationDuration: 0,
               dataSource: indexData,
               xValueMapper: (FundamentalAnalysisData stockData, _) =>
                   stockData.date,
@@ -160,6 +165,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
         {
           List<LineSeries<FundamentalAnalysisData, DateTime>> lineSeries = [
             LineSeries<FundamentalAnalysisData, DateTime>(
+              animationDuration: 0,
               dataSource: indexData,
               xValueMapper: (FundamentalAnalysisData stockData, _) =>
                   stockData.date,
@@ -179,6 +185,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
         {
           List<LineSeries<FundamentalAnalysisData, DateTime>> lineSeries = [
             LineSeries<FundamentalAnalysisData, DateTime>(
+              animationDuration: 0,
               dataSource: indexData,
               xValueMapper: (FundamentalAnalysisData stockData, _) =>
                   stockData.date,
@@ -198,6 +205,7 @@ class _FundamentalsLineChartState extends State<FundamentalsLineChart> {
         {
           List<LineSeries<FundamentalAnalysisData, DateTime>> lineSeries = [
             LineSeries<FundamentalAnalysisData, DateTime>(
+              animationDuration: 0,
               dataSource: indexData,
               xValueMapper: (FundamentalAnalysisData stockData, _) =>
                   stockData.date,

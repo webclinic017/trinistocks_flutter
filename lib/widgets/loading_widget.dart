@@ -12,7 +12,7 @@ class LoadingWidget extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(width: 3, color: Theme.of(context).splashColor),
+          border: Border.all(width: 3, color: Theme.of(context).accentColor),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(

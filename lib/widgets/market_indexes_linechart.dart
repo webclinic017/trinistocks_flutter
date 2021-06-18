@@ -14,8 +14,10 @@ class MarketIndexesLineChart extends StatelessWidget {
     enableDoubleTapZooming: true,
     enableSelectionZooming: true,
   );
+  Color? chartColor = Colors.purple;
 
-  MarketIndexesLineChart(this.chartData, this.name, {this.animate});
+  MarketIndexesLineChart(this.chartData, this.name,
+      {this.animate, this.chartColor});
   void resetZoom() {
     zoomPanBehavior.reset();
   }
@@ -53,18 +55,19 @@ class MarketIndexesLineChart extends StatelessWidget {
     }
     List<LineSeries<MarketIndexData, DateTime>> returnSeries = [
       new LineSeries<MarketIndexData, DateTime>(
+        animationDuration: 0,
         name: "Index value",
         xValueMapper: (MarketIndexData data, _) => data.dateTime,
         yValueMapper: (MarketIndexData data, _) => data.indexValue,
         dataSource: indexData,
-        color: Colors.purple,
+        color: chartColor,
         markerSettings: MarkerSettings(
             isVisible: true,
             height: 4,
             width: 4,
             shape: DataMarkerType.triangle,
             borderWidth: 3,
-            borderColor: Colors.purpleAccent),
+            borderColor: chartColor),
       )
     ];
     return returnSeries;

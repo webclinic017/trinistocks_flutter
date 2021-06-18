@@ -68,6 +68,7 @@ class _OutstandingPricesAreaChartState
     }
     List<SplineSeries<OutstandingPriceChartData, DateTime>> chartSeries = [
       SplineSeries<OutstandingPriceChartData, DateTime>(
+        animationDuration: 0,
         dataSource: outstandingTradeData,
         xValueMapper: (OutstandingPriceChartData tradeData, _) =>
             tradeData.date,
@@ -84,6 +85,7 @@ class _OutstandingPricesAreaChartState
             borderColor: Colors.tealAccent),
       ),
       SplineSeries<OutstandingPriceChartData, DateTime>(
+        animationDuration: 0,
         dataSource: outstandingTradeData,
         xValueMapper: (OutstandingPriceChartData tradeData, _) =>
             tradeData.date,

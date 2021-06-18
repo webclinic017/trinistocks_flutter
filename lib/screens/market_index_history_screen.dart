@@ -48,26 +48,79 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
         child: ListView(
           padding: const EdgeInsets.all(0.0),
           children: [
-            ButtonBar(
-              alignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: Text(
-                    "Index:",
-                    style: TextStyle(fontSize: buttonBarLabelSize),
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 5, right: 5),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Index",
+                            style: TextStyle(
+                              fontSize: buttonBarLabelSize,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).cardColor,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: 5, bottom: 5, left: 5, right: 5),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Container(
+                              height: 30,
+                              margin: EdgeInsets.only(left: 5, right: 5),
+                              child: buildIndexNameDropdownButton(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                buildIndexNameDropdownButton(context),
-                Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: Text(
-                    "Range:",
-                    style: TextStyle(fontSize: buttonBarLabelSize),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 5, right: 5),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Range",
+                            style: TextStyle(
+                              fontSize: buttonBarLabelSize,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).cardColor,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: 5, bottom: 5, left: 5, right: 5),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Container(
+                              height: 30,
+                              margin: EdgeInsets.only(left: 5, right: 5),
+                              child: startDateDropdownButton(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                startDateDropdownButton(context),
-              ],
+                ],
+              ),
             ),
             marketIndexChartBuilt ? marketIndexChart : Text(""),
             marketTradesChartBuilt ? marketTradesChart : Text(""),
@@ -107,11 +160,11 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
       marketIndexChart = MarketIndexesLineChart(
         indexData,
         selectedIndexName,
-        animate: true,
+        animate: false,
       );
       marketTradesChart = MarketTradesLineChart(
         indexData,
-        animate: true,
+        animate: false,
       );
       setState(() {
         marketIndexChartBuilt = true;
@@ -125,8 +178,7 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
     return DropdownButton<String>(
       value: dateRange,
       icon: FaIcon(
-        FontAwesomeIcons.arrowAltCircleDown,
-        color: Theme.of(context).accentColor,
+        FontAwesomeIcons.chevronDown,
       ),
       items: [
         new DropdownMenuItem<String>(
@@ -158,10 +210,7 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
           ),
         ),
       ],
-      underline: Container(
-        height: 2,
-        color: Theme.of(context).splashColor,
-      ),
+      underline: Text(""),
       onChanged: (String? newValue) {
         setState(() {
           _loading = true;
@@ -176,8 +225,7 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
     return DropdownButton<String>(
       value: selectedIndexName,
       icon: FaIcon(
-        FontAwesomeIcons.arrowAltCircleDown,
-        color: Theme.of(context).accentColor,
+        FontAwesomeIcons.chevronDown,
       ),
       items: [
         new DropdownMenuItem<String>(
@@ -202,10 +250,7 @@ class _MarketIndexHistoryPageState extends State<MarketIndexHistoryPage> {
           ),
         ),
       ],
-      underline: Container(
-        height: 2,
-        color: Theme.of(context).splashColor,
-      ),
+      underline: Text(""),
       onChanged: (String? newValue) {
         setState(() {
           _loading = true;

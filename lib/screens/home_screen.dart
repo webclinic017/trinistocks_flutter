@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:random_color/random_color.dart';
 import 'package:trinistocks_flutter/widgets/loading_widget.dart';
 import 'package:trinistocks_flutter/widgets/main_drawer.dart';
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   ColorHue colorHue = ColorHue.green;
   late Color headerColor;
   late Color leftHandColor;
+  bool isLoading = true;
 
   void _onRefresh() async {
     updateAllWidgets();
@@ -46,14 +48,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    headerColor = RandomColor().randomColor(
-        colorHue: colorHue,
-        colorSaturation: ColorSaturation.lowSaturation,
-        colorBrightness: ColorBrightness.dark);
-    leftHandColor = RandomColor().randomColor(
-        colorHue: colorHue,
-        colorSaturation: ColorSaturation.lowSaturation,
-        colorBrightness: ColorBrightness.light);
     updateAllWidgets();
     new Timer.periodic(
         Duration(minutes: 15),
@@ -63,6 +57,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   void updateAllWidgets() {
+    setState(
+      () {
+        headerColor = RandomColor().randomColor(
+            colorHue: colorHue,
+            colorSaturation: ColorSaturation.lowSaturation,
+            colorBrightness: ColorBrightness.dark);
+        leftHandColor = RandomColor().randomColor(
+            colorHue: colorHue,
+            colorSaturation: ColorSaturation.lowSaturation,
+            colorBrightness: ColorBrightness.light);
+        marketIndexesLineChart = Text("");
+        headlineText = Text("");
+        latestTradesBarChart = Text("");
+        latestTradesTable = Text("");
+        stockNewsTable = Text("");
+      },
+    ); //reset all widgets
     MarketIndexesAPI.fetchMarketIndexData(
             MarketIndexDateRange.oneMonth, "Composite Totals")
         .then((value) {
@@ -70,31 +81,36 @@ class _HomePageState extends State<HomePage> {
         marketIndexesLineChart = MarketIndexesLineChart(
           value,
           "Composite Totals",
-          animate: true,
+          animate: false,
+          chartColor: leftHandColor,
         );
       });
     });
     FetchDailyTradesAPI.fetchLatestTrades().then((value) {
-      setState(() {
-        headlineText = Text(
-          "Stocks Traded on the TTSE on ${value['date']}",
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.visible,
-          style: Theme.of(context).textTheme.headline6,
-        );
-        latestTradesBarChart = SizedBox(
-          height: 400.0,
-          child: DailyTradesHorizontalBarChart(
-            value['chartData'],
-            animate: true,
-          ),
-        );
-        latestTradesTable = new DailyTradesDataTable(
-          tableData: value['tableData'],
-          headerColor: headerColor,
-          leftHandColor: leftHandColor,
-        );
-      });
+      setState(
+        () {
+          headlineText = Text(
+            "Stocks Traded on the TTSE on ${value['date']}",
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.visible,
+            style: Theme.of(context).textTheme.headline6,
+          );
+          latestTradesBarChart = SizedBox(
+            height: 400.0,
+            child: new DailyTradesHorizontalBarChart(
+              value['chartData'],
+              animate: false,
+              chartColor: leftHandColor,
+            ),
+          );
+          latestTradesTable = new DailyTradesDataTable(
+            tableData: value['tableData'],
+            headerColor: headerColor,
+            leftHandColor: leftHandColor,
+          );
+          isLoading = false;
+        },
+      );
     });
     StockNewsAPI.fetch10LatestNews().then((value) {
       setState(() {
@@ -137,27 +153,30 @@ class _HomePageState extends State<HomePage> {
       //add a drawer for navigation
       endDrawer: MainDrawer(),
       //setup futurebuilders to wait on the API data
-      body: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        enablePullUp: false,
-        onRefresh: _onRefresh,
-        child: ListView(padding: const EdgeInsets.all(10.0), children: [
-          Text(
-            "TTSE 30-Day Composite Index",
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.visible,
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          SizedBox(
-            height: 200.0,
-            child: marketIndexesLineChart,
-          ),
-          headlineText,
-          latestTradesBarChart,
-          latestTradesTable,
-          stockNewsTable,
-        ]),
+      body: LoadingOverlay(
+        isLoading: isLoading,
+        child: SmartRefresher(
+          controller: _refreshController,
+          enablePullDown: true,
+          enablePullUp: false,
+          onRefresh: _onRefresh,
+          child: ListView(padding: const EdgeInsets.all(10.0), children: [
+            Text(
+              "TTSE 30-Day Composite Index",
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.visible,
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            SizedBox(
+              height: 200.0,
+              child: marketIndexesLineChart,
+            ),
+            headlineText,
+            latestTradesBarChart,
+            latestTradesTable,
+            stockNewsTable,
+          ]),
+        ),
       ),
     );
   }

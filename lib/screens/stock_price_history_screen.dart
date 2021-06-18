@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -36,9 +38,7 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
             value: symbol,
             child: Text(
               symbol,
-              style: TextStyle(
-                  color: Theme.of(context).accentColor,
-                  fontSize: buttonBarLabelSize),
+              style: TextStyle(fontSize: buttonBarLabelSize),
             ),
           ),
         );
@@ -62,26 +62,79 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
         child: ListView(
           padding: const EdgeInsets.all(0.0),
           children: <Widget>[
-            ButtonBar(
-              alignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: Text(
-                    "Symbol:",
-                    style: TextStyle(fontSize: buttonBarLabelSize),
+            Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 5, right: 5),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Symbol",
+                            style: TextStyle(
+                              fontSize: buttonBarLabelSize,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).cardColor,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: 5, bottom: 5, left: 5, right: 5),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).backgroundColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Container(
+                              height: 30,
+                              margin: EdgeInsets.only(left: 5, right: 5),
+                              child: buildSymbolDropdownButton(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                buildSymbolDropdownButton(context),
-                Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: Text(
-                    "Range:",
-                    style: TextStyle(fontSize: buttonBarLabelSize),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 5, right: 5),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Range",
+                            style: TextStyle(
+                              fontSize: buttonBarLabelSize,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).cardColor,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: 5, bottom: 5, left: 5, right: 5),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).backgroundColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Container(
+                              height: 30,
+                              margin: EdgeInsets.only(left: 5, right: 5),
+                              child: startDateDropdownButton(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                startDateDropdownButton(context),
-              ],
+                ],
+              ),
             ),
             stockPriceChartBuilt ? stockPriceCandlestickChart : Text(""),
             ButtonBar(
@@ -113,9 +166,9 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
   void updateStockPriceChart(BuildContext context) {
     StockPriceAPI.fetchStockPriceData(selectedSymbol, dateRange)
         .then((List<Map> stockData) {
-      stockPriceCandlestickChart = new StockPriceCandlestickChart(
+      stockPriceCandlestickChart = StockPriceCandlestickChart(
         stockData,
-        animate: true,
+        animate: false,
       );
       setState(() {
         _loading = false;
@@ -128,14 +181,10 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
     return DropdownButton<String>(
       value: this.selectedSymbol,
       icon: FaIcon(
-        FontAwesomeIcons.arrowAltCircleDown,
-        color: Theme.of(context).accentColor,
+        FontAwesomeIcons.chevronDown,
       ),
       items: listedSymbols,
-      underline: Container(
-        height: 2,
-        color: Theme.of(context).splashColor,
-      ),
+      underline: Text(""),
       onChanged: (String? newValue) {
         setState(() {
           _loading = true;
@@ -150,8 +199,7 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
     return DropdownButton<String>(
       value: dateRange,
       icon: FaIcon(
-        FontAwesomeIcons.arrowAltCircleDown,
-        color: Theme.of(context).accentColor,
+        FontAwesomeIcons.chevronDown,
       ),
       items: [
         new DropdownMenuItem<String>(
@@ -183,10 +231,7 @@ class _StockPriceHistoryPageState extends State<StockPriceHistoryPage> {
           ),
         ),
       ],
-      underline: Container(
-        height: 2,
-        color: Theme.of(context).splashColor,
-      ),
+      underline: Text(""),
       onChanged: (String? newValue) {
         setState(() {
           _loading = true;

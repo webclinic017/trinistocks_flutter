@@ -48,6 +48,7 @@ class PortfolioGainLossHorizontalBarChart extends StatelessWidget {
     losses.sort((a, b) => (a.totalGainLoss).compareTo(b.totalGainLoss));
     return <BarSeries<ChartDataPoints, String>>[
       BarSeries<ChartDataPoints, String>(
+        animationDuration: 0,
         name: 'Total Gains/Losses',
         dataSource: losses,
         xValueMapper: (ChartDataPoints trade, _) => trade.symbol,

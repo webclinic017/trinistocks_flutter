@@ -40,6 +40,7 @@ class PortfolioSectorMarketValueHorizontalBarChart extends StatelessWidget {
     parsedData = new List.from(parsedData.reversed);
     return <BarSeries<MarketValueData, String>>[
       BarSeries<MarketValueData, String>(
+        animationDuration: 0,
         name: 'Sector Market Values',
         dataSource: parsedData,
         xValueMapper: (MarketValueData trade, _) => trade.sector,

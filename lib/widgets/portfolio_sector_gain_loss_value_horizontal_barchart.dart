@@ -55,6 +55,7 @@ class PortfolioSectorGainLossHorizontalBarChart extends StatelessWidget {
         color: Colors.red,
       ),
       BarSeries<ChartDataPoints, String>(
+        animationDuration: 0,
         name: 'Total Gains/Losses',
         dataSource: gains,
         xValueMapper: (ChartDataPoints trade, _) => trade.sector,

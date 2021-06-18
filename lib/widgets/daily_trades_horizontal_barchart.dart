@@ -6,8 +6,10 @@ import 'package:intl/intl.dart';
 class DailyTradesHorizontalBarChart extends StatelessWidget {
   final List inputData;
   final bool? animate;
+  Color? chartColor = Colors.teal;
 
-  DailyTradesHorizontalBarChart(this.inputData, {this.animate});
+  DailyTradesHorizontalBarChart(this.inputData,
+      {this.animate, this.chartColor});
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +40,11 @@ class DailyTradesHorizontalBarChart extends StatelessWidget {
     parsedData = new List.from(parsedData.reversed);
     return <BarSeries<DailyTrades, String>>[
       BarSeries<DailyTrades, String>(
+        animationDuration: 0,
         dataSource: parsedData,
         xValueMapper: (DailyTrades trade, _) => trade.symbol,
         yValueMapper: (DailyTrades trade, _) => trade.valueTraded,
-        color: Colors.teal,
+        color: this.chartColor,
       )
     ];
   }

@@ -28,6 +28,7 @@ class ProfileManagementAPI {
       prefs.setString('username', apiResponse['username']);
       prefs.setString('token', apiResponse['token']);
       prefs.setString('email', apiResponse['email']);
+      prefs.setString('user_id', apiResponse['user_id'].toString());
     } else {
       //if we get any other weird response codes
       returnData['message'] = "Error while trying to access API.";

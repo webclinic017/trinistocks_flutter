@@ -60,6 +60,12 @@ class PortfolioAPI {
           } catch (e) {
             parsedData['total_gain_loss'] = null;
           }
+          try {
+            parsedData['gain_loss_percent'] =
+                double.parse(response['gain_loss_percent']);
+          } catch (e) {
+            parsedData['gain_loss_percent'] = null;
+          }
           portfolioData.add(parsedData);
         }
         portfolioData
@@ -107,6 +113,12 @@ class PortfolioAPI {
                 double.parse(response['total_gain_loss']);
           } catch (e) {
             parsedData['total_gain_loss'] = null;
+          }
+          try {
+            parsedData['gain_loss_percent'] =
+                double.parse(response['gain_loss_percent']);
+          } catch (e) {
+            parsedData['gain_loss_percent'] = null;
           }
           portfolioData.add(parsedData);
         }

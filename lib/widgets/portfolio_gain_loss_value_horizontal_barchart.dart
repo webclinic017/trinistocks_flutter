@@ -23,7 +23,7 @@ class PortfolioGainLossHorizontalBarChart extends StatelessWidget {
         majorGridLines: MajorGridLines(width: 0),
         numberFormat: NumberFormat.compact(),
         title: AxisTitle(
-          text: "Gain/Loss (TT\$)",
+          text: "Gain/Loss(%)",
         ),
       ),
       tooltipBehavior: TooltipBehavior(enable: true),
@@ -36,30 +36,30 @@ class PortfolioGainLossHorizontalBarChart extends StatelessWidget {
     for (int i = 0; i < inputData.length; i++) {
       final dataPoint = new ChartDataPoints(
         inputData[i]['symbol'],
-        inputData[i]['total_gain_loss'],
+        inputData[i]['gain_loss_percent'],
       );
-      if (dataPoint.totalGainLoss > 0) {
+      if (dataPoint.gainLossPercent > 0) {
         gains.add(dataPoint);
       } else {
         losses.add(dataPoint);
       }
     }
-    gains.sort((a, b) => (a.totalGainLoss).compareTo(b.totalGainLoss));
-    losses.sort((a, b) => (a.totalGainLoss).compareTo(b.totalGainLoss));
+    gains.sort((a, b) => (a.gainLossPercent).compareTo(b.gainLossPercent));
+    losses.sort((a, b) => (a.gainLossPercent).compareTo(b.gainLossPercent));
     return <BarSeries<ChartDataPoints, String>>[
       BarSeries<ChartDataPoints, String>(
         animationDuration: 0,
-        name: 'Total Gains/Losses',
+        name: 'Gain/Loss %',
         dataSource: losses,
         xValueMapper: (ChartDataPoints trade, _) => trade.symbol,
-        yValueMapper: (ChartDataPoints trade, _) => trade.totalGainLoss,
+        yValueMapper: (ChartDataPoints trade, _) => trade.gainLossPercent,
         color: Colors.red,
       ),
       BarSeries<ChartDataPoints, String>(
         name: 'Total Gains/Losses',
         dataSource: gains,
         xValueMapper: (ChartDataPoints trade, _) => trade.symbol,
-        yValueMapper: (ChartDataPoints trade, _) => trade.totalGainLoss,
+        yValueMapper: (ChartDataPoints trade, _) => trade.gainLossPercent,
         color: Colors.green,
       ),
     ];
@@ -68,7 +68,7 @@ class PortfolioGainLossHorizontalBarChart extends StatelessWidget {
 
 class ChartDataPoints {
   final String symbol;
-  final double totalGainLoss;
+  final double gainLossPercent;
 
-  ChartDataPoints(this.symbol, this.totalGainLoss);
+  ChartDataPoints(this.symbol, this.gainLossPercent);
 }

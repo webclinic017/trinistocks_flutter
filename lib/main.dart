@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:trinistocks_flutter/screens/dividend_history_screen.dart';
 import 'package:trinistocks_flutter/screens/portfolio_summary_screen.dart';
 import 'package:trinistocks_flutter/screens/portfolio_transactions_screen.dart';
+import 'package:trinistocks_flutter/screens/simulator_create_game_screen.dart';
+import 'package:trinistocks_flutter/screens/simulator_games_summary_screen.dart';
+import 'package:trinistocks_flutter/screens/simulator_join_game_screen.dart';
 import 'screens/fundamental_analysis_history_screen.dart';
 import 'screens/fundamental_analysis_screen.dart';
 import 'screens/listed_stocks_screen.dart';
@@ -60,6 +63,9 @@ class TriniStocks extends StatelessWidget {
             FundamentalAnalysisHistoryPage(),
         '/portfolio_summary': (context) => PortfolioSummaryPage(),
         '/portfolio_transactions': (context) => PortfolioTransactionsPage(),
+        '/simulator_games': (context) => SimulatorGamesPage(),
+        '/simulator_game_create': (context) => SimulatorGameCreatePage(),
+        '/simulator_game_join': (context) => SimulatorJoinGamePage(),
       },
     );
   }

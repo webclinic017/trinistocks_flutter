@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
           value,
           "Composite Totals",
           animate: false,
-          chartColor: leftHandColor,
+          chartColor: Theme.of(context).accentColor,
         );
       });
     });
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
             child: new DailyTradesHorizontalBarChart(
               value['chartData'],
               animate: false,
-              chartColor: leftHandColor,
+              chartColor: Theme.of(context).accentColor,
             ),
           );
           latestTradesTable = new DailyTradesDataTable(

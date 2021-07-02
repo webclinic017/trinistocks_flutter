@@ -23,7 +23,7 @@ class PortfolioSectorGainLossHorizontalBarChart extends StatelessWidget {
         majorGridLines: MajorGridLines(width: 0),
         numberFormat: NumberFormat.compact(),
         title: AxisTitle(
-          text: "Gain/Loss (TT\$)",
+          text: "Gain/Loss (%)",
         ),
       ),
       tooltipBehavior: TooltipBehavior(enable: true),
@@ -36,22 +36,22 @@ class PortfolioSectorGainLossHorizontalBarChart extends StatelessWidget {
     for (int i = 0; i < inputData.length; i++) {
       final dataPoint = new ChartDataPoints(
         inputData[i]['sector'],
-        inputData[i]['total_gain_loss'],
+        inputData[i]['gain_loss_percent'],
       );
-      if (dataPoint.totalGainLoss > 0) {
+      if (dataPoint.gainLossPercent > 0) {
         gains.add(dataPoint);
       } else {
         losses.add(dataPoint);
       }
     }
-    gains.sort((a, b) => (a.totalGainLoss).compareTo(b.totalGainLoss));
-    losses.sort((a, b) => (a.totalGainLoss).compareTo(b.totalGainLoss));
+    gains.sort((a, b) => (a.gainLossPercent).compareTo(b.gainLossPercent));
+    losses.sort((a, b) => (a.gainLossPercent).compareTo(b.gainLossPercent));
     return <BarSeries<ChartDataPoints, String>>[
       BarSeries<ChartDataPoints, String>(
-        name: 'Total Gains/Losses',
+        name: 'Gain/Loss %',
         dataSource: losses,
         xValueMapper: (ChartDataPoints trade, _) => trade.sector,
-        yValueMapper: (ChartDataPoints trade, _) => trade.totalGainLoss,
+        yValueMapper: (ChartDataPoints trade, _) => trade.gainLossPercent,
         color: Colors.red,
       ),
       BarSeries<ChartDataPoints, String>(
@@ -59,7 +59,7 @@ class PortfolioSectorGainLossHorizontalBarChart extends StatelessWidget {
         name: 'Total Gains/Losses',
         dataSource: gains,
         xValueMapper: (ChartDataPoints trade, _) => trade.sector,
-        yValueMapper: (ChartDataPoints trade, _) => trade.totalGainLoss,
+        yValueMapper: (ChartDataPoints trade, _) => trade.gainLossPercent,
         color: Colors.green,
       ),
     ];
@@ -68,7 +68,7 @@ class PortfolioSectorGainLossHorizontalBarChart extends StatelessWidget {
 
 class ChartDataPoints {
   final String sector;
-  final double totalGainLoss;
+  final double gainLossPercent;
 
-  ChartDataPoints(this.sector, this.totalGainLoss);
+  ChartDataPoints(this.sector, this.gainLossPercent);
 }

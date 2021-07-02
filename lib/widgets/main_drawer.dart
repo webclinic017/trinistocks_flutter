@@ -230,6 +230,7 @@ class _MainDrawerState extends State<MainDrawer> {
             ],
           ),
           buildPortfolioExpansion(),
+          buildSimulatorExpansion(),
         ],
       ),
     );
@@ -245,7 +246,6 @@ class _MainDrawerState extends State<MainDrawer> {
         title: Text(
           "Portfolio",
           style: TextStyle(
-            color: Theme.of(context).accentColor,
             fontWeight: FontWeight.w600,
             fontSize: dropDownHeaderSize,
           ),
@@ -349,5 +349,27 @@ class _MainDrawerState extends State<MainDrawer> {
               Theme.of(context).toggleableActiveColor),
         ),
       );
+  }
+
+  Widget buildSimulatorExpansion() {
+    if (userLoggedIn) {
+      return ListTile(
+        leading: FaIcon(
+          FontAwesomeIcons.gamepad,
+          size: iconSize,
+        ),
+        title: Text(
+          'Simulator',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: itemHeaderSize,
+          ),
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, '/simulator_games');
+        },
+      );
+    } else
+      return Text("");
   }
 }

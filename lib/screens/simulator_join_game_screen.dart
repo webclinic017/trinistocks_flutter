@@ -180,6 +180,7 @@ class _SimulatorJoinGamePageState extends State<SimulatorJoinGamePage> {
                       toastDuration: Duration(seconds: 5),
                       gravity: ToastGravity.BOTTOM,
                     );
+                    Navigator.pushReplacementNamed(context, '/simulator_games');
                   }
                 });
               }
@@ -311,7 +312,27 @@ class _SimulatorJoinGamePageState extends State<SimulatorJoinGamePage> {
                 ),
                 Center(
                   child: ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      SimulatorGamesAPI.joinSimulatorGame(
+                              game["game_name"], null)
+                          .then((Map returnValue) {
+                        if (returnValue.containsKey("error")) {
+                          fToast.showToast(
+                            child: returnToast(returnValue["error"], false),
+                            toastDuration: Duration(seconds: 5),
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                        } else {
+                          fToast.showToast(
+                            child: returnToast(returnValue["message"], true),
+                            toastDuration: Duration(seconds: 5),
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                          Navigator.pushReplacementNamed(
+                              context, '/simulator_games');
+                        }
+                      });
+                    },
                     label: Text("Join"),
                     icon: FaIcon(FontAwesomeIcons.pen),
                     style: ButtonStyle(

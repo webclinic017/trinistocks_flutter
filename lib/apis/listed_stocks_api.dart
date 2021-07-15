@@ -69,4 +69,22 @@ class ListedStocksAPI {
     // return the data from the api request
     return returnData;
   }
+
+  static Future<List<Map>> fetchListedStockSymbolsAndLatestPrices() async {
+    String url = 'https://trinistocks.com/api/lateststockprices';
+    const apiToken = config.APIKeys.guest_api_token;
+    final listedStocksResponse =
+        await http.get(url, headers: {"Authorization": "Token $apiToken"});
+    List listedSymbolsAndPrices = [];
+    if (listedStocksResponse.statusCode == 200) {
+      listedSymbolsAndPrices = json.decode(listedStocksResponse.body);
+    } else {
+      throw Exception("Could not fetch API data from $url");
+    }
+    // sort the listed stocks by symbols
+    listedSymbolsAndPrices.sort((a, b) => (a['symbol']).compareTo(b['symbol']));
+    List<Map>? returnData = listedSymbolsAndPrices.cast<Map>();
+    // return the data from the api request
+    return returnData;
+  }
 }

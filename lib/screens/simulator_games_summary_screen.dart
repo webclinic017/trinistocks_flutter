@@ -134,7 +134,11 @@ class _SimulatorGamesPageState extends State<SimulatorGamesPage> {
                   ),
                   Center(
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, '/simulator_portfolio_summary',
+                            arguments: {'game': game});
+                      },
                       label: Text("Manage"),
                       icon: FaIcon(FontAwesomeIcons.pen),
                       style: ButtonStyle(

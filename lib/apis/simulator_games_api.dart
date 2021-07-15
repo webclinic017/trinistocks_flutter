@@ -84,48 +84,41 @@ class SimulatorGamesAPI {
             }
             //now check through the apiResponse and search for the game requested
             bool gameFound = false;
+            Map? gameToJoin;
             for (Map game in apiResponse) {
               if (game['game_name'] == gameName) {
                 if (game['game_code'] == gameCode) {
                   gameFound = true;
+                  gameToJoin = game;
                 } else {
                   throw Exception("Game code is incorrect.");
                 }
               }
             }
-            if (gameFound == false) {
+            if (gameFound == false || gameToJoin == null) {
               throw Exception("No game with that name found");
             } else {
-              //we have found the game and verified the code, so go ahead and add this player to the game
-              return {"message": "Successfully joined game!"};
+              //we have found the game and verified the code, so go ahead and add this user to the game
+              // we have to create a new simulator player for this user and this game
+              Map simulatorPlayerPostData = {};
+              simulatorPlayerPostData['liquid_cash'] =
+                  gameToJoin['starting_cash'].toString();
+              simulatorPlayerPostData['game_name'] = gameToJoin['game_name'];
+              url = 'https://trinistocks.com/api/simulatorplayers';
+              var simulatorPlayerResponse = await http.post(url,
+                  headers: {"Authorization": "Token $apiToken"},
+                  body: simulatorPlayerPostData);
+              Map gameJoinResponse = json.decode(simulatorPlayerResponse.body);
+              if (simulatorPlayerResponse.statusCode == 201) {
+                return {"message": "Successfully joined game!"};
+              } else {
+                String errorMessages = "";
+                gameJoinResponse.forEach((key, value) {
+                  errorMessages += value[0];
+                });
+                throw Exception(errorMessages);
+              }
             }
-            //     //we only need to create a new simulator player for the join process
-            //     Map simulatorPlayerPostData = {};
-            //     simulatorPlayerPostData['liquid_cash'] = startingCash.toString();
-            //     simulatorPlayerPostData['game_name'] = gameName;
-            //     url = 'https://trinistocks.com/api/simulatorplayers';
-            //     var simulatorPlayerResponse = await http.post(url,
-            //         headers: {"Authorization": "Token $apiToken"},
-            //         body: simulatorPlayerPostData);
-            //     apiResponse.addAll(json.decode(simulatorPlayerResponse.body));
-            //     if (simulatorPlayerResponse.statusCode == 201) {
-            //       apiResponse['message'] = "Success";
-            //     } else {
-            //       String errorMessages = "";
-            //       apiResponse.forEach((key, value) {
-            //         errorMessages += value[0];
-            //       });
-            //       throw Exception(errorMessages);
-            //     }
-            //   } else {
-            //     String errorMessages = "";
-            //     apiResponse.forEach((key, value) {
-            //       errorMessages += key;
-            //       errorMessages += value[0];
-            //     });
-            //     throw Exception(errorMessages);
-            //   }
-            //   return apiResponse;
           } else {
             throw Exception('Please ensure that you are logged in!');
           }
@@ -229,5 +222,87 @@ class SimulatorGamesAPI {
         }
       },
     );
+  }
+
+  static Future<Map> getSimulatorPlayerAndPortfolioData(
+      String gameName, int gameId) async {
+    //ensure that the user is signed in
+    return ProfileManagementAPI.checkUserLoggedIn().then(
+      (Map userInfo) async {
+        try {
+          if (userInfo['isLoggedIn'] = true) {
+            String url = 'https://trinistocks.com/api/simulatorplayers';
+            final apiToken = userInfo['token'];
+            var response = await http
+                .get(url, headers: {"Authorization": "Token $apiToken"});
+            if (response.statusCode == 200) {
+              List allSimulatorPlayers = json.decode(response.body);
+              //check for the simulator player that matches the current gameName
+              Map? simulatorPlayerData;
+              for (Map simulatorPlayer in allSimulatorPlayers) {
+                if (simulatorPlayer['simulator_game'] == gameId) {
+                  simulatorPlayerData = simulatorPlayer;
+                }
+              }
+              //also get the portfolio data for this gameName
+              url =
+                  'https://trinistocks.com/api/simulatorportfolios?game_name=$gameName';
+              //first get all the simulator players for this user
+              response = await http
+                  .get(url, headers: {"Authorization": "Token $apiToken"});
+              if (response.statusCode == 200) {
+                List simulatorPortfolioData = json.decode(response.body);
+                return {
+                  'simulatorPlayerData': simulatorPlayerData,
+                  'simulatorPortfolioData': simulatorPortfolioData
+                };
+              } else {
+                throw Exception("Could not GET API data from $url");
+              }
+            } else {
+              throw Exception("Could not GET API data from $url");
+            }
+          } else {
+            return {'error': 'Please ensure that you are logged in!'};
+          }
+        } catch (e) {
+          return {'error': e.toString()};
+        }
+      },
+    );
+  }
+
+  static Future<Map> addSimulatorTransaction(
+      Map transactionData, Map simulatorGameUpdate) async {
+    //ensure that the user is signed in
+    return ProfileManagementAPI.checkUserLoggedIn().then((Map userInfo) async {
+      Map response = Map();
+      if (userInfo['isLoggedIn'] = true) {
+        //first set the new liquid cash for the simulator player
+        String url = 'https://trinistocks.com/api/simulatorplayers';
+        final apiToken = userInfo['token'];
+        var apiResponse = await http.post(url,
+            headers: {"Authorization": "Token $apiToken"},
+            body: simulatorGameUpdate);
+        if (apiResponse.statusCode == 202) {
+          String url = 'https://trinistocks.com/api/simulatortransactions';
+          final apiToken = userInfo['token'];
+          var apiResponse = await http.put(url,
+              headers: {"Authorization": "Token $apiToken"},
+              body: transactionData);
+          if (apiResponse.statusCode == 201) {
+            response['message'] = null;
+          } else {
+            response['message'] = apiResponse.body;
+          }
+        } else {
+          response['message'] =
+              "Could not update remaining cash for simulator player.";
+        }
+      } else {
+        response['message'] = "No user logged in";
+      }
+      return response;
+    });
   }
 }

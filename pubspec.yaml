@@ -52,6 +52,7 @@ dependencies:
   fluttertoast: ^8.0.7
   a_colors: ^0.0.2
   flex_color_scheme: any
+  after_layout: ^1.1.0
   
 dev_dependencies:
   flutter_test:

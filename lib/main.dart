@@ -6,6 +6,7 @@ import 'package:trinistocks_flutter/screens/dividend_history_screen.dart';
 import 'package:trinistocks_flutter/screens/portfolio_summary_screen.dart';
 import 'package:trinistocks_flutter/screens/portfolio_transactions_screen.dart';
 import 'package:trinistocks_flutter/screens/simulator_create_game_screen.dart';
+import 'package:trinistocks_flutter/screens/simulator_game_rankings_screen.dart';
 import 'package:trinistocks_flutter/screens/simulator_games_summary_screen.dart';
 import 'package:trinistocks_flutter/screens/simulator_join_game_screen.dart';
 import 'package:trinistocks_flutter/screens/simulator_portfolio_summary_screen.dart';
@@ -71,6 +72,7 @@ class TriniStocks extends StatelessWidget {
         '/simulator_portfolio_summary': (context) =>
             SimulatorPortfolioSummaryPage(),
         '/simulator_transactions': (context) => SimulatorTransactionsPage(),
+        '/simulator_games_rankings': (context) => SimulatorGamesRankingsPage(),
       },
     );
   }

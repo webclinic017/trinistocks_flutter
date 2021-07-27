@@ -252,13 +252,79 @@ class SimulatorGamesAPI {
                   .get(url, headers: {"Authorization": "Token $apiToken"});
               if (response.statusCode == 200) {
                 List simulatorPortfolioData = json.decode(response.body);
-                return {
-                  'simulatorPlayerData': simulatorPlayerData,
-                  'simulatorPortfolioData': simulatorPortfolioData
-                };
+                //ensure the datatypes are correct
+                for (Map symbolData in simulatorPortfolioData) {
+                  symbolData['average_cost'] =
+                      double.tryParse(symbolData['average_cost']);
+                  symbolData['book_cost'] =
+                      double.tryParse(symbolData['book_cost']);
+                  symbolData['current_market_price'] =
+                      double.tryParse(symbolData['current_market_price']);
+                  symbolData['market_value'] =
+                      double.tryParse(symbolData['market_value']);
+                  symbolData['total_gain_loss'] =
+                      double.tryParse(symbolData['total_gain_loss']);
+                  symbolData['gain_loss_percent'] =
+                      double.tryParse(symbolData['gain_loss_percent']);
+                }
+                //also get the portfolio sector data for this game name
+                url =
+                    'https://trinistocks.com/api/simulatorportfoliosectors?game_name=$gameName';
+                //first get all the simulator players for this user
+                response = await http
+                    .get(url, headers: {"Authorization": "Token $apiToken"});
+                if (response.statusCode == 200) {
+                  List simulatorPortfolioSectorData =
+                      json.decode(response.body);
+                  for (Map sectorData in simulatorPortfolioSectorData) {
+                    sectorData['book_cost'] =
+                        double.tryParse(sectorData['book_cost']);
+                    sectorData['market_value'] =
+                        double.tryParse(sectorData['market_value']);
+                    sectorData['total_gain_loss'] =
+                        double.tryParse(sectorData['total_gain_loss']);
+                    sectorData['gain_loss_percent'] =
+                        double.tryParse(sectorData['gain_loss_percent']);
+                  }
+                  return {
+                    'simulatorPlayerData': simulatorPlayerData,
+                    'simulatorPortfolioData': simulatorPortfolioData,
+                    'simulatorPortfolioSectorData': simulatorPortfolioSectorData
+                  };
+                  //also get the portfolio sector data for this game name
+                } else {
+                  throw Exception("Could not GET API data from $url");
+                }
               } else {
                 throw Exception("Could not GET API data from $url");
               }
+            } else {
+              throw Exception("Could not GET API data from $url");
+            }
+          } else {
+            return {'error': 'Please ensure that you are logged in!'};
+          }
+        } catch (e) {
+          return {'error': e.toString()};
+        }
+      },
+    );
+  }
+
+  static Future<Map> getSimulatorPlayersInGame(String gameName) async {
+    //ensure that the user is signed in
+    return ProfileManagementAPI.checkUserLoggedIn().then(
+      (Map userInfo) async {
+        try {
+          if (userInfo['isLoggedIn'] = true) {
+            String url =
+                'https://trinistocks.com/api/simulatorplayers?game_name=$gameName';
+            final apiToken = userInfo['token'];
+            var response = await http
+                .get(url, headers: {"Authorization": "Token $apiToken"});
+            if (response.statusCode == 200) {
+              List allSimulatorPlayers = json.decode(response.body);
+              return {'simulatorPlayerData': allSimulatorPlayers};
             } else {
               throw Exception("Could not GET API data from $url");
             }

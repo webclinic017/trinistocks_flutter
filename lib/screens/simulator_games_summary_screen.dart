@@ -16,7 +16,8 @@ class SimulatorGamesPage extends StatefulWidget {
 
 class _SimulatorGamesPageState extends State<SimulatorGamesPage> {
   bool isLoading = false;
-  List<TableRow> simulatorGames = [];
+  List<TableRow> activeSimulatorGames = [];
+  List<TableRow> inactiveSimulatorGames = [];
   late FToast fToast;
 
   @override
@@ -94,14 +95,46 @@ class _SimulatorGamesPageState extends State<SimulatorGamesPage> {
                   child: Text("Current Games",
                       style: Theme.of(context).textTheme.headline6),
                 ),
-                Table(
-                  border: TableBorder.all(color: Theme.of(context).accentColor),
-                  columnWidths: const <int, TableColumnWidth>{
-                    0: FlexColumnWidth(),
-                    1: FlexColumnWidth(),
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: simulatorGames,
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Table(
+                    border:
+                        TableBorder.all(color: Theme.of(context).shadowColor),
+                    columnWidths: const <int, TableColumnWidth>{
+                      0: FlexColumnWidth(),
+                      1: FlexColumnWidth(),
+                    },
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    children: activeSimulatorGames,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text("Past Games",
+                      style: Theme.of(context).textTheme.headline6),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 0, bottom: 10),
+                  child: Table(
+                    border:
+                        TableBorder.all(color: Theme.of(context).shadowColor),
+                    columnWidths: const <int, TableColumnWidth>{
+                      0: FlexColumnWidth(),
+                      1: FlexColumnWidth(),
+                    },
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    children: inactiveSimulatorGames,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 100, right: 100),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    icon: FaIcon(FontAwesomeIcons.arrowLeft),
+                    label: Text("Back"),
+                  ),
                 ),
               ],
             ),
@@ -123,37 +156,72 @@ class _SimulatorGamesPageState extends State<SimulatorGamesPage> {
             gravity: ToastGravity.BOTTOM,
           );
         } else {
-          List<TableRow> fetchedSimulatorGames = [];
+          List<TableRow> fetchedActiveSimulatorGames = [];
+          List<TableRow> fetchedInactiveSimulatorGames = [];
           for (Map game in returnValue) {
-            fetchedSimulatorGames.add(
-              TableRow(
-                children: <Widget>[
-                  Center(
-                    child: Text(game["game_name"],
-                        style: Theme.of(context).textTheme.bodyText1),
-                  ),
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context, '/simulator_portfolio_summary',
-                            arguments: {'game': game});
-                      },
-                      label: Text("Manage"),
-                      icon: FaIcon(FontAwesomeIcons.pen),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.brown),
+            if (game['is_active']) {
+              fetchedActiveSimulatorGames.add(
+                TableRow(
+                  children: <Widget>[
+                    Center(
+                      child: Text(game["game_name"],
+                          style: Theme.of(context).textTheme.bodyText1),
+                    ),
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, '/simulator_portfolio_summary',
+                              arguments: {'game': game});
+                        },
+                        label: Text("Manage"),
+                        icon: FaIcon(FontAwesomeIcons.pen),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.brown),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                  ],
+                ),
+              );
+            } else {
+              fetchedInactiveSimulatorGames.add(
+                TableRow(
+                  children: <Widget>[
+                    Center(
+                      child: Text(game["game_name"],
+                          style: Theme.of(context).textTheme.bodyText1),
+                    ),
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, '/simulator_portfolio_summary',
+                              arguments: {'game': game});
+                        },
+                        label: Text("Manage"),
+                        icon: FaIcon(FontAwesomeIcons.pen),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.brown),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          }
+          if (fetchedInactiveSimulatorGames.isEmpty) {
+            fetchedInactiveSimulatorGames = [
+              TableRow(children: [Text(""), Text("")])
+            ];
           }
           this.setState(
             () {
-              this.simulatorGames = fetchedSimulatorGames;
+              this.activeSimulatorGames = fetchedActiveSimulatorGames;
+              this.inactiveSimulatorGames = fetchedInactiveSimulatorGames;
             },
           );
         }

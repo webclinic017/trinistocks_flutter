@@ -32,32 +32,18 @@ class _SimulatorPortfolioSummaryPageState
   Widget gainLossBarchart = Text("");
   Widget sectorGainLossBarchart = Text("");
   Map? simulatorGame;
-  List? simulatorPortfolioData;
+  List simulatorPortfolioData = [];
+  List simulatorPortfolioSectorData = [];
   Map? simulatorPlayerData;
   String liquidCash = 'N/A';
 
   @override
   void initState() {
     super.initState();
-    PortfolioAPI.fetchPortfolioSummaryData().then((List portfolioData) {
-      setState(() {
-        //build the market value horizontal barchart
-        marketValueBarchart =
-            PortfolioMarketValueHorizontalBarChart(portfolioData);
-        bookValueBarchart = PortfolioBookValueHorizontalBarChart(portfolioData);
-        gainLossBarchart = PortfolioGainLossHorizontalBarChart(portfolioData);
-        _loading = false;
-      });
-    });
     PortfolioAPI.fetchPortfolioSectorData().then((List sectorData) {
       setState(() {
         //build the market value horizontal barchart
-        sectorValueBarchart =
-            PortfolioSectorMarketValueHorizontalBarChart(sectorData);
-        sectorBookValueBarchart =
-            PortfolioSectorBookValueHorizontalBarChart(sectorData);
-        sectorGainLossBarchart =
-            PortfolioSectorGainLossHorizontalBarChart(sectorData);
+
         _loading = false;
       });
     });
@@ -153,18 +139,34 @@ class _SimulatorPortfolioSummaryPageState
                 ],
               ),
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 100, right: 100),
-                child: ElevatedButton.icon(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.indigo)),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/simulator_transactions',
-                          arguments: {'simulatorGame': simulatorGame});
-                    },
-                    icon: FaIcon(FontAwesomeIcons.cashRegister),
-                    label: Text("Trade Stocks"))),
+            ButtonBar(
+              alignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.indigo)),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/simulator_transactions',
+                        arguments: {'simulatorGame': simulatorGame});
+                  },
+                  icon: FaIcon(FontAwesomeIcons.cashRegister),
+                  label: Text("Trade Stocks"),
+                ),
+                ElevatedButton.icon(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.orange),
+                    foregroundColor: MaterialStateProperty.all(Colors.black),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/simulator_games_rankings',
+                        arguments: {'simulatorGame': simulatorGame});
+                  },
+                  icon: FaIcon(FontAwesomeIcons.medal),
+                  label: Text("Rankings"),
+                ),
+              ],
+            ),
             marketValueBarchart,
             bookValueBarchart,
             gainLossBarchart,
@@ -195,8 +197,22 @@ class _SimulatorPortfolioSummaryPageState
         .then((Map returnValue) {
       simulatorPlayerData = returnValue['simulatorPlayerData'];
       simulatorPortfolioData = returnValue['simulatorPortfolioData'];
+      simulatorPortfolioSectorData =
+          returnValue['simulatorPortfolioSectorData'];
       setState(() {
         liquidCash = simulatorPlayerData!['liquid_cash'];
+        marketValueBarchart =
+            PortfolioMarketValueHorizontalBarChart(simulatorPortfolioData);
+        bookValueBarchart =
+            PortfolioBookValueHorizontalBarChart(simulatorPortfolioData);
+        gainLossBarchart =
+            PortfolioGainLossHorizontalBarChart(simulatorPortfolioData);
+        sectorValueBarchart = PortfolioSectorMarketValueHorizontalBarChart(
+            simulatorPortfolioSectorData);
+        sectorBookValueBarchart = PortfolioSectorBookValueHorizontalBarChart(
+            simulatorPortfolioSectorData);
+        sectorGainLossBarchart = PortfolioSectorGainLossHorizontalBarChart(
+            simulatorPortfolioSectorData);
       });
     });
   }
